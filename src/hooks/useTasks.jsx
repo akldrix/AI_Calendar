@@ -4,9 +4,11 @@ import { generateTasksAI } from "../utils/ai";
 export const useTasks = () => {
   const [tasks, setTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const generateFromPrompt = async (prompt, dateContext) => {
     setIsLoading(true);
+    setError(null); // Сбрасываем предыдущую ошибку
     try {
       const newTasks = await generateTasksAI(prompt);
 
@@ -23,7 +25,8 @@ export const useTasks = () => {
 
       setTasks((prev) => [...prev, ...tasksWithFullDate]);
     } catch (err) {
-      console.error("Ошибка при генерации задач с помощью AI:", err);
+      console.error("AI Generation Error:", err);
+      setError("Не удалось сгенерировать задачи. Попробуйте еще раз.");
     } finally {
       setIsLoading(false);
     }
@@ -38,5 +41,5 @@ export const useTasks = () => {
     setTasks((prev) => [...prev, newTask]);
   };
 
-  return { tasks, isLoading, generateFromPrompt, addManualTask };
+  return { tasks, isLoading, error, generateFromPrompt, addManualTask };
 };

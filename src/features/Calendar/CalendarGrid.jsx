@@ -1,8 +1,21 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 const CalendarGrid = ({ tasks, daysInMonth, startDayOffset }) => {
   const blanks = Array.from({ length: startDayOffset - 1 });
   const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+
+  // Группируем задачи по дням для быстрого доступа.
+  // Этот код выполнится только один раз при изменении `tasks`.
+  const tasksByDay = useMemo(() => {
+    const map = new Map();
+    tasks.forEach((task) => {
+      if (!map.has(task.day)) {
+        map.set(task.day, []);
+      }
+      map.get(task.day).push(task);
+    });
+    return map;
+  }, [tasks]);
 
   return (
     <div className="calendar-grid">
@@ -17,7 +30,8 @@ const CalendarGrid = ({ tasks, daysInMonth, startDayOffset }) => {
       ))}
 
       {days.map((day) => {
-        const dayTasks = tasks.filter((t) => t.day === day);
+        // Получаем задачи для дня из подготовленной Map. Это очень быстро.
+        const dayTasks = tasksByDay.get(day) || [];
         return (
           <div key={day} className="day-cell">
             <span className="day-number">{day}</span>
