@@ -1,54 +1,86 @@
 import { useState } from "react";
 import CalendarGrid from "./features/Calendar/CalendarGrid";
-import { generateTasksAI } from "./services/api";
+import Modal from "./components/Modal";
+import ManualTaskForm from "./features/Tasks/ManualTaskForm";
+
+import { useCalendar } from "./hooks/useCalendar";
+import { useTasks } from "./hooks/useTasks";
+
 import "./styles/main.css";
 
 function App() {
-  const [tasks, setTasks] = useState([]);
+  const {
+    currentDate,
+    monthName,
+    year,
+    daysInMonth,
+    startDay,
+    nextMonth,
+    prevMonth,
+  } = useCalendar();
+
+  const { tasks, isLoading, generateFromPrompt, addManualTask } = useTasks();
+
+  const [isModalOpen, setModalOpen] = useState(false);
   const [prompt, setPrompt] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSend = async () => {
+  const handleAiSend = () => {
     if (!prompt.trim()) return;
-
-    setIsLoading(true);
-    try {
-      const newTasks = await generateTasksAI(prompt);
-      setTasks((prev) => [...prev, ...newTasks]);
-      setPrompt("");
-    } catch (error) {
-      console.error(error);
-      alert("Ошибка AI");
-    } finally {
-      setIsLoading(false);
-    }
+    generateFromPrompt(prompt, currentDate);
+    setPrompt("");
   };
 
   return (
     <div className="app-container">
-      <header>
-        <h1>
-          AI Календарь <span style={{ fontSize: "0.5em" }}>Декабрь 2025</span>
-        </h1>
+      <header className="header">
+        <div>
+          <h1>AI Календарь</h1>
+          <p className="subtitle">
+            {monthName} {year}
+          </p>
+        </div>
+        <div className="header-controls">
+          <button onClick={prevMonth}>&lt;</button>
+          <button onClick={nextMonth}>&gt;</button>
+          <button className="add-btn" onClick={() => setModalOpen(true)}>
+            + Задача
+          </button>
+        </div>
       </header>
 
-      {/* Сетка календаря, куда мы передаем задачи */}
-      <CalendarGrid tasks={tasks} />
+      <CalendarGrid
+        tasks={tasks}
+        daysInMonth={daysInMonth}
+        startDayOffset={startDay}
+      />
 
-      {/* Зона промпта (как на твоем макете снизу) */}
       <div className="prompt-area">
         <input
           type="text"
-          placeholder="Например: Спланируй подготовку к экзамену..."
+          placeholder="AI промпт: Спланируй мой день..."
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && handleSend()}
+          onKeyDown={(e) => e.key === "Enter" && handleAiSend()}
           disabled={isLoading}
         />
-        <button onClick={handleSend} disabled={isLoading}>
-          {isLoading ? "Thinking..." : "Send"}
+        <button onClick={handleAiSend} disabled={isLoading}>
+          {isLoading ? "Thinking..." : "Send AI"}
         </button>
       </div>
+
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setModalOpen(false)}
+        title="Добавить задачу вручную"
+      >
+        <ManualTaskForm
+          onSubmit={(data) => {
+            addManualTask(data);
+            setModalOpen(false);
+          }}
+          onCancel={() => setModalOpen(false)}
+        />
+      </Modal>
     </div>
   );
 }
