@@ -8,7 +8,7 @@ export const useTasks = () => {
 
   const generateFromPrompt = async (prompt, dateContext) => {
     setIsLoading(true);
-    setError(null); // Сбрасываем предыдущую ошибку
+    setError(null); 
     try {
       const newTasks = await generateTasksAI(prompt);
 
