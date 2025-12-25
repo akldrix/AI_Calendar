@@ -1,4 +1,8 @@
-export type Priority = "low" | "medium" | "high";
+enum Priority {
+  Low = "low",
+  Medium = "medium",
+  High = "high",
+}
 
 export interface Task {
   id: string;
