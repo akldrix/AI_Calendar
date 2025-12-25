@@ -8,8 +8,8 @@ export const generateTasksAI = async (prompt) => {
       title: "Че-то сделать",
       start_time: "14:00",
       duration: "30",
-      priority: "medium",
-      date: "22",
+      priority: "low",
+      date: "19",
     },
     {
       id: crypto.randomUUID(),

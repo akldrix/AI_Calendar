@@ -14,7 +14,7 @@ const ManualTaskForm = ({ onSubmit, onCancel }) => {
       start_time: time || null,
       day: Number(day),
       duration_minutes: 60,
-      priority: "medium",
+      priority: "low",
     });
   };
 

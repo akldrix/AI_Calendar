@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { generateTasksAI } from "../utils/ai";
+import { generateTasksAI } from "../services/api";
 
 export const useTasks = () => {
   const [tasks, setTasks] = useState([]);
@@ -36,7 +36,7 @@ export const useTasks = () => {
     const newTask = {
       ...taskData,
       id: crypto.randomUUID(),
-      priority: taskData.priority || "medium",
+      priority: taskData.priority || "high",
     };
     setTasks((prev) => [...prev, newTask]);
   };
