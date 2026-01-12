@@ -59,8 +59,8 @@ function App() {
           type="text"
           placeholder="AI промпт: Спланируй мой день..."
           value={prompt}
-          onChange={e => setPrompt(e.target.value)}
-          onKeyDown={e => e.key === "Enter" && handleAiSend()}
+          onChange={(e) => setPrompt(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleAiSend()}
           disabled={isLoading}
         />
         <button onClick={handleAiSend} disabled={isLoading}>

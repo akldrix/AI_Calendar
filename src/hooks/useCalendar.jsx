@@ -3,7 +3,9 @@ import { useState } from "react";
 export const useCalendar = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
 
-  const monthName = currentDate.toLocaleString("default", { month: "long" });
+  const monthName = currentDate.toLocaleString("default", {
+    month: "long",
+  });
   const year = currentDate.getFullYear();
 
   const daysInMonth = new Date(year, currentDate.getMonth() + 1, 0).getDate();
