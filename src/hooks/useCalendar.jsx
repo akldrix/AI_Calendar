@@ -15,13 +15,13 @@ export const useCalendar = () => {
 
   const nextMonth = () => {
     setCurrentDate(
-      (prev) => new Date(prev.getFullYear(), prev.getMonth() + 1, 1)
+      (cur) => new Date(cur.getFullYear(), cur.getMonth() + 1, 1)
     );
   };
 
   const prevMonth = () => {
     setCurrentDate(
-      (prev) => new Date(prev.getFullYear(), prev.getMonth() - 1, 1)
+      (cur) => new Date(cur.getFullYear(), cur.getMonth() - 1, 1)
     );
   };
 

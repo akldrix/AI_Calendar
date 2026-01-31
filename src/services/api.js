@@ -1,3 +1,13 @@
+const BASE_URL = "http://localhost:3000";
+//'https://posttracheal-beckie-lithographical.ngrok-free.dev'//
+export const fetchTasks = async () => {
+  const response = await fetch(`${BASE_URL}/tasks`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch tasks');
+  }
+  return await response.json();
+};
+
 export const generateTasksAI = async (prompt) => {
   console.log("Отправка в ИИ: ", prompt);
 
@@ -21,3 +31,19 @@ export const generateTasksAI = async (prompt) => {
     },
   ];
 };
+export const createTask = async (taskData) => {
+const response = await fetch(`${BASE_URL}/tasks`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify(taskData),
+});
+
+if (!response.ok) {
+  throw new Error('Failed to create task');
+}
+return await response.json();
+
+};
+

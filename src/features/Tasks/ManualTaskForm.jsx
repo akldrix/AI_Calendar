@@ -9,10 +9,11 @@ const ManualTaskForm = ({ onSubmit, onCancel }) => {
     e.preventDefault();
     if (!title) return;
 
+    
     onSubmit({
       title,
       start_time: time || null,
-      day: Number(day),
+      daу: Number(day),
       duration_minutes: 60,
       priority: "low",
     });
