@@ -8,7 +8,7 @@ export const useTasks = () => {
 
   useEffect(() => {
     const loadTasks = async () => {
-      setIsLoading(true); 
+      setIsLoading(true);
       try {
         const data = await fetchTasks();
         setTasks(data);
@@ -28,14 +28,12 @@ export const useTasks = () => {
       const newTasks = await generateTasksAI(prompt);
 
       const year = dateContext.getFullYear();
-      const month = dateContext.getMonth();
+      const month = dateContext.getMonth() + 1;
 
       const tasksWithFullDate = newTasks.map((t) => ({
         ...t,
 
-        day: t.day || dateContext.getDate(),
-        month: month,
-        year: year,
+        date: `${year}-${month.toString().padStart(2, "0")}-${t.day.toString().padStart(2, "0")}`,
       }));
 
       setTasks((prev) => [...prev, ...tasksWithFullDate]);

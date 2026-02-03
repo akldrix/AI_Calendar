@@ -1,6 +1,9 @@
 import React, { useMemo } from "react";
 
-const CalendarGrid = ({ tasks, daysInMonth, startDayOffset }) => {
+const CalendarGrid = ({ tasks, daysInMonth, startDayOffset, currentDate }) => {
+const year = currentDate.getFullYear();
+const month = currentDate.getMonth() + 1;
+
   const blanks = Array.from({ length: startDayOffset - 1 });
   const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
 
@@ -8,13 +11,17 @@ const CalendarGrid = ({ tasks, daysInMonth, startDayOffset }) => {
   const tasksByDay = useMemo(() => {
     const map = new Map();
     tasks.forEach((task) => {
-      if (!map.has(task.day)) {
-        map.set(task.day, []);
+      const taskDate = new Date(task.date);
+      if (taskDate.getFullYear() === year && taskDate.getMonth() + 1 === month) {
+       const dayNum = taskDate.getDate();
+       if (!map.has(dayNum)){
+        map.set(dayNum, []);
+       }
+       map.get(dayNum).push(task);
       }
-      map.get(task.day).push(task);
     });
     return map;
-  }, [tasks]);
+  }, [tasks, year, month]);
 
   return (
     <div className="calendar-grid">

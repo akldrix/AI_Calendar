@@ -12,11 +12,17 @@ body {
   display: flex;
   flex-direction: column;
 }
-
+.header-controls {
+  padding-left: 10px;
+  padding-bottom: 5px;
+}
+.weekday-header {
+  padding-left: 5px;
+}
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 10px;
+  gap: 8px;
   background: white;
   padding: 20px;
   border-radius: 20px;

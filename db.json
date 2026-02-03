@@ -2,81 +2,35 @@
   "tasks": [
     {
       "id": "1",
-      "title": "Созвон с ментором",
-      "day": "2026-01-20",
+      "title": "iwef",
+      "date": "2026-02-01",
       "start_time": "14:00",
+      "duration_minutes": 30,
       "priority": "high"
     },
     {
-      "id": "2",
-      "title": "Купить продукты",
-      "date": "2026-01-22",
-      "start_time": "18:30",
-      "priority": "low"
-    },
-    {
-      "title": "t",
+      "title": "e2",
       "start_time": null,
-      "day": 22,
+      "date": "2026-02-02",
       "duration_minutes": 60,
       "priority": "low",
-      "id": "dxmtohH"
+      "id": "eKf5Jbl"
     },
     {
-      "title": "qwe",
+      "title": "23e",
       "start_time": "11:11",
-      "day": 21,
+      "date": "2026-02-02",
       "duration_minutes": 60,
-      "priority": "low",
-      "id": "42-9NIw"
+      "priority": "medium",
+      "id": "_j1v4xS"
     },
     {
-      "title": "w",
+      "title": "111",
       "start_time": null,
-      "day": 22,
+      "date": "2027-02-02",
       "duration_minutes": 60,
-      "priority": "low",
-      "id": "XXEqY3T"
-    },
-    {
-      "title": "qq",
-      "start_time": null,
-      "day": 22,
-      "duration_minutes": 60,
-      "priority": "low",
-      "id": "eWX6FAm"
-    },
-    {
-      "title": "32",
-      "start_time": null,
-      "day": 22,
-      "duration_minutes": 60,
-      "priority": "low",
-      "id": "osHD1fZ"
-    },
-    {
-      "title": "qe",
-      "start_time": "11:11",
-      "day": 22,
-      "duration_minutes": 60,
-      "priority": "low",
-      "id": "sWMe9MR"
-    },
-    {
-      "title": "3",
-      "start_time": null,
-      "daу": 3,
-      "duration_minutes": 60,
-      "priority": "low",
-      "id": "gx7MSNV"
-    },
-    {
-      "title": "3",
-      "start_time": null,
-      "daу": 27,
-      "duration_minutes": 60,
-      "priority": "low",
-      "id": "quLXMnP"
+      "priority": "medium",
+      "id": "k8S41e2"
     }
   ]
 }

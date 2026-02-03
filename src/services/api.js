@@ -3,7 +3,7 @@ const BASE_URL = "http://localhost:3000";
 export const fetchTasks = async () => {
   const response = await fetch(`${BASE_URL}/tasks`);
   if (!response.ok) {
-    throw new Error('Failed to fetch tasks');
+    throw new Error("Failed to fetch tasks");
   }
   return await response.json();
 };
@@ -19,7 +19,7 @@ export const generateTasksAI = async (prompt) => {
       start_time: "14:00",
       duration: "30",
       priority: "low",
-      date: "19",
+      date: "2026-01-19",
     },
     {
       id: crypto.randomUUID(),
@@ -27,23 +27,21 @@ export const generateTasksAI = async (prompt) => {
       start_time: "19:00",
       duration: "90",
       priority: "high",
-      date: "22",
+      date: "2026-01-22",
     },
   ];
 };
 export const createTask = async (taskData) => {
-const response = await fetch(`${BASE_URL}/tasks`, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify(taskData),
-});
+  const response = await fetch(`${BASE_URL}/tasks`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(taskData),
+  });
 
-if (!response.ok) {
-  throw new Error('Failed to create task');
-}
-return await response.json();
-
+  if (!response.ok) {
+    throw new Error("Failed to create task");
+  }
+  return await response.json();
 };
-

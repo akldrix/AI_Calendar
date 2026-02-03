@@ -52,6 +52,7 @@ function App() {
         tasks={tasks}
         daysInMonth={daysInMonth}
         startDayOffset={startDay}
+        currentDate={currentDate}
       />
 
       <div className="prompt-area">
@@ -79,6 +80,7 @@ function App() {
             setModalOpen(false);
           }}
           onCancel={() => setModalOpen(false)}
+          currentDate={currentDate}
         />
       </Modal>
     </div>

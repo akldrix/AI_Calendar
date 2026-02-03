@@ -7,9 +7,9 @@ enum Priority {
 export interface Task {
   id: string;
   title: string;
-  deskription?: string;
+  description?: string;
   start_time: string | null;
-  duration: number;
+  duration_minutes: number;
   priority: Priority;
   date: string;
 }

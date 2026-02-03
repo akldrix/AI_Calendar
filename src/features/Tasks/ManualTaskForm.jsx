@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const ManualTaskForm = ({ onSubmit, onCancel }) => {
+const ManualTaskForm = ({ onSubmit, onCancel, currentDate }) => {
   const [title, setTitle] = useState("");
   const [time, setTime] = useState("");
   const [day, setDay] = useState(new Date().getDate());
@@ -9,13 +9,16 @@ const ManualTaskForm = ({ onSubmit, onCancel }) => {
     e.preventDefault();
     if (!title) return;
 
-    
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth() + 1;
+    const formattedDate = `${year}-${month.toString().padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
+
     onSubmit({
       title,
       start_time: time || null,
-      daу: Number(day),
+      date: formattedDate,
       duration_minutes: 60,
-      priority: "low",
+      priority: "medium",
     });
   };
 
