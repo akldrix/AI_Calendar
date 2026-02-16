@@ -1,7 +1,7 @@
 :root {
   --bg-app: #ffffff;
-  --bg-block: #e4e4e4; /* Светло-серый фон блоков */
-  --bg-card: #ffffff; /* Белые карточки дней */
+  --bg-block: #e4e4e4; 
+  --bg-card: #ffffff; 
   --text-main: #111111;
   --text-secondary: #666666;
   --accent-color: #000000;
@@ -31,7 +31,7 @@ body {
   box-sizing: border-box;
 }
 
-/* --- Header --- */
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -53,7 +53,7 @@ body {
   margin: 4px 0 0 0;
 }
 
-/* Стилизация кнопок навигации (< >) */
+
 .header-controls {
   display: flex;
   gap: 12px;
@@ -63,7 +63,7 @@ body {
 .header-controls button {
   background: var(
     --bg-block
-  ); /* или белый, если как на макете внутри серого блока */
+  ); 
   color: var(--text-main);
   border: none;
   width: 40px;
@@ -82,7 +82,7 @@ body {
   opacity: 0.7;
 }
 
-/* Кнопка добавления задачи (скроем текст, оставим иконку или сделаем компактной) */
+
 .header-controls .add-btn {
   width: auto;
   padding: 0 20px;
@@ -91,7 +91,6 @@ body {
   color: white;
 }
 
-/* --- Main Layout Grid (Calendar + Sidebar) --- */
 .app-container > div:nth-child(2) {
   display: flex;
   gap: 20px;
@@ -100,16 +99,16 @@ body {
   align-items: flex-start;
 }
 
-/* --- Calendar Area --- */
+
 .calendar-grid {
-  flex: 2; /* Занимает больше места */
+  flex: 2; 
   background: var(--bg-block);
   border-radius: var(--radius-lg);
   padding: 24px;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 10px; /* Отступы между карточками дней */
-  box-shadow: none; /* Убираем тень, делаем плоским как на макете */
+  gap: 10px;
+  box-shadow: none; 
   height: auto;
   min-height: 500px;
 }
@@ -127,7 +126,7 @@ body {
   background-color: var(--bg-card);
   border-radius: var(--radius-md);
   border: none;
-  min-height: 80px; /* Фиксированная высота для квадратности */
+  min-height: 80px; 
   aspect-ratio: 1 / 1;
   padding: 10px;
   display: flex;
@@ -154,7 +153,7 @@ body {
   margin-bottom: 6px;
 }
 
-/* Точки задач внутри дня */
+
 .tasks-dots {
   display: flex;
   gap: 3px;
@@ -176,10 +175,7 @@ body {
 .priority-low {
   background-color: #52c41a;
 }
-/* --- Right Sidebar (Задачи) --- */
-/* Важно: этот класс должен быть на обертке RightModal,
-  но в коде React он называется .right-sidebar (в CSS) или .right-modal-content (в JSX).
-  Адаптируем стили под JSX класс */
+
 
 .right-modal-content,
 .right-sidebar {
@@ -215,7 +211,7 @@ body {
   gap: 12px;
 }
 
-/* Элементы списка как буллиты */
+
 .task-item {
   background: transparent;
   padding: 0;
@@ -231,7 +227,7 @@ body {
   background: transparent;
 }
 
-/* Создаем кастомные буллиты (точки) перед текстом */
+
 .task-item::before {
   content: "";
   display: inline-block;
@@ -250,19 +246,19 @@ body {
   opacity: 0.5;
 }
 
-/* --- Bottom AI Prompt Area --- */
+
 .prompt-area {
-  margin-top: 1em; /* Прижимает к низу, если контента мало */
+  margin-top: 1em;
   padding-bottom: 1em;
-  background: #dcdcdc; /* Более темный серый, как на макете */
-  border-radius: 16px; /* Не полная капсула, а скругленный прямоугольник */
+  background: #dcdcdc;
+  border-radius: 16px; 
   padding: 8px 12px;
 
   display: flex;
   align-items: center;
   gap: 10px;
   box-shadow: none;
-  height: 60px; /* Фиксированная высота панели */
+  height: 60px; 
   box-sizing: border-box;
 }
 
@@ -282,13 +278,13 @@ body {
   font-weight: 500;
 }
 
-/* Кнопка отправки (делаем стрелочку) */
+
 .prompt-area button {
   width: 44px;
   height: 44px;
-  min-width: 44px; /* Чтобы не сжималась */
+  min-width: 44px; 
   border-radius: 10px;
-  background: #bebebe; /* Цвет кнопки (чуть темнее фона панели) */
+  background: #bebebe; 
   color: #333;
   border: none;
   padding: 0;
@@ -298,17 +294,17 @@ body {
   justify-content: center;
   transition: background 0.2s;
 
-  /* Скрываем текст "Send AI" */
+
   font-size: 0;
 }
 
-/* Добавляем иконку стрелки через CSS */
+
 .prompt-area button::after {
-  content: "➤"; /* Символ стрелки */
+  content: "➤";
   font-size: 16px;
-  margin-left: -2px; /* Визуальная компенсация */
+
   color: #333;
-  transform: rotate(-45deg); /* Если нужно повернуть */
+  transform: rotate(-45deg); 
 }
 
 .prompt-area button:hover {
@@ -321,7 +317,7 @@ body {
   cursor: not-allowed;
 }
 
-/* --- Modal Styles (оставляем функциональными) --- */
+
 .modal-overlay {
   background: rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(2px);
@@ -333,13 +329,12 @@ body {
   border: none;
 }
 
-/* --- Скрытие дефолтных стилей заголовка календаря внутри грида,
-  так как мы вынесли управление в общий Header --- */
+
 .calendar-grid .header-controls {
   display: none;
 }
 
-/* Media Queries для адаптивности */
+
 @media (max-width: 900px) {
   .app-container > div:nth-child(2) {
     flex-direction: column;
