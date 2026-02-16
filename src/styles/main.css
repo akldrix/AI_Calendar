@@ -1,61 +1,172 @@
+:root {
+  --bg-app: #ffffff;
+  --bg-block: #e4e4e4; /* Светло-серый фон блоков */
+  --bg-card: #ffffff; /* Белые карточки дней */
+  --text-main: #111111;
+  --text-secondary: #666666;
+  --accent-color: #000000;
+  --radius-lg: 24px;
+  --radius-md: 14px;
+  --radius-sm: 8px;
+}
+
 body {
-  background-color: #f5f5f5;
-  font-family: sans-serif;
+  background-color: var(--bg-app);
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif;
+  color: var(--text-main);
   margin: 0;
+  height: 100vh;
+  overflow-x: hidden;
 }
 
 .app-container {
-  max-width: 900px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
-  height: 100vh;
+  padding: 20px 40px;
   display: flex;
   flex-direction: column;
+  height: 95vh;
+  box-sizing: border-box;
 }
+
+/* --- Header --- */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 0 10px;
+}
+
+.header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+.subtitle {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 4px 0 0 0;
+}
+
+/* Стилизация кнопок навигации (< >) */
 .header-controls {
-  padding-left: 10px;
-  padding-bottom: 5px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
 }
-.weekday-header {
-  padding-left: 5px;
+
+.header-controls button {
+  background: var(
+    --bg-block
+  ); /* или белый, если как на макете внутри серого блока */
+  color: var(--text-main);
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s;
 }
+
+.header-controls button:hover {
+  opacity: 0.7;
+}
+
+/* Кнопка добавления задачи (скроем текст, оставим иконку или сделаем компактной) */
+.header-controls .add-btn {
+  width: auto;
+  padding: 0 20px;
+  font-size: 1rem;
+  background: var(--accent-color);
+  color: white;
+}
+
+/* --- Main Layout Grid (Calendar + Sidebar) --- */
+.app-container > div:nth-child(2) {
+  display: flex;
+  gap: 20px;
+  height: 100%;
+  flex-grow: 1;
+  align-items: flex-start;
+}
+
+/* --- Calendar Area --- */
 .calendar-grid {
+  flex: 2; /* Занимает больше места */
+  background: var(--bg-block);
+  border-radius: var(--radius-lg);
+  padding: 24px;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 8px;
-  background: white;
-  padding: 20px;
-  border-radius: 20px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  flex-grow: 1;
+  gap: 10px; /* Отступы между карточками дней */
+  box-shadow: none; /* Убираем тень, делаем плоским как на макете */
+  height: auto;
+  min-height: 500px;
+}
+
+.weekday-header {
+  text-align: center;
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  text-transform: lowercase;
+  padding-bottom: 10px;
 }
 
 .day-cell {
-  border: 1px solid #eee;
-  border-radius: 12px;
-  min-height: 80px;
-  padding: 8px;
-  position: relative;
+  background-color: var(--bg-card);
+  border-radius: var(--radius-md);
+  border: none;
+  min-height: 80px; /* Фиксированная высота для квадратности */
+  aspect-ratio: 1 / 1;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.day-cell:hover {
+  transform: scale(1.02);
+}
+
+.day-cell.empty {
+  background-color: transparent;
+  cursor: default;
 }
 
 .day-number {
-  font-weight: bold;
-  color: #333;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 6px;
 }
 
+/* Точки задач внутри дня */
 .tasks-dots {
   display: flex;
-  gap: 4px;
+  gap: 3px;
   flex-wrap: wrap;
   margin-top: 5px;
 }
 
 .dot {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
 }
-
 .priority-high {
   background-color: #ff4d4f;
 }
@@ -65,33 +176,178 @@ body {
 .priority-low {
   background-color: #52c41a;
 }
+/* --- Right Sidebar (Задачи) --- */
+/* Важно: этот класс должен быть на обертке RightModal,
+  но в коде React он называется .right-sidebar (в CSS) или .right-modal-content (в JSX).
+  Адаптируем стили под JSX класс */
 
-.prompt-area {
-  margin-top: 20px;
-  background: white;
-  padding: 15px;
-  border-radius: 15px;
+.right-modal-content,
+.right-sidebar {
+  flex: 1;
+  max-width: 350px;
+  background: var(--bg-block);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  justify-content: flex-start;
+  box-shadow: none;
+  height: 100%;
+  max-height: calc(100% - 48px);
   display: flex;
-  gap: 10px;
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+  flex-direction: column;
+  min-height: auto;
+  overflow-y: auto;
+  height: 600px;
+  max-height: 30em;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+.task-group h3 {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-weight: 500;
 }
 
-input {
-  flex-grow: 1;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  outline: none;
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-button {
-  padding: 10px 20px;
-  background: #000;
-  color: white;
+/* Элементы списка как буллиты */
+.task-item {
+  background: transparent;
+  padding: 0;
   border: none;
-  border-radius: 10px;
-  cursor: pointer;
+  display: flex;
+  align-items: baseline;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-main);
 }
-button:disabled {
-  opacity: 0.7;
+
+.task-item:hover {
+  background: transparent;
+}
+
+/* Создаем кастомные буллиты (точки) перед текстом */
+.task-item::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background-color: #666;
+  border-radius: 50%;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.divider {
+  height: 1px;
+  background: #ccc;
+  margin: 20px 0;
+  opacity: 0.5;
+}
+
+/* --- Bottom AI Prompt Area --- */
+.prompt-area {
+  margin-top: 1em; /* Прижимает к низу, если контента мало */
+  padding-bottom: 1em;
+  background: #dcdcdc; /* Более темный серый, как на макете */
+  border-radius: 16px; /* Не полная капсула, а скругленный прямоугольник */
+  padding: 8px 12px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: none;
+  height: 60px; /* Фиксированная высота панели */
+  box-sizing: border-box;
+}
+
+.prompt-area input {
+  flex-grow: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 0 10px;
+  font-size: 0.95rem;
+  color: var(--text-main);
+  height: 100%;
+}
+
+.prompt-area input::placeholder {
+  color: #777;
+  font-weight: 500;
+}
+
+/* Кнопка отправки (делаем стрелочку) */
+.prompt-area button {
+  width: 44px;
+  height: 44px;
+  min-width: 44px; /* Чтобы не сжималась */
+  border-radius: 10px;
+  background: #bebebe; /* Цвет кнопки (чуть темнее фона панели) */
+  color: #333;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+
+  /* Скрываем текст "Send AI" */
+  font-size: 0;
+}
+
+/* Добавляем иконку стрелки через CSS */
+.prompt-area button::after {
+  content: "➤"; /* Символ стрелки */
+  font-size: 16px;
+  margin-left: -2px; /* Визуальная компенсация */
+  color: #333;
+  transform: rotate(-45deg); /* Если нужно повернуть */
+}
+
+.prompt-area button:hover {
+  background: #a0a0a0;
+  color: #000;
+}
+
+.prompt-area button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* --- Modal Styles (оставляем функциональными) --- */
+.modal-overlay {
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(2px);
+}
+
+.modal-content {
+  border-radius: var(--radius-lg);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  border: none;
+}
+
+/* --- Скрытие дефолтных стилей заголовка календаря внутри грида,
+  так как мы вынесли управление в общий Header --- */
+.calendar-grid .header-controls {
+  display: none;
+}
+
+/* Media Queries для адаптивности */
+@media (max-width: 900px) {
+  .app-container > div:nth-child(2) {
+    flex-direction: column;
+  }
+
+  .right-modal-content,
+  .right-sidebar {
+    max-width: 100%;
+    width: 100%;
+  }
 }

@@ -8,6 +8,7 @@ const ManualTaskForm = ({ onSubmit, onCancel, currentDate }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!title) return;
+    if (!time) return;
 
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth() + 1;
@@ -15,7 +16,7 @@ const ManualTaskForm = ({ onSubmit, onCancel, currentDate }) => {
 
     onSubmit({
       title,
-      start_time: time || null,
+      start_time: time,
       date: formattedDate,
       duration_minutes: 60,
       priority: "medium",

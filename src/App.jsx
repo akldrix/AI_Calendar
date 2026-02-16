@@ -2,7 +2,7 @@ import { useState } from "react";
 import CalendarGrid from "./features/Calendar/CalendarGrid";
 import Modal from "./components/Modal";
 import ManualTaskForm from "./features/Tasks/ManualTaskForm";
-import RightModal from "./components/RightModal"
+import RightModal from "./components/RightModal";
 import { useCalendar } from "./hooks/useCalendar";
 import { useTasks } from "./hooks/useTasks";
 
@@ -20,15 +20,15 @@ function App() {
   } = useCalendar();
 
   const { tasks, isLoading, generateFromPrompt, addManualTask } = useTasks();
-  
-const toDateString = (date) => {
-  if (!date) return "";
-  const year = date.getFullYear();
-  const month = date.getMonth();
-  const day = date.getDate()
-  return `${year}-${month.toString().padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
-}
-const [selectedDate, setSelectedDate] = useState(toDateString(currentDate));
+
+  const toDateString = (date) => {
+    if (!date) return "";
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    return `${year}-${month.toString().padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
+  };
+  const [selectedDate, setSelectedDate] = useState(toDateString(currentDate));
   const [isModalOpen, setModalOpen] = useState(false);
   const [prompt, setPrompt] = useState("");
 
@@ -55,19 +55,16 @@ const [selectedDate, setSelectedDate] = useState(toDateString(currentDate));
           </button>
         </div>
       </header>
-<div>
+      <div>
         <CalendarGrid
-        tasks={tasks}
-        daysInMonth={daysInMonth}
-        startDayOffset={startDay}
-        currentDate={currentDate}
-        onSelect={setSelectedDate}
-      />
- <RightModal 
-        selectedDate={selectedDate} 
-        tasks={tasks} 
-     />
-     </div>
+          tasks={tasks}
+          daysInMonth={daysInMonth}
+          startDayOffset={startDay}
+          currentDate={currentDate}
+          onSelect={setSelectedDate}
+        />
+        <RightModal selectedDate={selectedDate} tasks={tasks} />
+      </div>
       <div className="prompt-area">
         <input
           type="text"

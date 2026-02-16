@@ -1,25 +1,34 @@
 import React, { useMemo } from "react";
 
-const CalendarGrid = ({ tasks, daysInMonth, startDayOffset, currentDate, onSelect }) => {
-const year = currentDate.getFullYear();
-const month = currentDate.getMonth() + 1;
+const CalendarGrid = ({
+  tasks,
+  daysInMonth,
+  startDayOffset,
+  currentDate,
+  onSelect,
+}) => {
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth() + 1;
 
   const blanks = Array.from({ length: startDayOffset - 1 });
   const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
 
-const formatDate = (dayNum) => {
-  return `${year}-${month.toString().padStart(2, "0")}-${dayNum.toString().padStart(2, "0")}`;
-}
+  const formatDate = (dayNum) => {
+    return `${year}-${month.toString().padStart(2, "0")}-${dayNum.toString().padStart(2, "0")}`;
+  };
   const tasksByDay = useMemo(() => {
     const map = new Map();
     tasks.forEach((task) => {
       const taskDate = new Date(task.date);
-      if (taskDate.getFullYear() === year && taskDate.getMonth() + 1 === month) {
-       const dayNum = taskDate.getDate();
-       if (!map.has(dayNum)){
-        map.set(dayNum, []);
-       }
-       map.get(dayNum).push(task);
+      if (
+        taskDate.getFullYear() === year &&
+        taskDate.getMonth() + 1 === month
+      ) {
+        const dayNum = taskDate.getDate();
+        if (!map.has(dayNum)) {
+          map.set(dayNum, []);
+        }
+        map.get(dayNum).push(task);
       }
     });
     return map;
@@ -38,20 +47,26 @@ const formatDate = (dayNum) => {
       ))}
 
       {days.map((day) => {
-        
         const dayTasks = tasksByDay.get(day) || [];
+        const maxDots = 4;
         const dateString = formatDate(day);
         return (
-          <div key={day} className="day-cell" onClick={() => onSelect(dateString)}>
+          <div
+            key={day}
+            className="day-cell"
+            onClick={() => onSelect(dateString)}
+          >
             <span className="day-number">{day}</span>
             <div className="tasks-dots">
-              {dayTasks.map((task) => (
+              {dayTasks.slice(0, maxDots).map((task) => (
                 <div
                   key={task.id}
                   className={`dot priority-${task.priority}`}
-                  title={task.title}
                 />
               ))}
+              {dayTasks.length > maxDots && (
+                <span className="more-count">+{dayTasks.length - maxDots}</span>
+              )}
             </div>
           </div>
         );
