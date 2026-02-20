@@ -27,12 +27,10 @@ const RightModal = ({ selectedDate, tasks }) => {
     });
   };
 
-  
-
   return (
     <div className="right-modal-content">
       <div className="task-group">
-        <h3>
+        <h3 className="sidebar-title">
           Дата: <span>{selectedDate}</span>
         </h3>
         {todayTasks.length > 0 ? (
@@ -40,11 +38,15 @@ const RightModal = ({ selectedDate, tasks }) => {
             {sortTasks(todayTasks).map((task) => (
               <li
                 key={task.id}
-                className={`task-item priority-${task.priority}`}
+                className={`task-item category-${task.category}`}
               >
-                {!task.start_time
-                  ? task.title
-                  : `${task.start_time}${task.end_time ? `-${task.end_time}` : ''} — ${task.title}`}
+                
+                <span className="task-text">
+                  {!task.start_time
+                    ? task.title
+                    : `${task.start_time}${task.end_time ? `-${task.end_time}` : ""} — ${task.title}`}
+                </span>
+
               </li>
             ))}
           </ul>
@@ -56,16 +58,16 @@ const RightModal = ({ selectedDate, tasks }) => {
       <div className="divider"></div>
 
       <div className="task-group">
-        <h3>
+        <h3 className="sidebar-title">
           Следующий день: <span>{nextDayString}</span>
         </h3>
         {tomorrowTasks.length > 0 ? (
           <ul className="task-list">
             {sortTasks(tomorrowTasks).map((task) => (
-              <li key={task.id} className="task-item faded">
+              <li key={task.id} className={`task-item faded category-${task.category}`}>
                 {!task.start_time
                   ? task.title
-                  : `${task.start_time}${task.end_time ? ` - ${task.end_time}` : ''} — ${task.title}`}
+                  : `${task.start_time}${task.end_time ? ` - ${task.end_time}` : ""} — ${task.title}`}
               </li>
             ))}
           </ul>

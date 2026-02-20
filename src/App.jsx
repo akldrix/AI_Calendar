@@ -5,6 +5,7 @@ import ManualTaskForm from "./features/Tasks/ManualTaskForm";
 import RightModal from "./components/RightModal";
 import { useCalendar } from "./hooks/useCalendar";
 import { useTasks } from "./hooks/useTasks";
+import { FilterCategory } from "./features/Tasks/FilterCategory";
 
 import "./styles/main.css";
 
@@ -31,6 +32,19 @@ function App() {
   const [selectedDate, setSelectedDate] = useState(toDateString(currentDate));
   const [isModalOpen, setModalOpen] = useState(false);
   const [prompt, setPrompt] = useState("");
+  const [hiddenCategories, setHiddenCategories] = useState([]);
+
+  const filteredTasks = tasks.filter(
+    (task) => !hiddenCategories.includes(task.category),
+  );
+
+  const toggleCategory = (categoryId) => {
+    setHiddenCategories((prev) =>
+      prev.includes(categoryId)
+        ? prev.filter((id) => id !== categoryId)
+        : [...prev, categoryId],
+    );
+  };
 
   const handleAiSend = () => {
     if (!prompt.trim()) return;
@@ -47,6 +61,12 @@ function App() {
             {monthName} {year}
           </p>
         </div>
+        <div>
+          <FilterCategory
+            hiddenCategories={hiddenCategories}
+            onToggle={toggleCategory}
+          />
+        </div>
         <div className="header-controls">
           <button onClick={prevMonth}>&lt;</button>
           <button onClick={nextMonth}>&gt;</button>
@@ -57,13 +77,13 @@ function App() {
       </header>
       <div>
         <CalendarGrid
-          tasks={tasks}
+          tasks={filteredTasks}
           daysInMonth={daysInMonth}
           startDayOffset={startDay}
           currentDate={currentDate}
           onSelect={setSelectedDate}
         />
-        <RightModal selectedDate={selectedDate} tasks={tasks} />
+        <RightModal selectedDate={selectedDate} tasks={filteredTasks} />
       </div>
       <div className="prompt-area">
         <input
