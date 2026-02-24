@@ -1,4 +1,6 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
+import { Popover} from 'antd';
+
 
 const CalendarGrid = ({
   tasks,
@@ -7,7 +9,27 @@ const CalendarGrid = ({
   currentDate,
   onSelect,
 }) => {
-   
+   const [arrow, setArrow] = useState('Show');
+  const mergedArrow = useMemo(() => {
+    if (arrow === 'Hide') {
+      return false;
+    }
+    if (arrow === 'Show') {
+      return true;
+    }
+    return {
+      pointAtCenter: true,
+    };
+  }, [arrow]);
+   const renderPopoverContent = (dayTasks) => (
+    <div>
+      {dayTasks.length > 0 
+        ? dayTasks.map(t => <div key={t.id}>• {t.title}</div>) 
+        : "Нет задач"}
+    </div>
+  );
+
+
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth() + 1;
 
@@ -52,6 +74,13 @@ const CalendarGrid = ({
         const maxDots = 4;
         const dateString = formatDate(day);
         return (
+          <Popover key={day}
+            placement="bottomRight" 
+            title={`Задачи на ${day}.${month}`} 
+            content={renderPopoverContent(dayTasks)} 
+            arrow={mergedArrow}
+            trigger="hover" // Добавлено для удобства
+          >
           <div
             key={day}
             className="day-cell"
@@ -70,6 +99,7 @@ const CalendarGrid = ({
               )}
             </div>
           </div>
+          </Popover>
         );
       })}
     </div>

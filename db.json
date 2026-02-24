@@ -144,6 +144,39 @@
       "date": "2026-02-20",
       "category": "home",
       "id": 18
+    },
+    {
+      "title": "ergte",
+      "start_time": "11:11",
+      "end_time": "11:12",
+      "date": "2026-02-20",
+      "category": "work",
+      "id": 19
+    },
+    {
+      "title": "234",
+      "start_time": "",
+      "end_time": "",
+      "date": "2026-02-20",
+      "category": "self",
+      "id": 20
+    },
+    {
+      "title": "wr",
+      "start_time": "",
+      "end_time": "",
+      "date": "2026-02-20",
+      "category": "home",
+      "id": 21
+    },
+    {
+      "title": "e",
+      "start_time": "",
+      "end_time": "",
+      "date": "2026-02-24",
+      "category": "home",
+      "completed": false,
+      "id": 22
     }
   ]
 }

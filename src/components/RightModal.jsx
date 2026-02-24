@@ -1,7 +1,8 @@
 import React from "react";
 import "../styles/main.css";
+import { Checkbox } from 'antd';
 
-const RightModal = ({ selectedDate, tasks }) => {
+const RightModal = ({ selectedDate, tasks, onToggleTask }) => {
   if (!selectedDate)
     return <div className="right-modal-empty">Выберите день</div>;
 
@@ -25,7 +26,9 @@ const RightModal = ({ selectedDate, tasks }) => {
       const timeB = b.start_time || "00:00";
       return timeA.localeCompare(timeB);
     });
+
   };
+
 
   return (
     <div className="right-modal-content">
@@ -38,15 +41,18 @@ const RightModal = ({ selectedDate, tasks }) => {
             {sortTasks(todayTasks).map((task) => (
               <li
                 key={task.id}
-                className={`task-item category-${task.category}`}
+                className={`task-item category-${task.category} ${task.completed ? "completed" : ""}`}
               >
-                
                 <span className="task-text">
                   {!task.start_time
                     ? task.title
                     : `${task.start_time}${task.end_time ? `-${task.end_time}` : ""} — ${task.title}`}
                 </span>
 
+                  <Checkbox 
+      checked={task.completed} 
+      onChange={() => onToggleTask(task.id)} 
+    />
               </li>
             ))}
           </ul>
@@ -64,7 +70,10 @@ const RightModal = ({ selectedDate, tasks }) => {
         {tomorrowTasks.length > 0 ? (
           <ul className="task-list">
             {sortTasks(tomorrowTasks).map((task) => (
-              <li key={task.id} className={`task-item faded category-${task.category}`}>
+              <li
+                key={task.id}
+                className={`task-item faded category-${task.category}`}
+              >
                 {!task.start_time
                   ? task.title
                   : `${task.start_time}${task.end_time ? ` - ${task.end_time}` : ""} — ${task.title}`}

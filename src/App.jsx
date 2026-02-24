@@ -20,7 +20,7 @@ function App() {
     prevMonth,
   } = useCalendar();
 
-  const { tasks, isLoading, generateFromPrompt, addManualTask } = useTasks();
+  const { tasks, isLoading, generateFromPrompt, addManualTask, toggleTask } = useTasks();
 
   const toDateString = (date) => {
     if (!date) return "";
@@ -83,7 +83,7 @@ function App() {
           currentDate={currentDate}
           onSelect={setSelectedDate}
         />
-        <RightModal selectedDate={selectedDate} tasks={filteredTasks} />
+        <RightModal selectedDate={selectedDate} tasks={filteredTasks} onToggleTask={toggleTask}/>
       </div>
       <div className="prompt-area">
         <input

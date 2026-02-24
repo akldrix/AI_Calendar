@@ -6,6 +6,15 @@ export const useTasks = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  
+  const toggleTask = (taskId) => {
+  setTasks((prev) => prev.map((task) => 
+  task.id === taskId ? {...task, completed: !task.completed} : task
+  )
+);
+  };
+  
+
   useEffect(() => {
     const loadTasks = async () => {
       setIsLoading(true);
@@ -48,7 +57,9 @@ export const useTasks = () => {
   const addManualTask = async (taskData) => {
     try {
       setIsLoading(true);
-      const newSavedTask = await createTask(taskData);
+      const newSavedTask = await createTask({...taskData,
+        completed: false,
+      });
 
       setTasks((prev) => [...prev, newSavedTask]);
       return true;
@@ -60,5 +71,5 @@ export const useTasks = () => {
     }
   };
 
-  return { tasks, isLoading, error, generateFromPrompt, addManualTask };
+  return { tasks, isLoading, error, generateFromPrompt, addManualTask, toggleTask };
 };

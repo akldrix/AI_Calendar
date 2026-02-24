@@ -80,6 +80,7 @@ const ManualTaskForm = ({ onSubmit, onCancel, currentDate }) => {
         <button type="button" onClick={onCancel}>
           Отмена
         </button>
+        
         <button
           onKeyDown={(e) => e.key === "Enter" && onSubmit()}
           type="submit"
