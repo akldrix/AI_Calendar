@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Select } from "antd";
 
 const ManualTaskForm = ({ onSubmit, onCancel, currentDate }) => {
   const [title, setTitle] = useState("");
@@ -8,20 +9,18 @@ const ManualTaskForm = ({ onSubmit, onCancel, currentDate }) => {
   const [category, setCategory] = useState("");
 
   const options = [
-    { id: "home", label: "Дом" },
-    { id: "work", label: "Работа" },
-    { id: "self", label: "Саморазвитие" },
+    { value: "home", label: "Дом" },
+    { value: "work", label: "Работа" },
+    { value: "self", label: "Саморазвитие" },
   ];
 
   const handleChange = (event) => {
     setCategory(event.target.value);
   };
 
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!title) return;
-    if (!category) return;
+    if (!title || !category) return;
 
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth() + 1;
@@ -65,22 +64,24 @@ const ManualTaskForm = ({ onSubmit, onCancel, currentDate }) => {
           onChange={(e) => setEndTime(e.target.value)}
           min={time}
         />
-        <select className="" value={category} onChange={handleChange}>
-          <option value="" disabled>
-            Выберите...
-          </option>
-          {options.map((option) => (
-            <option key={option.id} value={option.id}>
-              {option.label}
-            </option>
-          ))}
-        </select>
+        <Select
+          style={{
+            width: "100%",
+            marginBottom: "10px",
+            padding: "8px",
+            boxSizing: "border-box",
+          }}
+          allowClear
+          options={options}
+          placeholder="Категория"
+          onChange={(value) => setCategory(value)}
+        />
       </div>
       <div className="actions">
         <button type="button" onClick={onCancel}>
           Отмена
         </button>
-        
+
         <button
           onKeyDown={(e) => e.key === "Enter" && onSubmit()}
           type="submit"

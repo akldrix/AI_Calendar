@@ -50,6 +50,7 @@ const RightModal = ({ selectedDate, tasks, onToggleTask }) => {
                 </span>
 
                   <Checkbox 
+                  style={{color: "black"}}
       checked={task.completed} 
       onChange={() => onToggleTask(task.id)} 
     />

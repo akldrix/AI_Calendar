@@ -76,10 +76,10 @@ const CalendarGrid = ({
         return (
           <Popover key={day}
             placement="bottomRight" 
-            title={`Задачи на ${day}.${month}`} 
+            title={`Задачи на ${day}.${month.toString().padStart(2, '0')}`} 
             content={renderPopoverContent(dayTasks)} 
             arrow={mergedArrow}
-            trigger="hover" // Добавлено для удобства
+            trigger="hover" 
           >
           <div
             key={day}
