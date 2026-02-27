@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Select } from "antd";
+import { Popover} from 'antd';
 
 const ManualTaskForm = ({ onSubmit, onCancel, currentDate }) => {
   const [title, setTitle] = useState("");
@@ -7,6 +8,7 @@ const ManualTaskForm = ({ onSubmit, onCancel, currentDate }) => {
   const [endTime, setEndTime] = useState("");
   const [day, setDay] = useState(new Date().getDate());
   const [category, setCategory] = useState("");
+  const [isCategoryInvalid, setIsCategoryInvalid] = useState(false);
 
   const options = [
     { value: "home", label: "Дом" },
@@ -20,7 +22,13 @@ const ManualTaskForm = ({ onSubmit, onCancel, currentDate }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!title || !category) return;
+    if (!title) return;
+    if (!category) {
+      setIsCategoryInvalid(true);
+      return; 
+    }
+
+  setIsCategoryInvalid(false);
 
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth() + 1;
@@ -64,7 +72,15 @@ const ManualTaskForm = ({ onSubmit, onCancel, currentDate }) => {
           onChange={(e) => setEndTime(e.target.value)}
           min={time}
         />
+        <Popover
+  content="Пожалуйста, выберите категорию"
+  color="#fff1f0" // Светло-красный фон
+  overlayInnerStyle={{ color: '#ff4d4f' }}
+  open={isCategoryInvalid}
+  placement="right" // Или "bottom"
+>
         <Select
+        status={isCategoryInvalid ? "error" : ""}
           style={{
             width: "100%",
             marginBottom: "10px",
@@ -74,8 +90,12 @@ const ManualTaskForm = ({ onSubmit, onCancel, currentDate }) => {
           allowClear
           options={options}
           placeholder="Категория"
-          onChange={(value) => setCategory(value)}
+          onChange={(value) => {setCategory(value);
+          if (value) setIsCategoryInvalid(false)
+          }}
+          onFocus={() => setIsCategoryInvalid(false)}
         />
+          </Popover>
       </div>
       <div className="actions">
         <button type="button" onClick={onCancel}>
