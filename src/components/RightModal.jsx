@@ -1,6 +1,6 @@
 import React from "react";
 import "../styles/main.css";
-import { Checkbox } from 'antd';
+import { Checkbox } from "antd";
 
 const RightModal = ({ selectedDate, tasks, onToggleTask }) => {
   if (!selectedDate)
@@ -26,9 +26,7 @@ const RightModal = ({ selectedDate, tasks, onToggleTask }) => {
       const timeB = b.start_time || "00:00";
       return timeA.localeCompare(timeB);
     });
-
   };
-
 
   return (
     <div className="right-modal-content">
@@ -49,11 +47,11 @@ const RightModal = ({ selectedDate, tasks, onToggleTask }) => {
                     : `${task.start_time}${task.end_time ? `-${task.end_time}` : ""} — ${task.title}`}
                 </span>
 
-                  <Checkbox 
-                  style={{color: "black"}}
-      checked={task.completed} 
-      onChange={() => onToggleTask(task.id)} 
-    />
+                <Checkbox
+                  style={{ color: "black" }}
+                  checked={task.completed}
+                  onChange={() => onToggleTask(task.id)}
+                />
               </li>
             ))}
           </ul>

@@ -1,6 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { Popover} from 'antd';
-
+import { Popover } from "antd";
 
 const CalendarGrid = ({
   tasks,
@@ -9,26 +8,25 @@ const CalendarGrid = ({
   currentDate,
   onSelect,
 }) => {
-   const [arrow, setArrow] = useState('Show');
+  const [arrow, setArrow] = useState("Show");
   const mergedArrow = useMemo(() => {
-    if (arrow === 'Hide') {
+    if (arrow === "Hide") {
       return false;
     }
-    if (arrow === 'Show') {
+    if (arrow === "Show") {
       return true;
     }
     return {
       pointAtCenter: true,
     };
   }, [arrow]);
-   const renderPopoverContent = (dayTasks) => (
+  const renderPopoverContent = (dayTasks) => (
     <div>
-      {dayTasks.length > 0 
-        ? dayTasks.map(t => <div key={t.id}>• {t.title}</div>) 
+      {dayTasks.length > 0
+        ? dayTasks.map((t) => <div key={t.id}>• {t.title}</div>)
         : "Нет задач"}
     </div>
   );
-
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth() + 1;
@@ -74,31 +72,34 @@ const CalendarGrid = ({
         const maxDots = 4;
         const dateString = formatDate(day);
         return (
-          <Popover key={day}
-            placement="bottomRight" 
-            title={`Задачи на ${day}.${month.toString().padStart(2, '0')}`} 
-            content={renderPopoverContent(dayTasks)} 
-            arrow={mergedArrow}
-            trigger="hover" 
-          >
-          <div
+          <Popover
             key={day}
-            className="day-cell"
-            onClick={() => onSelect(dateString)}
+            placement="bottomRight"
+            title={`Задачи на ${day}.${month.toString().padStart(2, "0")}`}
+            content={renderPopoverContent(dayTasks)}
+            arrow={mergedArrow}
+            trigger="hover"
           >
-            <span className="day-number">{day}</span>
-            <div className="tasks-dots">
-              {dayTasks.slice(0, maxDots).map((task) => (
-                <div
-                  key={task.id}
-                  className={`dot category-${task.category} `}
-                />
-              ))}
-              {dayTasks.length > maxDots && (
-                <span className="more-count">+{dayTasks.length - maxDots}</span>
-              )}
+            <div
+              key={day}
+              className="day-cell"
+              onClick={() => onSelect(dateString)}
+            >
+              <span className="day-number">{day}</span>
+              <div className="tasks-dots">
+                {dayTasks.slice(0, maxDots).map((task) => (
+                  <div
+                    key={task.id}
+                    className={`dot category-${task.category} `}
+                  />
+                ))}
+                {dayTasks.length > maxDots && (
+                  <span className="more-count">
+                    +{dayTasks.length - maxDots}
+                  </span>
+                )}
+              </div>
             </div>
-          </div>
           </Popover>
         );
       })}

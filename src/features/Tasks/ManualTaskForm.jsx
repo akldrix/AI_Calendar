@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Select } from "antd";
-import { Popover} from 'antd';
+import { Popover } from "antd";
 
 const ManualTaskForm = ({ onSubmit, onCancel, currentDate }) => {
   const [title, setTitle] = useState("");
@@ -25,10 +25,10 @@ const ManualTaskForm = ({ onSubmit, onCancel, currentDate }) => {
     if (!title) return;
     if (!category) {
       setIsCategoryInvalid(true);
-      return; 
+      return;
     }
 
-  setIsCategoryInvalid(false);
+    setIsCategoryInvalid(false);
 
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth() + 1;
@@ -73,29 +73,30 @@ const ManualTaskForm = ({ onSubmit, onCancel, currentDate }) => {
           min={time}
         />
         <Popover
-  content="Пожалуйста, выберите категорию"
-  color="#fff1f0" // Светло-красный фон
-  overlayInnerStyle={{ color: '#ff4d4f' }}
-  open={isCategoryInvalid}
-  placement="right" // Или "bottom"
->
-        <Select
-        status={isCategoryInvalid ? "error" : ""}
-          style={{
-            width: "100%",
-            marginBottom: "10px",
-            padding: "8px",
-            boxSizing: "border-box",
-          }}
-          allowClear
-          options={options}
-          placeholder="Категория"
-          onChange={(value) => {setCategory(value);
-          if (value) setIsCategoryInvalid(false)
-          }}
-          onFocus={() => setIsCategoryInvalid(false)}
-        />
-          </Popover>
+          content="Пожалуйста, выберите категорию"
+          color="#fff1f0" // Светло-красный фон
+          overlayInnerStyle={{ color: "#ff4d4f" }}
+          open={isCategoryInvalid}
+          placement="right" // Или "bottom"
+        >
+          <Select
+            status={isCategoryInvalid ? "error" : ""}
+            style={{
+              width: "100%",
+              marginBottom: "10px",
+              padding: "8px",
+              boxSizing: "border-box",
+            }}
+            allowClear
+            options={options}
+            placeholder="Категория"
+            onChange={(value) => {
+              setCategory(value);
+              if (value) setIsCategoryInvalid(false);
+            }}
+            onFocus={() => setIsCategoryInvalid(false)}
+          />
+        </Popover>
       </div>
       <div className="actions">
         <button type="button" onClick={onCancel}>
