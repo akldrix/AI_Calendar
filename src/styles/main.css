@@ -181,8 +181,8 @@ body {
 
 .right-modal-content,
 .right-sidebar {
-  flex: 1;
-  max-width: 350px;
+ flex: 0 0 300px; /* Запрещаем сжиматься или расширяться (350px фиксированно) */
+  width: 300px;
   background: var(--bg-block);
   border-radius: var(--radius-lg);
   padding: 24px;
