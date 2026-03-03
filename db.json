@@ -370,6 +370,84 @@
       "category": "work",
       "completed": false,
       "id": 44
+    },
+    {
+      "title": "df",
+      "start_time": "",
+      "end_time": "",
+      "date": "2026-04-03",
+      "category": "home",
+      "completed": false,
+      "id": 45
+    },
+    {
+      "completed": false,
+      "id": 46
+    },
+    {
+      "completed": false,
+      "id": 47
+    },
+    {
+      "completed": false,
+      "id": 48
+    },
+    {
+      "completed": false,
+      "id": 49
+    },
+    {
+      "completed": false,
+      "id": 50
+    },
+    {
+      "completed": false,
+      "id": 51
+    },
+    {
+      "title": "23e",
+      "start_time": "",
+      "end_time": "",
+      "date": "2026-03-03",
+      "category": "home",
+      "completed": false,
+      "id": 52
+    },
+    {
+      "title": "13",
+      "start_time": "",
+      "end_time": "",
+      "date": "2026-03-03",
+      "category": "home",
+      "completed": false,
+      "id": 53
+    },
+    {
+      "title": "w",
+      "start_time": "",
+      "end_time": "",
+      "date": "2026-03-05",
+      "category": "work",
+      "completed": false,
+      "id": 54
+    },
+    {
+      "title": "23e",
+      "start_time": "",
+      "end_time": "",
+      "date": "2026-03-03",
+      "category": "home",
+      "completed": false,
+      "id": 55
+    },
+    {
+      "title": "2e3",
+      "start_time": "",
+      "end_time": "",
+      "date": "2026-03-07",
+      "category": "self",
+      "completed": false,
+      "id": 56
     }
   ]
 }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Select } from "antd";
 import { Popover } from "antd";
 
@@ -38,7 +38,17 @@ const ManualTaskForm = ({ onSubmit, onCancel, currentDate, daysInMonth }) => {
       category: category,
     });
   };
-
+useEffect(() => {
+  const handleKeyDown = (event) => {
+    if (event.key === 'Escape') {
+      onCancel();
+    }
+  };
+  document.addEventListener('keydown', handleKeyDown);
+  return () => {
+     document.removeEventListener('keydown', handleKeyDown);
+  };
+}, [onCancel]);
   return (
     <form onSubmit={handleSubmit} className="task-form">
       <input
@@ -87,6 +97,11 @@ const ManualTaskForm = ({ onSubmit, onCancel, currentDate, daysInMonth }) => {
             allowClear
             options={options}
             placeholder="Категория"
+            onInputKeyDown={(e) => {
+              if (e.key === "Enter" && category) {
+                handleSubmit(e);
+              }
+            }}
             onChange={(value) => {
               setCategory(value);
               if (value) setIsCategoryInvalid(false);
@@ -102,7 +117,6 @@ const ManualTaskForm = ({ onSubmit, onCancel, currentDate, daysInMonth }) => {
         </button>
 
         <button
-          onKeyDown={(e) => e.key === "Enter" && onSubmit()}
           type="submit"
           className="primary"
         >
