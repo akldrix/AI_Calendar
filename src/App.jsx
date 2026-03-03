@@ -7,7 +7,8 @@ import { useCalendar } from "./hooks/useCalendar";
 import { useTasks } from "./hooks/useTasks";
 import { FilterCategory } from "./features/Tasks/FilterCategory";
 
-import "./styles/main.css";
+import { MoonIcon } from "./components/Icons/Moon";
+import { SunIcon } from "./components/Icons/Sun";
 
 function App() {
   const {
@@ -76,7 +77,7 @@ function App() {
         </div>
         <div className="header-controls">
           <button onClick={toggleTheme} className="theme-toggle">
-            {theme === "light" ? "🌙" : "☀️"}
+            {theme === "light" ? (<MoonIcon/>) : (<SunIcon/>)}
           </button>
           <button onClick={prevMonth}>&lt;</button>
           <button onClick={nextMonth}>&gt;</button>

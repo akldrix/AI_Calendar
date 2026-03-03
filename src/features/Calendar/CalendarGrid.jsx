@@ -90,7 +90,6 @@ const CalendarGrid = ({
             trigger="hover"
           >
             <div
-              key={day}
               className="day-cell"
               onClick={() => onSelect(dateString)}
             >
