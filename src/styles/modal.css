@@ -1,3 +1,25 @@
+:root {
+--modal-body: white;
+--add-btn: #333;
+--add-text: white;
+--button-bg: #000;
+--button-text: white;
+--close-bg: transparent;
+--close-content: #000;
+--input-bg: white;
+--border: #ddd;
+}
+[data-theme="dark"] {
+--modal-body: #1c1c1c;
+--add-btn: #CCCC;
+--add-text: black;
+--button-bg: #CCCC;
+--button-text: black;
+--close-bg: transparent;
+--close-content: #fff;
+--input-bg: #CCC;
+--border: #212121;
+}
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -11,7 +33,7 @@
   z-index: 1000;
 }
 .modal-content {
-  background: white;
+  background: var(--modal-body);
   padding: 20px;
   border-radius: 12px;
   width: 400px;
@@ -50,8 +72,8 @@ select {
   margin-top: 10px;
 }
 .add-btn {
-  background: #333;
-  color: white;
+  background: var(--add-btn);
+  color: var(--add-text);
   border: none;
   padding: 5px 15px;
   border-radius: 20px;
@@ -64,8 +86,8 @@ select {
 }
 button {
   padding: 10px 20px;
-  background: #000;
-  color: white;
+  background: var(--button-bg);
+  color: var(--button-text);
   border: none;
   border-radius: 10px;
   cursor: pointer;
@@ -76,20 +98,26 @@ button:disabled {
 input {
   flex-grow: 1;
   padding: 12px;
-  border: 1px solid #ddd;
+  background-color: var(--input-bg);
+  border: 1px solid var(--border);
   border-radius: 10px;
   outline: none;
 }
 select {
   flex-grow: 1;
   padding: 12px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border);
+  background-color: var(--input-bg);
   border-radius: 10px;
   outline: none;
 }
 .close-btn {
   border: none;
-  color: #000;
-  background-color: #ffff;
+  color: var(--close-content);
+  background-color: var(--close-bg);
   font-size: 2em;
+}
+.select-dropdown {
+  background-color: var(--input-bg);
+
 }

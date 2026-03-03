@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { Popover } from "antd";
-
+import "../../styles/main.css";
 const CalendarGrid = ({
   tasks,
   daysInMonth,
@@ -37,6 +37,14 @@ const CalendarGrid = ({
   const formatDate = (dayNum) => {
     return `${year}-${month.toString().padStart(2, "0")}-${dayNum.toString().padStart(2, "0")}`;
   };
+  function getMonthGenitive(monthNumber) {
+  const index = monthNumber - 1;
+  const months = [
+    'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
+    'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'
+  ];
+  return months[index];
+}
   const tasksByDay = useMemo(() => {
     const map = new Map();
     tasks.forEach((task) => {
@@ -64,7 +72,7 @@ const CalendarGrid = ({
       ))}
 
       {blanks.map((_, i) => (
-        <div key={`blank-${i}`} className="day-cell.empty" />
+        <div key={`blank-${i}`} className="empty" />
       ))}
 
       {days.map((day) => {
@@ -74,8 +82,9 @@ const CalendarGrid = ({
         return (
           <Popover
             key={day}
+            overlayInnerStyle={{ backgroundColor: 'var(--popover-bg)' }}
             placement="bottomRight"
-            title={`Задачи на ${day}.${month.toString().padStart(2, "0")}`}
+            title={`Задачи на ${day} ${getMonthGenitive(month)}`}
             content={renderPopoverContent(dayTasks)}
             arrow={mergedArrow}
             trigger="hover"

@@ -16,10 +16,6 @@ const ManualTaskForm = ({ onSubmit, onCancel, currentDate }) => {
     { value: "self", label: "Саморазвитие" },
   ];
 
-  const handleChange = (event) => {
-    setCategory(event.target.value);
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!title) return;
@@ -82,6 +78,7 @@ const ManualTaskForm = ({ onSubmit, onCancel, currentDate }) => {
           <Select
             status={isCategoryInvalid ? "error" : ""}
             style={{
+              backgroundColor: "var(--input-bg)",
               width: "100%",
               marginBottom: "10px",
               padding: "8px",
@@ -95,6 +92,7 @@ const ManualTaskForm = ({ onSubmit, onCancel, currentDate }) => {
               if (value) setIsCategoryInvalid(false);
             }}
             onFocus={() => setIsCategoryInvalid(false)}
+            popupClassName="select-dropdown"
           />
         </Popover>
       </div>

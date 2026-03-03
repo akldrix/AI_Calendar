@@ -5,9 +5,30 @@
   --text-main: #111111;
   --text-secondary: #666666;
   --accent-color: #000000;
+  --prompt-color: #dbdbdb;
+  --prompt-btn: #bebebe;
+  --prompt-content: #333333;
+  --add-text: #ffffff;
   --radius-lg: 24px;
   --radius-md: 14px;
   --radius-sm: 8px;
+  --popover-bg: white;
+  --pulse: #443636;
+}
+[data-theme="dark"] {
+  --bg-app: #000000;
+  --bg-block: #1c1c1c;
+  --bg-card: #242424;
+  --text-main: #ededed;
+  --text-secondary: #b0b0b0;
+  --add-text: #000000;
+  --accent-color: #ffffff;
+  --border-color: #333333;
+   --prompt-color: #242424;
+   --prompt-btn: #404040;
+    --prompt-content: #cccccc;
+    --popover-bg: #ccc;
+    --pulse: #c9bbbb;
 }
 
 body {
@@ -86,10 +107,14 @@ body {
   background: var(--accent-color);
   color: white;
 }
+.add-btn {
+  color: var(--add-text) !important;
+}
 .add-btn:hover {
   -webkit-animation: pulsate-fwd 0.5s ease-in-out infinite both;
   animation: pulsate-fwd 0.5s ease-in-out infinite both;
 }
+
 .app-container > div:nth-child(2) {
   display: flex;
   gap: 20px;
@@ -181,7 +206,7 @@ body {
 
 .right-modal-content,
 .right-sidebar {
- flex: 0 0 300px; /* Запрещаем сжиматься или расширяться (350px фиксированно) */
+ flex: 0 0 300px;
   width: 300px;
   background: var(--bg-block);
   border-radius: var(--radius-lg);
@@ -276,7 +301,7 @@ body {
 .prompt-area {
   margin-top: 1em;
   padding-bottom: 1em;
-  background: #dcdcdc;
+  background: var(--prompt-color);
   border-radius: 16px;
   padding: 10px 12px;
   margin: 3em 0;
@@ -310,7 +335,7 @@ body {
   height: 44px;
   min-width: 44px;
   border-radius: 10px;
-  background: #bebebe;
+  background: var(--prompt-btn);
   color: #333;
   border: none;
   padding: 0;
@@ -327,7 +352,7 @@ body {
   content: "➤";
   font-size: 16px;
 
-  color: #333;
+  color: var(--prompt-content);
   transform: rotate(-45deg);
 }
 
@@ -374,7 +399,7 @@ body {
 }
 @keyframes pulse {
   0% {
-    box-shadow: 0 0 0 0 #443636;
+    box-shadow: 0 0 0 0 var(--pulse);
   }
 }
 

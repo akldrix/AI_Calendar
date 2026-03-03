@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CalendarGrid from "./features/Calendar/CalendarGrid";
 import Modal from "./components/Modal";
 import ManualTaskForm from "./features/Tasks/ManualTaskForm";
@@ -34,11 +34,17 @@ function App() {
   const [isModalOpen, setModalOpen] = useState(false);
   const [prompt, setPrompt] = useState("");
   const [hiddenCategories, setHiddenCategories] = useState([]);
-
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
   const filteredTasks = tasks.filter(
     (task) => !hiddenCategories.includes(task.category),
   );
-
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+  };
   const toggleCategory = (categoryId) => {
     setHiddenCategories((prev) =>
       prev.includes(categoryId)
@@ -69,6 +75,9 @@ function App() {
           />
         </div>
         <div className="header-controls">
+          <button onClick={toggleTheme} className="theme-toggle">
+            {theme === "light" ? "🌙" : "☀️"}
+          </button>
           <button onClick={prevMonth}>&lt;</button>
           <button onClick={nextMonth}>&gt;</button>
           <button className="add-btn" onClick={() => setModalOpen(true)}>
@@ -90,6 +99,7 @@ function App() {
           onToggleTask={toggleTask}
         />
       </div>
+
       <div className="prompt-area">
         <input
           type="text"
