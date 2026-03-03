@@ -126,6 +126,7 @@ function App() {
           }}
           onCancel={() => setModalOpen(false)}
           currentDate={currentDate}
+          daysInMonth={daysInMonth}
         />
       </Modal>
     </div>

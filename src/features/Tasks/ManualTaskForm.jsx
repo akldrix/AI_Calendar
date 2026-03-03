@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Select } from "antd";
 import { Popover } from "antd";
 
-const ManualTaskForm = ({ onSubmit, onCancel, currentDate }) => {
+const ManualTaskForm = ({ onSubmit, onCancel, currentDate, daysInMonth }) => {
   const [title, setTitle] = useState("");
   const [time, setTime] = useState("");
   const [endTime, setEndTime] = useState("");
@@ -55,7 +55,7 @@ const ManualTaskForm = ({ onSubmit, onCancel, currentDate }) => {
           value={day}
           onChange={(e) => setDay(e.target.value)}
           min="1"
-          max="31"
+          max={daysInMonth}
         />
         <input
           type="time"
@@ -70,10 +70,10 @@ const ManualTaskForm = ({ onSubmit, onCancel, currentDate }) => {
         />
         <Popover
           content="Пожалуйста, выберите категорию"
-          color="#fff1f0" // Светло-красный фон
+          color="#fff1f0"
           overlayInnerStyle={{ color: "#ff4d4f" }}
           open={isCategoryInvalid}
-          placement="right" // Или "bottom"
+          placement="right"
         >
           <Select
             status={isCategoryInvalid ? "error" : ""}
