@@ -33,7 +33,9 @@ export const useTasks = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const newTasks = await generateTasksAI(prompt);
+      const response = await generateTasksAI(prompt);
+
+const newTasks = Array.isArray(response) ? response : [];
 
       const year = dateContext.getFullYear();
       const month = dateContext.getMonth() + 1;
