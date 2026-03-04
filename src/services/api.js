@@ -1,3 +1,5 @@
+import { QueryClient } from "@tanstack/react-query";
+
 const BASE_URL = "https://posttracheal-beckie-lithographical.ngrok-free.dev";
 
 const headers = {
@@ -30,6 +32,9 @@ export const generateTasksAI = async (text) => {
   }
   return await response.json();
 };
+
+export const queryClient = new QueryClient();
+
 export const createTask = async (taskData) => {
   const response = await fetch(`${BASE_URL}/tasks`, {
     method: "POST",
