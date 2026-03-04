@@ -17,20 +17,18 @@ export const fetchTasks = async () => {
 };
 
 export const generateTasksAI = async (text) => {
+  const response = await fetch(`${BASE_URL}/tasks/from-text`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ text: text }),
+  });
 
-const response = await fetch(`${BASE_URL}/tasks/from-text`, {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-
-  },
-  body: JSON.stringify({text: text})
-});
-  
-if (!response.ok) {
-  throw new Error(`Failed: ${response.status} ${response.statusText}`);
-}
-return await response.json();
+  if (!response.ok) {
+    throw new Error(`Failed: ${response.status} ${response.statusText}`);
+  }
+  return await response.json();
 };
 export const createTask = async (taskData) => {
   const response = await fetch(`${BASE_URL}/tasks`, {

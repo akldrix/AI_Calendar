@@ -35,8 +35,6 @@ export const useTasks = () => {
     try {
       const response = await generateTasksAI(text);
 
-
-
       setTasks((prev) => [...prev, response]);
       return true;
     } catch (err) {

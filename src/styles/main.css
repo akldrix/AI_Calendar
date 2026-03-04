@@ -24,13 +24,18 @@
   --add-text: #000000;
   --accent-color: #ffffff;
   --border-color: #333333;
-   --prompt-color: #242424;
-   --prompt-btn: #404040;
-    --prompt-content: #cccccc;
-    --popover-bg: #ccc;
-    --pulse: #c9bbbb;
+  --prompt-color: #242424;
+  --prompt-btn: #404040;
+  --prompt-content: #cccccc;
+  --popover-bg: #ccc;
+  --pulse: #c9bbbb;
 }
-
+* {
+  transition:
+    background-color 0.5s ease,
+    color 0.5s ease,
+    border-color 0.5s ease;
+}
 body {
   background-color: var(--bg-app);
   font-family:
@@ -206,7 +211,7 @@ body {
 
 .right-modal-content,
 .right-sidebar {
- flex: 0 0 300px;
+  flex: 0 0 300px;
   width: 300px;
   background: var(--bg-block);
   border-radius: var(--radius-lg);

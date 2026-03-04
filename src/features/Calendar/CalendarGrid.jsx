@@ -38,13 +38,23 @@ const CalendarGrid = ({
     return `${year}-${month.toString().padStart(2, "0")}-${dayNum.toString().padStart(2, "0")}`;
   };
   function getMonthGenitive(monthNumber) {
-  const index = monthNumber - 1;
-  const months = [
-    'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
-    'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'
-  ];
-  return months[index];
-}
+    const index = monthNumber - 1;
+    const months = [
+      "января",
+      "февраля",
+      "марта",
+      "апреля",
+      "мая",
+      "июня",
+      "июля",
+      "августа",
+      "сентября",
+      "октября",
+      "ноября",
+      "декабря",
+    ];
+    return months[index];
+  }
   const tasksByDay = useMemo(() => {
     const map = new Map();
     tasks.forEach((task) => {
@@ -82,17 +92,14 @@ const CalendarGrid = ({
         return (
           <Popover
             key={day}
-            styles={{ container: { backgroundColor: 'var(--popover-bg)' } }}
+            styles={{ container: { backgroundColor: "var(--popover-bg)" } }}
             placement="bottomRight"
             title={`Задачи на ${day} ${getMonthGenitive(month)}`}
             content={renderPopoverContent(dayTasks)}
             arrow={mergedArrow}
             trigger="hover"
           >
-            <div
-              className="day-cell"
-              onClick={() => onSelect(dateString)}
-            >
+            <div className="day-cell" onClick={() => onSelect(dateString)}>
               <span className="day-number">{day}</span>
               <div className="tasks-dots">
                 {dayTasks.slice(0, maxDots).map((task) => (

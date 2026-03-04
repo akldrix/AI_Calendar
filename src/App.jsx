@@ -77,7 +77,7 @@ function App() {
         </div>
         <div className="header-controls">
           <button onClick={toggleTheme} className="theme-toggle">
-            {theme === "light" ? (<MoonIcon/>) : (<SunIcon/>)}
+            {theme === "light" ? <MoonIcon /> : <SunIcon />}
           </button>
           <button onClick={prevMonth}>&lt;</button>
           <button onClick={nextMonth}>&gt;</button>
@@ -104,7 +104,7 @@ function App() {
       <div className="prompt-area">
         <input
           type="text"
-          placeholder="AI промпт: Спланируй мой день..."
+          placeholder={isLoading ? "Генерирую..." : "Спланируй мой день..."}
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleAiSend()}
