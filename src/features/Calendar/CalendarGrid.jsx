@@ -82,7 +82,7 @@ const CalendarGrid = ({
         return (
           <Popover
             key={day}
-            overlayInnerStyle={{ backgroundColor: 'var(--popover-bg)' }}
+            styles={{ container: { backgroundColor: 'var(--popover-bg)' } }}
             placement="bottomRight"
             title={`Задачи на ${day} ${getMonthGenitive(month)}`}
             content={renderPopoverContent(dayTasks)}

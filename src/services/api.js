@@ -1,5 +1,4 @@
-const BASE_URL = "http://localhost:3000";
-//"https://posttracheal-beckie-lithographical.ngrok-free.dev";//
+const BASE_URL = "https://posttracheal-beckie-lithographical.ngrok-free.dev";
 
 const headers = {
   "Content-Type": "application/json",
@@ -17,14 +16,15 @@ export const fetchTasks = async () => {
   return await response.json();
 };
 
-export const generateTasksAI = async (prompt) => {
+export const generateTasksAI = async (text) => {
 
-const response = await fetch(`${BASE_URL}/taskfromprompt`, {
+const response = await fetch(`${BASE_URL}/tasks/from-text`, {
   method: "POST",
   headers: {
     "Content-Type": "application/json",
+
   },
-  body: JSON.stringify({prompt: prompt})
+  body: JSON.stringify({text: text})
 });
   
 if (!response.ok) {

@@ -29,24 +29,16 @@ export const useTasks = () => {
     loadTasks();
   }, []);
 
-  const generateFromPrompt = async (prompt, dateContext) => {
+  const generateFromPrompt = async (text) => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await generateTasksAI(prompt);
+      const response = await generateTasksAI(text);
 
-const newTasks = Array.isArray(response) ? response : [];
 
-      const year = dateContext.getFullYear();
-      const month = dateContext.getMonth() + 1;
 
-      const tasksWithFullDate = newTasks.map((t) => ({
-        ...t,
-
-        date: `${year}-${month.toString().padStart(2, "0")}-${t.day.toString().padStart(2, "0")}`,
-      }));
-
-      setTasks((prev) => [...prev, ...tasksWithFullDate]);
+      setTasks((prev) => [...prev, response]);
+      return true;
     } catch (err) {
       console.error("AI Generation Error:", err);
       setError("Не удалось сгенерировать задачи. Попробуйте еще раз.");
