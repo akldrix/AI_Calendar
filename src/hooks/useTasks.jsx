@@ -5,7 +5,7 @@ import React from "react";
 export const useTasks = () => {
   const queryClient = useQueryClient();
   const {
-    data: tasks,
+    data: tasks = [],
     isLoading,
     error,
   } = useQuery({
