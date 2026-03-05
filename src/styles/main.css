@@ -30,12 +30,6 @@
   --popover-bg: #ccc;
   --pulse: #c9bbbb;
 }
-* {
-  transition:
-    background-color 0.5s ease,
-    color 0.5s ease,
-    border-color 0.5s ease;
-}
 body {
   background-color: var(--bg-app);
   font-family:

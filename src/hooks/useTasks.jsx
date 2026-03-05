@@ -1,11 +1,11 @@
-import { useQuery, useMutation, QueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchTasks, createTask, generateTasksAI } from "../services/api";
 import React from "react";
 
 export const useTasks = () => {
-  const queryClient = new QueryClient();
+  const queryClient = useQueryClient();
   const {
-    data: tasks = [],
+    data: tasks,
     isLoading,
     error,
   } = useQuery({
@@ -26,7 +26,7 @@ export const useTasks = () => {
     },
   });
   const toggleTask = (taskId) => {
-    queryClient.setQueryData(["task"], (old) =>
+    queryClient.setQueryData(["tasks"], (old) =>
       old.map((task) =>
         task.id === taskId ? { ...task, completed: !task.completed } : task,
       ),
