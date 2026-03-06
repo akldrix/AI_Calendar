@@ -15,15 +15,10 @@
   --popover-bg: white;
   --pulse: #443636;
    transition: background-color 0.3s ease, color 0.3s ease;
+   --focus-border: 2px solid #66abc5; 
+   --focus-shadow: 0 0 5px rgba(0, 162, 255, 0.5);
 }
-::view-transition-group(root) {
-animation-duration: 0.8s;
-}
-.task-form button.primary:focus {
-  outline: none; 
-  border: 2px solid #404040; 
-  box-shadow: 0 0 5px rgba(204, 204, 204, 0.5); 
-}
+
 [data-theme="dark"] {
   --bg-app: #000000;
   --bg-block: #1c1c1c;
@@ -38,6 +33,16 @@ animation-duration: 0.8s;
   --prompt-content: #cccccc;
   --popover-bg: #ccc;
   --pulse: #c9bbbb;
+  --focus-border: 2px solid #404040; 
+  --focus-shadow: 0 0 5px rgba(204, 204, 204, 0.5); 
+}
+::view-transition-group(root) {
+animation-duration: 0.8s;
+}
+.task-form button.primary:focus {
+  outline: none; 
+  border: var(--focus-border); 
+  box-shadow: 0 0 5px rgba(204, 204, 204, 0.5); 
 }
 body {
   background-color: var(--bg-app);
