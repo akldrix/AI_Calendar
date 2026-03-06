@@ -1,5 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchTasks, createTask, generateTasksAI, toggleTaskCompleteness } from "../services/api";
+import {
+  fetchTasks,
+  createTask,
+  generateTasksAI,
+  toggleTaskCompleteness,
+} from "../services/api";
 import React from "react";
 
 export const useTasks = () => {
@@ -25,7 +30,7 @@ export const useTasks = () => {
       queryClient.setQueryData(["tasks"], (old) => [response, ...old]);
     },
   });
-  
+
   /*const toggleTask = (taskId) => {
     queryClient.setQueryData(["tasks"], (old) =>
       old.map((task) =>
@@ -33,34 +38,32 @@ export const useTasks = () => {
       ),
     );
   };*/
- const mutation = useMutation({
-  mutationFn: toggleTaskCompleteness,
+  const mutation = useMutation({
+    mutationFn: toggleTaskCompleteness,
 
-  onMutate: async (updatedTask) => {
-    await queryClient.cancelQueries({ queryKey: ["tasks"] });
-    const previousTasks = queryClient.getQueryData(["tasks"]);
+    onMutate: async (updatedTask) => {
+      await queryClient.cancelQueries({ queryKey: ["tasks"] });
+      const previousTasks = queryClient.getQueryData(["tasks"]);
 
-    queryClient.setQueryData(["tasks"], (old) =>
-      old.map((task) =>
-        task.id === updatedTask.id ? updatedTask : task
-      )
-    );
+      queryClient.setQueryData(["tasks"], (old) =>
+        old.map((task) => (task.id === updatedTask.id ? updatedTask : task)),
+      );
 
-    return { previousTasks };
-  },
+      return { previousTasks };
+    },
 
-  onError: (err, updatedTask, context) => {
-    queryClient.setQueryData(["tasks"], context.previousTasks);
-  },
+    onError: (err, updatedTask, context) => {
+      queryClient.setQueryData(["tasks"], context.previousTasks);
+    },
 
-  onSettled: () => {
-    queryClient.invalidateQueries({ queryKey: ["tasks"] });
-  },
-});
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+    },
+  });
 
-const handleToggle = (task) => {
-  mutation.mutate({ ...task, completed: !task.completed });
-};
+  const handleToggle = (task) => {
+    mutation.mutate({ ...task, completed: !task.completed });
+  };
 
   return {
     tasks,

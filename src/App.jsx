@@ -9,11 +9,9 @@ import { FilterCategory } from "./features/Tasks/FilterCategory";
 
 import { MoonIcon } from "./components/Icons/Moon";
 import { SunIcon } from "./components/Icons/Sun";
-import { useHotkeys } from 'react-hotkeys-hook';
-
+import { useHotkeys } from "react-hotkeys-hook";
 
 function App() {
-  
   const {
     currentDate,
     monthName,
@@ -55,10 +53,10 @@ function App() {
       setTheme((prev) => (prev === "light" ? "dark" : "light"));
     });
   };
-  useHotkeys('ctrl+t', () => {
+  useHotkeys("ctrl+t", () => {
     toggleTheme();
   });
-  
+
   const toggleCategory = (categoryId) => {
     setHiddenCategories((prev) =>
       prev.includes(categoryId)
@@ -66,23 +64,23 @@ function App() {
         : [...prev, categoryId],
     );
   };
-useHotkeys('shift+h', () => {
-toggleCategory('home');
+  useHotkeys("shift+h", () => {
+    toggleCategory("home");
   });
-  useHotkeys('shift+w', () => {
-toggleCategory('work');
+  useHotkeys("shift+w", () => {
+    toggleCategory("work");
   });
-  useHotkeys('shift+s', () => {
-toggleCategory('self');
+  useHotkeys("shift+s", () => {
+    toggleCategory("self");
   });
   const handleAiSend = () => {
     if (!prompt.trim()) return;
     generateFromPrompt(prompt, currentDate);
     setPrompt("");
   };
-useHotkeys('ctrl+a', () => {
-setModalOpen(true);
-})
+  useHotkeys("ctrl+a", () => {
+    setModalOpen(true);
+  });
   return (
     <div className="app-container">
       <header className="header">

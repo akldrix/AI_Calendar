@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Select } from "antd";
 import { Popover } from "antd";
 
-
 const ManualTaskForm = ({ onSubmit, onCancel, currentDate, daysInMonth }) => {
   const [title, setTitle] = useState("");
   const [time, setTime] = useState("");
@@ -16,7 +15,6 @@ const ManualTaskForm = ({ onSubmit, onCancel, currentDate, daysInMonth }) => {
     { value: "work", label: "Работа" },
     { value: "self", label: "Саморазвитие" },
   ];
-
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!title) return;
@@ -39,17 +37,17 @@ const ManualTaskForm = ({ onSubmit, onCancel, currentDate, daysInMonth }) => {
       category: category,
     });
   };
-useEffect(() => {
-  const handleKeyDown = (event) => {
-    if (event.key === 'Escape') {
-      onCancel();
-    }
-  };
-  document.addEventListener('keydown', handleKeyDown);
-  return () => {
-     document.removeEventListener('keydown', handleKeyDown);
-  };
-}, [onCancel]);
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        onCancel();
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [onCancel]);
   return (
     <form onSubmit={handleSubmit} className="task-form">
       <input
@@ -106,6 +104,12 @@ useEffect(() => {
             onChange={(value) => {
               setCategory(value);
               if (value) setIsCategoryInvalid(false);
+              setTimeout(() => {
+                const submitBtn = document.querySelector(
+                  ".task-form button.primary",
+                );
+                submitBtn?.focus();
+              }, 0);
             }}
             onFocus={() => setIsCategoryInvalid(false)}
             popupClassName="select-dropdown"
@@ -117,10 +121,7 @@ useEffect(() => {
           Отмена
         </button>
 
-        <button
-          type="submit"
-          className="primary"
-        >
+        <button type="submit" className="primary">
           Создать
         </button>
       </div>

@@ -18,7 +18,11 @@
 }
 ::view-transition-group(root) {
 animation-duration: 0.8s;
-
+}
+.task-form button.primary:focus {
+  outline: none; 
+  border: 2px solid #404040; 
+  box-shadow: 0 0 5px rgba(204, 204, 204, 0.5); 
 }
 [data-theme="dark"] {
   --bg-app: #000000;
