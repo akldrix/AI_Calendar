@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchTasks, createTask, generateTasksAI } from "../services/api";
+import { fetchTasks, createTask, generateTasksAI, toggleTaskCompleteness } from "../services/api";
 import React from "react";
 
 export const useTasks = () => {
@@ -25,20 +25,50 @@ export const useTasks = () => {
       queryClient.setQueryData(["tasks"], (old) => [response, ...old]);
     },
   });
-  const toggleTask = (taskId) => {
+  
+  /*const toggleTask = (taskId) => {
     queryClient.setQueryData(["tasks"], (old) =>
       old.map((task) =>
         task.id === taskId ? { ...task, completed: !task.completed } : task,
       ),
     );
-  };
+  };*/
+ const mutation = useMutation({
+  mutationFn: toggleTaskCompleteness,
+
+  onMutate: async (updatedTask) => {
+    await queryClient.cancelQueries({ queryKey: ["tasks"] });
+    const previousTasks = queryClient.getQueryData(["tasks"]);
+
+    queryClient.setQueryData(["tasks"], (old) =>
+      old.map((task) =>
+        task.id === updatedTask.id ? updatedTask : task
+      )
+    );
+
+    return { previousTasks };
+  },
+
+  onError: (err, updatedTask, context) => {
+    queryClient.setQueryData(["tasks"], context.previousTasks);
+  },
+
+  onSettled: () => {
+    queryClient.invalidateQueries({ queryKey: ["tasks"] });
+  },
+});
+
+const handleToggle = (task) => {
+  mutation.mutate({ ...task, completed: !task.completed });
+};
+
   return {
     tasks,
     isLoading: isLoading || aiMutation.isPending || addMutation.isPending,
     error: error || aiMutation.error?.message || addMutation.error?.message,
     generateFromPrompt: aiMutation.mutateAsync,
     addManualTask: addMutation.mutateAsync,
-    toggleTask,
+    handleToggle,
   };
 };
 

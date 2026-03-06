@@ -9,8 +9,11 @@ import { FilterCategory } from "./features/Tasks/FilterCategory";
 
 import { MoonIcon } from "./components/Icons/Moon";
 import { SunIcon } from "./components/Icons/Sun";
+import { useHotkeys } from 'react-hotkeys-hook';
+
 
 function App() {
+  
   const {
     currentDate,
     monthName,
@@ -21,7 +24,7 @@ function App() {
     prevMonth,
   } = useCalendar();
 
-  const { tasks, isLoading, generateFromPrompt, addManualTask, toggleTask } =
+  const { tasks, isLoading, generateFromPrompt, addManualTask, handleToggle } =
     useTasks();
 
   const toDateString = (date) => {
@@ -44,8 +47,18 @@ function App() {
     (task) => !hiddenCategories.includes(task.category),
   );
   const toggleTheme = () => {
-    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+    if (!document.startViewTransition) {
+      setTheme((prev) => (prev === "light" ? "dark" : "light"));
+      return;
+    }
+    document.startViewTransition(() => {
+      setTheme((prev) => (prev === "light" ? "dark" : "light"));
+    });
   };
+  useHotkeys('ctrl+t', () => {
+    toggleTheme();
+  });
+  
   const toggleCategory = (categoryId) => {
     setHiddenCategories((prev) =>
       prev.includes(categoryId)
@@ -53,13 +66,23 @@ function App() {
         : [...prev, categoryId],
     );
   };
-
+useHotkeys('shift+h', () => {
+toggleCategory('home');
+  });
+  useHotkeys('shift+w', () => {
+toggleCategory('work');
+  });
+  useHotkeys('shift+s', () => {
+toggleCategory('self');
+  });
   const handleAiSend = () => {
     if (!prompt.trim()) return;
     generateFromPrompt(prompt, currentDate);
     setPrompt("");
   };
-
+useHotkeys('ctrl+a', () => {
+setModalOpen(true);
+})
   return (
     <div className="app-container">
       <header className="header">
@@ -97,14 +120,14 @@ function App() {
         <RightModal
           selectedDate={selectedDate}
           tasks={filteredTasks}
-          onToggleTask={toggleTask}
+          onToggleTask={handleToggle}
         />
       </div>
 
       <div className="prompt-area">
         <input
           type="text"
-          placeholder={isLoading ? "Генерирую..." : "Спланируй мой день..."}
+          placeholder={isLoading ? "Подождите..." : "Спланируй мой день..."}
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleAiSend()}
