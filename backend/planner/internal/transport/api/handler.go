@@ -31,11 +31,12 @@ func (h *Handler) CreateTask(w http.ResponseWriter, r *http.Request) {
 	}
 
 	t, err := service.BuildTaskFromRequest(service.CreateTaskInput{
-		Title:           req.Title,
-		Date:            req.Date,
-		StartTime:       req.StartTime,
-		DurationMinutes: req.DurationMinutes,
-		Priority:        req.Priority,
+		Title:     req.Title,
+		Date:      req.Date,
+		StartTime: req.StartTime,
+		EndTime:   req.EndTime,
+		Category:  req.Category,
+		Completed: req.Completed,
 	})
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -50,12 +51,13 @@ func (h *Handler) CreateTask(w http.ResponseWriter, r *http.Request) {
 
 	// DTO ответа
 	resp := CreateTaskResponse{
-		ID:              t.ID,
-		Title:           t.Title,
-		Date:            t.Start.Format("2006-01-02"),
-		StartTime:       t.Start.Format("15:04"),
-		DurationMinutes: int(t.Duration.Minutes()),
-		Priority:        t.Priority,
+		ID:        t.ID,
+		Title:     t.Title,
+		Date:      t.Start.Format("2006-01-02"),
+		StartTime: t.Start.Format("15:04"),
+		EndTime:   t.End.Format("15:04"),
+		Category:  t.Category,
+		Completed: t.Completed,
 	}
 
 	w.Header().Set("Content-Type", "application/json")
@@ -71,20 +73,19 @@ func (h *Handler) CreateTaskFromText(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// 1. вызывать Python-сервис
 	aiResp, err := callAIService(req.Text)
 	if err != nil {
 		http.Error(w, "ai service error: "+err.Error(), http.StatusBadGateway)
 		return
 	}
 
-	// 2. превратить ответ ИИ в input сервиса
 	input := service.CreateTaskInput{
-		Title:           aiResp.Title,
-		Date:            aiResp.Date,
-		StartTime:       aiResp.StartTime,
-		DurationMinutes: aiResp.DurationMinutes,
-		Priority:        aiResp.Priority,
+		Title:     aiResp.Title,
+		Date:      aiResp.Date,
+		StartTime: aiResp.StartTime,
+		EndTime:   aiResp.EndTime,
+		Category:  aiResp.Category,
+		Completed: aiResp.Completed,
 	}
 
 	// 3. переиспользуем твою логику построения и сохранения задачи
@@ -100,12 +101,13 @@ func (h *Handler) CreateTaskFromText(w http.ResponseWriter, r *http.Request) {
 	h.mu.Unlock()
 
 	resp := TaskResponse{
-		ID:              t.ID,
-		Title:           t.Title,
-		Date:            t.Start.Format("2006-01-02"),
-		StartTime:       t.Start.Format("15:04"),
-		DurationMinutes: int(t.Duration.Minutes()),
-		Priority:        t.Priority,
+		ID:        t.ID,
+		Title:     t.Title,
+		Date:      t.Start.Format("2006-01-02"),
+		StartTime: t.Start.Format("15:04"),
+		EndTime:   t.End.Format("15:04"),
+		Category:  t.Category,
+		Completed: t.Completed,
 	}
 
 	w.Header().Set("Content-Type", "application/json")
@@ -120,12 +122,13 @@ func (h *Handler) ListTasks(w http.ResponseWriter, r *http.Request) {
 	list := make([]TaskResponse, 0, len(h.tasks))
 	for _, t := range h.tasks {
 		list = append(list, TaskResponse{
-			ID:              t.ID,
-			Title:           t.Title,
-			Date:            t.Start.Format("2006-01-02"),
-			StartTime:       t.Start.Format("15:04"),
-			DurationMinutes: int(t.Duration.Minutes()),
-			Priority:        t.Priority,
+			ID:        t.ID,
+			Title:     t.Title,
+			Date:      t.Start.Format("2006-01-02"),
+			StartTime: t.Start.Format("15:04"),
+			EndTime:   t.End.Format("15:04"),
+			Category:  t.Category,
+			Completed: t.Completed,
 		})
 	}
 

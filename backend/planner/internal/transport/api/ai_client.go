@@ -9,15 +9,14 @@ import (
 
 func callAIService(text string) (AIParsedTask, error) {
 	body, err := json.Marshal(map[string]string{
-		"text": text,
+		"user_input": text,
 	})
 	if err != nil {
 		return AIParsedTask{}, err
 	}
 
-	// адрес Python-сервиса — пока хардкод, потом можно вынести в конфиг / env
 	resp, err := http.Post(
-		"http://localhost:8001/parse-task",
+		"http://127.0.0.1:8000/parse",
 		"application/json",
 		bytes.NewReader(body),
 	)
@@ -30,10 +29,10 @@ func callAIService(text string) (AIParsedTask, error) {
 		return AIParsedTask{}, fmt.Errorf("ai service returned %s", resp.Status)
 	}
 
-	var parsed AIParsedTask
-	if err := json.NewDecoder(resp.Body).Decode(&parsed); err != nil {
+	var wrapper AIParseResponse
+	if err := json.NewDecoder(resp.Body).Decode(&wrapper); err != nil {
 		return AIParsedTask{}, err
 	}
 
-	return parsed, nil
+	return wrapper.Task, nil
 }
