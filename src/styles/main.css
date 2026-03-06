@@ -39,7 +39,9 @@
   --pulse: #c9bbbb;
   --focus-border: 2px solid #404040;
   --focus-shadow: 0 0 5px rgba(204, 204, 204, 0.5);
-  --today-bg: #0c55c3;
+  --today-bg: rgba(29, 101, 241, 0.2);
+  --today-border: 1px solid #1d65f1;
+  --today-shadow: 0 0 15px rgba(29, 101, 241, 0.3);
   --selected: #4978bf;
 }
 ::view-transition-group(root) {
@@ -180,14 +182,16 @@ body {
 }
 .today-cell {
   background-color: var(--today-bg) !important;
+  border: var(--today-border) !important;
+  box-shadow: var(--today-shadow) !important;
 }
 .selected-cell {
-border: 1px solid #4978bf;
-transform: scale(1.05);
-box-shadow: 0 4px 12px rgba(24, 144, 255, 0.35);
+  background-color: rgba(79, 136, 252, 0.1);
+  border: dashed 1px #4882f5;
+  box-shadow: 0 0 15px rgba(46, 116, 255, 0.1);
 }
 .selected-cell.today-cell {
-  box-shadow: none;
+
 
 }
 .day-cell:hover:not(.selected-cell) {
@@ -496,10 +500,23 @@ box-shadow: 0 4px 12px rgba(24, 144, 255, 0.35);
   transition: all 0.6s ease;
 }
 
-.filter-btn.inactive {
-  background-color: #e0e0e0 !important;
-  color: #888 !important;
-  text-decoration: line-through;
+.filter-btn.category-home.inactive {
+  background-color: rgba(60, 196, 124, 0.1); 
+  border: 2px solid #3cc47c !important;
+  color: #3cc47c !important;
+  box-shadow: 0 0 4px rgba(60, 196, 124, 1);
+}
+.filter-btn.category-work.inactive {
+background-color: rgba(54, 115, 255, 0.1);
+  border: 2px solid #3673ff !important;
+  color: #3673ff !important;
+  box-shadow: 0 0 4px rgba(54, 115, 255, 1);
+}
+.filter-btn.category-self.inactive {
+background-color: rgba(255, 175, 4, 0.1);
+  border: 2px solid #ffaf04 !important;
+  color: #ffaf04 !important;
+  box-shadow: 0 0 4px rgba(255, 175, 4, 1);
 }
 .slide-out-right {
   -webkit-animation: slide-out-right 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53)

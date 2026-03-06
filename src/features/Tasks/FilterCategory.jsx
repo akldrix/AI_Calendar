@@ -16,8 +16,6 @@ export function FilterCategory({ hiddenCategories, onToggle }) {
             onClick={() => onToggle(cat.id)}
             className={`filter-btn category-${cat.id} ${isHidden ? "inactive" : ""}`}
             style={{
-              opacity: isHidden ? 0.5 : 1,
-              filter: isHidden ? "grayscale(1)" : "none",
               cursor: "pointer",
             }}
           >

@@ -107,7 +107,7 @@ const CalendarGrid = ({
         return (
           <Popover
             key={day}
-            mouseEnterDelay={0.4}
+            mouseEnterDelay={0.6}
             mouseLeaveDelay={0.2}
             styles={{ container: { backgroundColor: "var(--popover-bg)" } }}
             placement="bottomRight"
