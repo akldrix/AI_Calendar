@@ -114,6 +114,7 @@ function App() {
           startDayOffset={startDay}
           currentDate={currentDate}
           onSelect={setSelectedDate}
+          selectedDate={selectedDate}
         />
         <RightModal
           selectedDate={selectedDate}

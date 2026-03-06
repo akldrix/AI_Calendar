@@ -14,9 +14,13 @@
   --radius-sm: 8px;
   --popover-bg: white;
   --pulse: #443636;
-   transition: background-color 0.3s ease, color 0.3s ease;
-   --focus-border: 2px solid #66abc5; 
-   --focus-shadow: 0 0 5px rgba(0, 162, 255, 0.5);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+  --focus-border: 2px solid #66abc5;
+  --focus-shadow: 0 0 5px rgba(0, 162, 255, 0.5);
+  --today-bg: #0c55c3;
+  --selected-bg: #4978bf;
 }
 
 [data-theme="dark"] {
@@ -33,16 +37,18 @@
   --prompt-content: #cccccc;
   --popover-bg: #ccc;
   --pulse: #c9bbbb;
-  --focus-border: 2px solid #404040; 
-  --focus-shadow: 0 0 5px rgba(204, 204, 204, 0.5); 
+  --focus-border: 2px solid #404040;
+  --focus-shadow: 0 0 5px rgba(204, 204, 204, 0.5);
+  --today-bg: #0c55c3;
+  --selected-bg: #4978bf;
 }
 ::view-transition-group(root) {
-animation-duration: 0.8s;
+  animation-duration: 0.8s;
 }
 .task-form button.primary:focus {
-  outline: none; 
-  border: var(--focus-border); 
-  box-shadow: 0 0 5px rgba(204, 204, 204, 0.5); 
+  outline: none;
+  border: var(--focus-border);
+  box-shadow: 0 0 5px rgba(204, 204, 204, 0.5);
 }
 body {
   background-color: var(--bg-app);
@@ -172,7 +178,12 @@ body {
   cursor: pointer;
   transition: transform 0.1s;
 }
-
+.today-cell {
+  background-color: var(--today-bg) !important;
+}
+.selected-cell {
+  background-color: var(--selected-bg);
+}
 .day-cell:hover {
   transform: scale(1.02);
   -webkit-animation: pulse 0.3s;

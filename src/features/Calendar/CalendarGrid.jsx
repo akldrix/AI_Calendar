@@ -7,6 +7,7 @@ const CalendarGrid = ({
   startDayOffset,
   currentDate,
   onSelect,
+  selectedDate
 }) => {
   const [arrow, setArrow] = useState("Show");
   const mergedArrow = useMemo(() => {
@@ -55,6 +56,9 @@ const CalendarGrid = ({
     ];
     return months[index];
   }
+  const today = new Date();
+  const isCurrent = today.getFullYear() === year && today.getMonth() + 1 === month;
+  const currentCell = today.getDate();
   const tasksByDay = useMemo(() => {
     const map = new Map();
     tasks.forEach((task) => {
@@ -89,6 +93,10 @@ const CalendarGrid = ({
         const dayTasks = tasksByDay.get(day) || [];
         const maxDots = 4;
         const dateString = formatDate(day);
+const isToday = isCurrent && day === currentCell;
+const isSelected = dateString === selectedDate;
+
+const cellClasses = ["day-cell", isToday ? "today-cell" : "", isSelected ? "selected-cell" : ""].filter(Boolean).join(" ");
         return (
           <Popover
             key={day}
@@ -99,7 +107,7 @@ const CalendarGrid = ({
             arrow={mergedArrow}
             trigger="hover"
           >
-            <div className="day-cell" onClick={() => onSelect(dateString)}>
+            <div className={cellClasses} onClick={() => onSelect(dateString)}>
               <span className="day-number">{day}</span>
               <div className="tasks-dots">
                 {dayTasks.slice(0, maxDots).map((task) => (
