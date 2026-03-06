@@ -19,8 +19,8 @@
     color 0.3s ease;
   --focus-border: 2px solid #66abc5;
   --focus-shadow: 0 0 5px rgba(0, 162, 255, 0.5);
-  --today-bg: #0c55c3;
-  --selected-bg: #4978bf;
+  --today-bg: #015feb;
+  --selected: #4978bf;
 }
 
 [data-theme="dark"] {
@@ -40,7 +40,7 @@
   --focus-border: 2px solid #404040;
   --focus-shadow: 0 0 5px rgba(204, 204, 204, 0.5);
   --today-bg: #0c55c3;
-  --selected-bg: #4978bf;
+  --selected: #4978bf;
 }
 ::view-transition-group(root) {
   animation-duration: 0.8s;
@@ -182,9 +182,15 @@ body {
   background-color: var(--today-bg) !important;
 }
 .selected-cell {
-  background-color: var(--selected-bg);
+border: 1px solid #4978bf;
+transform: scale(1.05);
+box-shadow: 0 4px 12px rgba(24, 144, 255, 0.35);
 }
-.day-cell:hover {
+.selected-cell.today-cell {
+  box-shadow: none;
+
+}
+.day-cell:hover:not(.selected-cell) {
   transform: scale(1.02);
   -webkit-animation: pulse 0.3s;
   animation: pulse 0.3s;
@@ -202,14 +208,18 @@ body {
   color: var(--text-main);
   margin-bottom: 6px;
 }
-
+.selected-number {
+  color: white;
+}
 .tasks-dots {
   display: flex;
   gap: 3px;
   flex-wrap: wrap;
   margin-top: 5px;
 }
-
+.more-today {
+  color: white;
+}
 .dot {
   width: 6px;
   height: 6px;

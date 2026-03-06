@@ -108,7 +108,7 @@ const cellClasses = ["day-cell", isToday ? "today-cell" : "", isSelected ? "sele
             trigger="hover"
           >
             <div className={cellClasses} onClick={() => onSelect(dateString)}>
-              <span className="day-number">{day}</span>
+              <span className={isToday ? "selected-number" : "day-number"}>{day}</span>
               <div className="tasks-dots">
                 {dayTasks.slice(0, maxDots).map((task) => (
                   <div
@@ -117,7 +117,7 @@ const cellClasses = ["day-cell", isToday ? "today-cell" : "", isSelected ? "sele
                   />
                 ))}
                 {dayTasks.length > maxDots && (
-                  <span className="more-count">
+                  <span className={isToday ? "more-today" : "more-count"}>
                     +{dayTasks.length - maxDots}
                   </span>
                 )}
