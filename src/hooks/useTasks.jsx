@@ -67,7 +67,7 @@ export const useTasks = () => {
     taskCompletenessMutation.mutate({ ...task, completed: !task.completed });
   };
 
-const deleteTaskMutation = useMutation({
+  const deleteTaskMutation = useMutation({
     mutationFn: deleteTask,
 
     onMutate: async (deletedTask) => {
@@ -91,9 +91,9 @@ const deleteTaskMutation = useMutation({
   });
 
   const handleDeleteTask = (task) => {
-     deleteTaskMutation.mutate(task); 
+    deleteTaskMutation.mutate(task);
   };
-  
+
   const changeTaskMutation = useMutation({
     mutationFn: changeTask,
 
@@ -102,7 +102,7 @@ const deleteTaskMutation = useMutation({
       const previousTasks = queryClient.getQueryData(["tasks"]);
 
       queryClient.setQueryData(["tasks"], (old) =>
-      old.map((task) => (task.id === changedTask.id ? changedTask : task)),
+        old.map((task) => (task.id === changedTask.id ? changedTask : task)),
       );
 
       return { previousTasks };
@@ -118,7 +118,7 @@ const deleteTaskMutation = useMutation({
   });
 
   const handleTaskChange = (task) => {
-     changeTaskMutation.mutate(task); 
+    changeTaskMutation.mutate(task);
   };
   return {
     tasks,
@@ -128,7 +128,7 @@ const deleteTaskMutation = useMutation({
     addManualTask: addMutation.mutateAsync,
     handleToggle,
     handleDeleteTask,
-    handleTaskChange
+    handleTaskChange,
   };
 };
 

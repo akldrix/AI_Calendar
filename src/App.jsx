@@ -121,7 +121,7 @@ function App() {
           <button
             className="add-btn"
             onClick={() => {
-              setEditingTask(null); 
+              setEditingTask(null);
               setModalOpen(true);
             }}
           >

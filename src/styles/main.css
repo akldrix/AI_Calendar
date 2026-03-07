@@ -17,8 +17,8 @@
   transition:
     background-color 0.3s ease,
     color 0.3s ease;
-  --focus-border: 2px solid #66abc5;
-  --focus-shadow: 0 0 5px rgba(0, 162, 255, 0.5);
+  --focus-border: 0 solid #66abc5;
+  --focus-shadow: 0 0 8px rgba(0, 162, 255, 0.5);
   --today-bg: #e0f2fe;
   --today-border: 1px solid #0ea5e9;
   --today-shadow: 0 0 15px rgba(14, 165, 233, 0.15);
@@ -40,8 +40,8 @@
   --prompt-content: #cccccc;
   --popover-bg: #ccc;
   --pulse: #c9bbbb;
-  --focus-border: 2px solid #404040;
-  --focus-shadow: 0 0 5px rgba(204, 204, 204, 0.5);
+  --focus-border: 0 solid #404040;
+  --focus-shadow: 0 0 8px rgba(204, 204, 204, 0.5);
   --today-bg: rgba(29, 101, 241, 0.2);
   --today-border: 1px solid #1d65f1;
   --today-shadow: 0 0 15px rgba(29, 101, 241, 0.3);
@@ -557,4 +557,38 @@ body {
     transform: translateX(1000px);
     opacity: 0;
   }
+}
+.radio {
+  color: #000;
+}
+.radio:hover {
+color: #000;
+
+}
+.ant-radio-button-wrapper-checked.category-home {
+  transition: all 0.3s;
+  background-color: rgba(60, 196, 124, 0.3);
+  color: #3cc47c;
+}
+.ant-radio-button-wrapper-checked.category-home:hover {
+   transition: all 0.3s;
+  color: #3cc47c;
+}
+.ant-radio-button-wrapper-checked.category-work {
+  transition: all 0.3s;
+  background-color: rgba(54, 115, 255, 0.3);
+  color: #3673ff;
+}
+.ant-radio-button-wrapper-checked.category-work:hover {
+   transition: all 0.3s;
+  color: #3673ff;
+}
+.ant-radio-button-wrapper-checked.category-self {
+  transition: all 0.3s;
+  background-color: rgba(255, 175, 4, 0.3);
+  color: #ffaf04;
+}
+.ant-radio-button-wrapper-checked.category-self:hover {
+   transition: all 0.3s;
+  color: #ffaf04;
 }

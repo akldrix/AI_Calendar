@@ -2,7 +2,13 @@ import React from "react";
 import "../styles/main.css";
 import { Checkbox } from "antd";
 
-const RightModal = ({ selectedDate, tasks, onToggleTask, onDelete, taskChange, }) => {
+const RightModal = ({
+  selectedDate,
+  tasks,
+  onToggleTask,
+  onDelete,
+  taskChange,
+}) => {
   if (!selectedDate)
     return <div className="right-modal-empty">Выберите день</div>;
 
@@ -53,8 +59,12 @@ const RightModal = ({ selectedDate, tasks, onToggleTask, onDelete, taskChange, }
                   onChange={() => onToggleTask(task)}
                 />
                 <button className="delete-btn" onClick={() => onDelete(task)} />
-                <button className="change-btn" onClick={() => {
-                taskChange(task)}}></button>
+                <button
+                  className="change-btn"
+                  onClick={() => {
+                    taskChange(task);
+                  }}
+                ></button>
               </li>
             ))}
           </ul>

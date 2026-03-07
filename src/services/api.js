@@ -79,7 +79,7 @@ export const changeTask = async (task) => {
     headers: {
       "Content-Type": "application/json",
     },
-     body: JSON.stringify(task),
+    body: JSON.stringify(task),
   });
   if (!response.ok) {
     throw new Error(`Failed: ${response.status} ${response.statusText}`);

@@ -46,15 +46,6 @@
       "id": 9
     },
     {
-      "title": "Приготовить еду",
-      "start_time": "",
-      "date": "2026-02-10",
-      "duration_minutes": 60,
-      "priority": "high",
-      "category": "home",
-      "id": 10
-    },
-    {
       "title": "Урок по английскому",
       "start_time": "",
       "date": "2026-02-09",
@@ -63,12 +54,58 @@
       "id": 11
     },
     {
-      "title": "Почитать ",
-      "start_time": "12:00",
-      "date": "2026-02-20",
-      "duration_minutes": 60,
+      "title": "qe",
+      "start_time": "",
+      "end_time": "",
+      "date": "2026-03-07",
       "category": "self",
+      "completed": false,
       "id": 12
+    },
+    {
+      "title": "d",
+      "start_time": "",
+      "end_time": "",
+      "date": "2026-03-07",
+      "category": "self",
+      "completed": false,
+      "id": 13
+    },
+    {
+      "title": "dwed",
+      "start_time": "",
+      "end_time": "",
+      "date": "2026-03-07",
+      "category": "home",
+      "completed": false,
+      "id": 14
+    },
+    {
+      "title": "ee",
+      "start_time": "",
+      "end_time": "",
+      "date": "2026-03-07",
+      "category": "work",
+      "completed": false,
+      "id": 15
+    },
+    {
+      "title": "we",
+      "start_time": "",
+      "end_time": "",
+      "date": "2026-03-07",
+      "category": "self",
+      "completed": false,
+      "id": 16
+    },
+    {
+      "title": "erf",
+      "start_time": "",
+      "end_time": "",
+      "date": "2026-03-07",
+      "category": "work",
+      "completed": false,
+      "id": 17
     }
   ]
 }
