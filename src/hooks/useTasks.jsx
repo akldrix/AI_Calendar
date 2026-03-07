@@ -4,6 +4,8 @@ import {
   createTask,
   generateTasksAI,
   toggleTaskCompleteness,
+  deleteTask,
+  changeTask,
 } from "../services/api";
 import React from "react";
 
@@ -38,7 +40,7 @@ export const useTasks = () => {
       ),
     );
   };*/
-  const mutation = useMutation({
+  const taskCompletenessMutation = useMutation({
     mutationFn: toggleTaskCompleteness,
 
     onMutate: async (updatedTask) => {
@@ -62,9 +64,62 @@ export const useTasks = () => {
   });
 
   const handleToggle = (task) => {
-    mutation.mutate({ ...task, completed: !task.completed });
+    taskCompletenessMutation.mutate({ ...task, completed: !task.completed });
   };
 
+const deleteTaskMutation = useMutation({
+    mutationFn: deleteTask,
+
+    onMutate: async (deletedTask) => {
+      await queryClient.cancelQueries({ queryKey: ["tasks"] });
+      const previousTasks = queryClient.getQueryData(["tasks"]);
+
+      queryClient.setQueryData(["tasks"], (old) =>
+        old?.filter((task) => task.id !== deletedTask.id),
+      );
+
+      return { previousTasks };
+    },
+
+    onError: (err, updatedTask, context) => {
+      queryClient.setQueryData(["tasks"], context.previousTasks);
+    },
+
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+    },
+  });
+
+  const handleDeleteTask = (task) => {
+     deleteTaskMutation.mutate(task); 
+  };
+  
+  const changeTaskMutation = useMutation({
+    mutationFn: changeTask,
+
+    onMutate: async (changedTask) => {
+      await queryClient.cancelQueries({ queryKey: ["tasks"] });
+      const previousTasks = queryClient.getQueryData(["tasks"]);
+
+      queryClient.setQueryData(["tasks"], (old) =>
+      old.map((task) => (task.id === changedTask.id ? changedTask : task)),
+      );
+
+      return { previousTasks };
+    },
+
+    onError: (err, updatedTask, context) => {
+      queryClient.setQueryData(["tasks"], context.previousTasks);
+    },
+
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+    },
+  });
+
+  const handleTaskChange = (task) => {
+     changeTaskMutation.mutate(task); 
+  };
   return {
     tasks,
     isLoading: isLoading || aiMutation.isPending || addMutation.isPending,
@@ -72,6 +127,8 @@ export const useTasks = () => {
     generateFromPrompt: aiMutation.mutateAsync,
     addManualTask: addMutation.mutateAsync,
     handleToggle,
+    handleDeleteTask,
+    handleTaskChange
   };
 };
 

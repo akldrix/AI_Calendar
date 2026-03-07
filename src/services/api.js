@@ -1,6 +1,6 @@
 import { QueryClient } from "@tanstack/react-query";
 
-const BASE_URL ="http://localhost:3000";
+const BASE_URL = "http://localhost:3000";
 // "https://posttracheal-beckie-lithographical.ngrok-free.dev";//
 
 const headers = {
@@ -34,8 +34,6 @@ export const generateTasksAI = async (text) => {
   return await response.json();
 };
 
-export const queryClient = new QueryClient();
-
 export const createTask = async (taskData) => {
   const response = await fetch(`${BASE_URL}/tasks`, {
     method: "POST",
@@ -51,16 +49,40 @@ export const createTask = async (taskData) => {
   return await response.json();
 };
 export const toggleTaskCompleteness = async (task) => {
-const response = await fetch(`${BASE_URL}/tasks/${task.id}`, {
-  method: "PUT",
-headers: {
-"Content-Type": "application/json",
-},
-body: JSON.stringify(task),
-});
-if (!response.ok) {
-  throw new Error(`Failed: ${response.status} ${response.statusText}`);
-}
-return await response.json();
-}
-
+  const response = await fetch(`${BASE_URL}/tasks/${task.id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(task),
+  });
+  if (!response.ok) {
+    throw new Error(`Failed: ${response.status} ${response.statusText}`);
+  }
+  return await response.json();
+};
+export const deleteTask = async (task) => {
+  const response = await fetch(`${BASE_URL}/tasks/${task.id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  if (!response.ok) {
+    throw new Error(`Failed: ${response.status} ${response.statusText}`);
+  }
+  return await response.json();
+};
+export const changeTask = async (task) => {
+  const response = await fetch(`${BASE_URL}/tasks/${task.id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+     body: JSON.stringify(task),
+  });
+  if (!response.ok) {
+    throw new Error(`Failed: ${response.status} ${response.statusText}`);
+  }
+  return await response.json();
+};

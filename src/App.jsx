@@ -22,8 +22,15 @@ function App() {
     prevMonth,
   } = useCalendar();
 
-  const { tasks, isLoading, generateFromPrompt, addManualTask, handleToggle } =
-    useTasks();
+  const {
+    tasks,
+    isLoading,
+    generateFromPrompt,
+    addManualTask,
+    handleToggle,
+    handleDeleteTask,
+    handleTaskChange,
+  } = useTasks();
 
   const toDateString = (date) => {
     if (!date) return "";
@@ -37,6 +44,7 @@ function App() {
   const [prompt, setPrompt] = useState("");
   const [hiddenCategories, setHiddenCategories] = useState([]);
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+  const [editingTask, setEditingTask] = useState(null);
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
@@ -81,6 +89,14 @@ function App() {
   useHotkeys("ctrl+a", () => {
     setModalOpen(true);
   });
+  const handleEditClick = (task) => {
+    setEditingTask(task);
+    setModalOpen(true);
+  };
+  const closeModal = () => {
+    setModalOpen(false);
+    setEditingTask(null);
+  };
   return (
     <div className="app-container">
       <header className="header">
@@ -102,7 +118,13 @@ function App() {
           </button>
           <button onClick={prevMonth}>&lt;</button>
           <button onClick={nextMonth}>&gt;</button>
-          <button className="add-btn" onClick={() => setModalOpen(true)}>
+          <button
+            className="add-btn"
+            onClick={() => {
+              setEditingTask(null); 
+              setModalOpen(true);
+            }}
+          >
             + Задача
           </button>
         </div>
@@ -120,6 +142,8 @@ function App() {
           selectedDate={selectedDate}
           tasks={filteredTasks}
           onToggleTask={handleToggle}
+          onDelete={handleDeleteTask}
+          taskChange={handleEditClick}
         />
       </div>
 
@@ -140,12 +164,18 @@ function App() {
       <Modal
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}
-        title="Добавить задачу вручную"
+        title={editingTask ? "Редактировать задачу" : "Добавить задачу"}
       >
         <ManualTaskForm
+          key={editingTask?.id || "new-task"}
+          initialData={editingTask}
           onSubmit={(data) => {
-            addManualTask(data);
-            setModalOpen(false);
+            if (editingTask) {
+              handleTaskChange(data);
+            } else {
+              addManualTask(data);
+            }
+            closeModal();
           }}
           onCancel={() => setModalOpen(false)}
           currentDate={currentDate}

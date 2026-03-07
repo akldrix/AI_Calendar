@@ -2,13 +2,22 @@ import { useState, useEffect } from "react";
 import { Select } from "antd";
 import { Popover } from "antd";
 
-const ManualTaskForm = ({ onSubmit, onCancel, currentDate, daysInMonth }) => {
-  const [title, setTitle] = useState("");
-  const [time, setTime] = useState("");
-  const [endTime, setEndTime] = useState("");
-  const [day, setDay] = useState(new Date().getDate());
-  const [category, setCategory] = useState("");
+const ManualTaskForm = ({
+  onSubmit,
+  onCancel,
+  currentDate,
+  daysInMonth,
+  initialData,
+}) => {
+  const [title, setTitle] = useState(initialData?.title || "");
+  const [time, setTime] = useState(initialData?.start_time || "");
+  const [endTime, setEndTime] = useState(initialData?.end_time || "");
+  const [category, setCategory] = useState(initialData?.category || "");
   const [isCategoryInvalid, setIsCategoryInvalid] = useState(false);
+  const [day, setDay] = useState(() => {
+    if (initialData?.date) return new Date(initialData.date).getDate();
+    return new Date().getDate();
+  });
 
   const options = [
     { value: "home", label: "Дом" },
@@ -30,6 +39,7 @@ const ManualTaskForm = ({ onSubmit, onCancel, currentDate, daysInMonth }) => {
     const formattedDate = `${year}-${month.toString().padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
 
     onSubmit({
+      ...initialData, 
       title,
       start_time: time,
       end_time: endTime,
@@ -84,7 +94,7 @@ const ManualTaskForm = ({ onSubmit, onCancel, currentDate, daysInMonth }) => {
           open={isCategoryInvalid}
           placement="right"
         >
-          <Select
+          <Select value={initialData ? category : undefined}
             status={isCategoryInvalid ? "error" : ""}
             style={{
               backgroundColor: "var(--input-bg)",
@@ -122,7 +132,7 @@ const ManualTaskForm = ({ onSubmit, onCancel, currentDate, daysInMonth }) => {
         </button>
 
         <button type="submit" className="primary">
-          Создать
+          {initialData ? "Сохранить" : "Создать"}
         </button>
       </div>
     </form>
