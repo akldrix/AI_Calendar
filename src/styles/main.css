@@ -562,33 +562,58 @@ body {
   color: #000;
 }
 .radio:hover {
-color: #000;
-
+  color: #000;
+}
+.ant-radio-button-wrapper.category-home {
+   background-color: rgba(60, 196, 124, 0.1);
+  border: 2px solid #3cc47c;
+  color: #3cc47c;
+  box-shadow: 0 0 4px rgba(60, 196, 124, 1);
+}
+.ant-radio-button-wrapper.category-home:hover {
+    color: #3cc47c;
 }
 .ant-radio-button-wrapper-checked.category-home {
   transition: all 0.3s;
-  background-color: rgba(60, 196, 124, 0.3);
-  color: #3cc47c;
+  background-color: rgba(60, 196, 124, 1);
+  color: #000;
 }
 .ant-radio-button-wrapper-checked.category-home:hover {
-   transition: all 0.3s;
-  color: #3cc47c;
+  transition: all 0.3s;
+  color: #000;
+}
+.ant-radio-button-wrapper.category-work {
+  background-color: rgba(54, 115, 255, 0.1);
+  border: 2px solid #3673ff;
+  color: #3673ff;
+  box-shadow: 0 0 4px rgba(54, 115, 255, 1);}
+.ant-radio-button-wrapper.category-work:hover {
+    color: #3673ff;
 }
 .ant-radio-button-wrapper-checked.category-work {
   transition: all 0.3s;
-  background-color: rgba(54, 115, 255, 0.3);
-  color: #3673ff;
+  background-color: rgba(54, 115, 255, 1);
+  color: #000;
 }
 .ant-radio-button-wrapper-checked.category-work:hover {
-   transition: all 0.3s;
-  color: #3673ff;
+  transition: all 0.3s;
+  color: #000;
+}
+.ant-radio-button-wrapper.category-self {
+  background-color: rgba(255, 175, 4, 0.1);
+  border: 2px solid #ffaf04;
+  color: #ffaf04;
+  box-shadow: 0 0 4px rgba(255, 175, 4, 1);
+}
+.ant-radio-button-wrapper.category-self:hover {
+    color: #ffaf04;
 }
 .ant-radio-button-wrapper-checked.category-self {
   transition: all 0.3s;
-  background-color: rgba(255, 175, 4, 0.3);
-  color: #ffaf04;
+  background-color: rgba(255, 175, 4, 1);
+  color: #000;
 }
 .ant-radio-button-wrapper-checked.category-self:hover {
-   transition: all 0.3s;
-  color: #ffaf04;
+  transition: all 0.3s;
+  color: #000;
 }
