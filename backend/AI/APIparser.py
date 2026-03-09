@@ -4,7 +4,7 @@ from pydantic import BaseModel, Field
 import logging
 import os
 from datetime import datetime, timedelta
-
+from typing import Optional
 from parser import OllamaTaskParser
 
 logging.basicConfig(
@@ -28,135 +28,80 @@ except Exception as e:
 
 
 class ParseRequest(BaseModel):
+    mode: str = Field(
+        default="task",
+        description="Режим работы: 'task' для одиночной задачи, 'plan' для составления расписания"
+    )
     user_input: str = Field(
         ...,
         min_length=1,
         max_length=500,
-        description="Текст запроса пользователя",
+        description="Текст запроса пользователя"
+    )
+    horizon_days: Optional[int] = Field(
+        default=7,
+        ge=1,
+        le=30,
+        description="Горизонт планирования в днях (только для mode='plan')"
     )
 
 
-class Task(BaseModel):
-    title: str = Field(..., description="Название задачи")
-    date: str = Field(..., description="Дата в формате ГГГГ-ММ-ДД")
-    start_time: str = Field(..., description="Время начала в формате ЧЧ:ММ")
-    end_time: str = Field(..., description="Время окончания в формате ЧЧ:ММ")
-    category: str = Field("general", description="Категория задачи")
-    completed: bool = Field(False, description="Задача выполнена или нет")
+class TaskResponse(BaseModel):
+    task: dict
 
 
-class ParseResponse(BaseModel):
-    task: Task
+class PlanResponse(BaseModel):
+    action: str
+    items: list
 
 
-def _compute_end_time(date_str: str, start_time_str: str, duration_minutes: int) -> str:
-    start_dt = datetime.strptime(f"{date_str} {start_time_str}", "%Y-%m-%d %H:%M")
-    end_dt = start_dt + timedelta(minutes=int(duration_minutes))
-    return end_dt.strftime("%H:%M")
-
-
+# Эндпоинт парсинга
 @app.post(
     "/parse",
-    response_model=ParseResponse,
-    status_code=status.HTTP_200_OK,
-    summary="Распарсить задачу из текста",
+    summary="Распарсить запрос (задача или план)",
+    description="""
+    Поддерживает два режима:
+    - `mode="task"`: парсинг одиночной задачи (возвращает структуру задачи)
+    - `mode="plan"`: извлечение списка регулярных действий для расписания (возвращает список items)
+    """
 )
-async def parse_task(request: ParseRequest):
-    """
-    Преобразует естественный язык в структурированный объект задачи.
-
-    Пример запроса:
-    ```json
-    {
-      "user_input": "Запланируй танцы завтра в 14:00 на час"
-    }
-    ```
-
-    Пример ответа:
-    ```json
-    {
-      "task": {
-        "title": "Танцы",
-        "date": "2025-02-16",
-        "start_time": "14:00",
-        "end_time": "15:00",
-        "category": "general",
-        "completed": false
-      }
-    }
-    ```
-    """
+async def parse_endpoint(request: ParseRequest):
     if not parser:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="Парсер недоступен (ошибка инициализации)",
+            detail="Парсер недоступен"
         )
 
     try:
-        logger.info(f"Парсинг запроса: {request.user_input[:50]}...")
-        result = parser.parse(request.user_input)
+        logger.info(f"Парсинг в режиме '{request.mode}': {request.user_input[:50]}...")
 
-        if not isinstance(result, dict) or "task" not in result or not isinstance(result["task"], dict):
-            raise ValueError("Некорректный формат ответа от парсера")
-
-        task = result["task"]
-
-        # Дефолты (на случай если модель/парсер что-то пропустили)
-        task.setdefault("category", "general")
-        if task.get("completed") is None:
-            task["completed"] = False
-
-        # Поддержка старого формата: если пришла duration_minutes, но нет end_time
-        if "end_time" not in task or not task.get("end_time"):
-            duration = task.get("duration_minutes")
-            if duration is None:
-                duration = 30  # дефолт
-            task["end_time"] = _compute_end_time(task["date"], task["start_time"], int(duration))
-
-        # Если парсер всё ещё отдаёт duration_minutes — убираем, чтобы контракт был чистым
-        task.pop("duration_minutes", None)
-        task.pop("priority", None)  # на всякий случай, если раньше было
-
-        # Возвращаем в новом контракте
-        return {"task": task}
-
-    except ValueError as e:
-        logger.warning(f"Некорректный запрос: {e}")
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Ошибка в запросе: {str(e)}",
+        # Вызываем парсер с параметрами
+        result = parser.parse(
+            user_input=request.user_input,
+            mode=request.mode,
+            horizon_days=request.horizon_days
         )
-    except RuntimeError as e:
-        logger.error(f"Ошибка парсинга: {e}")
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Не удалось распарсить запрос: {str(e)}",
-        )
+
+        return result
+
     except Exception as e:
-        logger.error(f"Внутренняя ошибка: {e}", exc_info=True)
+        logger.error(f"Ошибка парсинга: {e}", exc_info=True)
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Внутренняя ошибка сервера парсера",
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Ошибка парсинга: {str(e)}"
         )
 
 
-@app.get("/health", summary="Проверка работоспособности")
+# Эндпоинт здоровья
+@app.get("/health")
 async def health():
-    """Проверяет статус сервиса и подключение к Ollama"""
     import requests
 
     ollama_status = "unknown"
-    models = []
-
     try:
         resp = requests.get("http://localhost:11434/api/tags", timeout=2)
-        if resp.status_code == 200:
-            ollama_status = "ok"
-            models = [m.get("name") for m in resp.json().get("models", [])]
-        else:
-            ollama_status = "error"
-    except Exception as e:
-        logger.error(f"Ollama недоступен: {e}")
+        ollama_status = "ok" if resp.status_code == 200 else "error"
+    except:
         ollama_status = "unavailable"
 
     return {
@@ -164,18 +109,20 @@ async def health():
         "service": "ready" if parser else "uninitialized",
         "ollama": ollama_status,
         "model": parser.model if parser else None,
-        "models_available": models,
+        "supported_modes": ["task", "plan"]
     }
 
 
 @app.get("/", include_in_schema=False)
 async def root():
-    """Инфо о сервисе"""
     return {
         "service": "AI Task Parser API",
-        "version": app.version,
+        "version": "1.1.0",
         "docs": "/docs",
-        "health": "/health",
+        "modes": {
+            "task": "Парсинг одиночной задачи",
+            "plan": "Извлечение списка действий для расписания"
+        }
     }
 
 
@@ -183,16 +130,12 @@ if __name__ == "__main__":
     import uvicorn
 
     port = int(os.getenv("PARSER_PORT", 8000))
-
-    logger.info(f"Запуск парсера на http://127.0.0.1:{port}")
-    logger.info(f"Документация: http://127.0.0.1:{port}/docs")
-    logger.info(f"Статус: http://127.0.0.1:{port}/health")
-
-    # ВАЖНО: только 127.0.0.1 — сервис доступен только локально
+    logger.info(f"🚀 Запуск парсера на http://127.0.0.1:{port}")
+    logger.info(f"📚 Документация: http://127.0.0.1:{port}/docs")
     uvicorn.run(
-        "main:app",
+        "AIParser:app",
         host="127.0.0.1",
         port=port,
         reload=False,
-        log_level="info",
+        log_level="info"
     )
