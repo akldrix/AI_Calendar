@@ -1,6 +1,8 @@
 import React from "react";
 import "../styles/main.css";
 import { Checkbox } from "antd";
+import { Dropdown, Space } from "antd";
+import { MoreOutlined } from "@ant-design/icons";
 
 const RightModal = ({
   selectedDate,
@@ -42,31 +44,54 @@ const RightModal = ({
         </h3>
         {todayTasks.length > 0 ? (
           <ul className="task-list">
-            {sortTasks(todayTasks).map((task) => (
-              <li
-                key={task.id}
-                className={`task-item category-${task.category} ${task.completed ? "completed" : ""}`}
-              >
-                <span className="task-text">
-                  {!task.start_time
-                    ? task.title
-                    : `${task.start_time}${task.end_time ? `-${task.end_time}` : ""} — ${task.title}`}
-                </span>
+            {sortTasks(todayTasks).map((task) => {
+              const items = [
+                {
+                  key: "toggle",
+                  label: <div className={task.completed ? "complete-btn active" : "complete-btn inactive"}>{task.completed ? "Выполнено" :  "Выполнить"}</div>,
+                  onClick: () => onToggleTask(task),
+                },
+                {
+                  key: "edit",
+                  label: <div className="menu-item-centered">Изменить</div>,
+                  onClick: () => taskChange(task),
+                },
+                {
+                  type: "divider",
+                },
+                {
+                  key: "delete",
+                  label: "Удалить",
+                  danger: true,
+                  onClick: () => onDelete(task),
+                },
+              ];
+              return (
+                <li onDoubleClick={() => onToggleTask(task)} style={{cursor: "default", userSelect: 'none'}}
+                  key={task.id}
+                  className={`task-item category-${task.category} ${task.completed ? "completed" : ""}`}
+                >
+                  <span className="task-text">
+                    {!task.start_time
+                      ? task.title
+                      : `${task.start_time}${task.end_time ? `-${task.end_time}` : ""} — ${task.title}`}
+                  </span>
 
-                <Checkbox
-                  style={{ color: "black" }}
-                  checked={task.completed}
-                  onChange={() => onToggleTask(task)}
-                />
-                <button className="delete-btn" onClick={() => onDelete(task)} />
-                <button
-                  className="change-btn"
-                  onClick={() => {
-                    taskChange(task);
-                  }}
-                ></button>
-              </li>
-            ))}
+                  <Dropdown
+                    overlayClassName="custom-dropdown"
+                    menu={{ items: items }}
+                    trigger={["click"]}
+                  >
+                    <button
+                      className="ant-dropdown-link action-btn"
+                      onClick={(e) => e.preventDefault()}
+                    >
+                      <MoreOutlined />
+                    </button>
+                  </Dropdown>
+                </li>
+              );
+            })}
           </ul>
         ) : (
           <p className="no-tasks">Нет задач</p>

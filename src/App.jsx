@@ -18,8 +18,11 @@ function App() {
     year,
     daysInMonth,
     startDay,
+    endDay,
     nextMonth,
     prevMonth,
+    prevDaysInMonth,
+    nextDaysInMonth,
   } = useCalendar();
 
   const {
@@ -134,9 +137,14 @@ function App() {
           tasks={filteredTasks}
           daysInMonth={daysInMonth}
           startDayOffset={startDay}
+          endDay={endDay}
           currentDate={currentDate}
           onSelect={setSelectedDate}
           selectedDate={selectedDate}
+          prevDaysInMonth={prevDaysInMonth}
+          nextDaysInMonth={nextDaysInMonth}
+          prevMonth={prevMonth}
+          nextMonth={nextMonth}
         />
         <RightModal
           selectedDate={selectedDate}

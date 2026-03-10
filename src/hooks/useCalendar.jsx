@@ -12,7 +12,8 @@ export const useCalendar = () => {
 
   let startDay = new Date(year, currentDate.getMonth(), 1).getDay();
   if (startDay === 0) startDay = 7;
-
+  let endDay = new Date(year, currentDate.getMonth() + 1, 0).getDay();
+  if (endDay === 0) endDay = 7;
   const nextMonth = () => {
     setCurrentDate((cur) => new Date(cur.getFullYear(), cur.getMonth() + 1, 1));
   };
@@ -20,7 +21,7 @@ export const useCalendar = () => {
   const prevMonth = () => {
     setCurrentDate((cur) => new Date(cur.getFullYear(), cur.getMonth() - 1, 1));
   };
-
+  const prevDaysInMonth = new Date(year, currentDate.getMonth(), 0).getDate()
   return {
     currentDate,
     monthName,
@@ -29,5 +30,7 @@ export const useCalendar = () => {
     startDay,
     nextMonth,
     prevMonth,
+    prevDaysInMonth,
+    endDay,
   };
 };

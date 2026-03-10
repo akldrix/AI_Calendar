@@ -22,7 +22,7 @@
   --today-bg: #e0f2fe;
   --today-border: 1px solid #0ea5e9;
   --today-shadow: 0 0 15px rgba(14, 165, 233, 0.15);
-  --selected-border: solid 1px rgba(14, 165, 233, 1);
+  --selected-border: 1px solid rgba(14, 165, 233, 1);
   --selected-shadow: 0 0 15px rgba(46, 116, 255, 0.2);
 }
 
@@ -46,7 +46,7 @@
   --today-border: 1px solid #1d65f1;
   --today-shadow: 0 0 15px rgba(29, 101, 241, 0.3);
   --selected-bg: rgba(79, 136, 252, 0.1);
-  --selected-border: solid 1px #4882f5;
+  --selected-border: 1px solid #4882f5;
   --selected-shadow: 0 0 15px rgba(46, 116, 255, 0.2);
 }
 ::view-transition-group(root) {
@@ -174,7 +174,7 @@ body {
 .day-cell {
   background-color: var(--bg-card);
   border-radius: var(--radius-md);
-  border: none;
+  border: 1px solid transparent;
   min-height: 80px;
   aspect-ratio: 1 / 1;
   padding: 10px;
@@ -195,16 +195,30 @@ body {
   border: var(--selected-border);
   box-shadow: var(--selected-shadow);
 }
-.day-cell:hover:not(.selected-cell) {
+.day-cell:hover:not(.selected-cell):not(.day-cell.prev) {
   transform: scale(1.02);
   -webkit-animation: pulse 0.3s;
   animation: pulse 0.3s;
-  box-shadow: 0 0 0 1.2em transparent;
+  box-shadow: 0 0 0 0.5em transparent;
 }
 
 .day-cell.empty {
   background-color: transparent;
   cursor: default;
+}
+.day-cell.prev {
+  background-color: transparent;
+  border-radius: var(--radius-md);
+  border: none;
+  min-height: 80px;
+  aspect-ratio: 1 / 1;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.1s;
 }
 
 .day-number {
@@ -212,6 +226,9 @@ body {
   font-weight: 600;
   color: var(--text-main);
   margin-bottom: 6px;
+}
+.day-number.grey{
+    color: rgba(255, 255, 255, 0.5);
 }
 .selected-number {
   font-weight: 700;
@@ -230,6 +247,9 @@ body {
   -webkit-animation: slide-in-left 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)
     both;
   animation: slide-in-left 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+.dot.grey {
+  background-color: #595757;
 }
 .category-home {
   background-color: #3cc47c;
@@ -276,17 +296,16 @@ body {
 }
 .task-item {
   background: transparent;
-  padding: 0;
+  padding: 2px 0;
   border: none;
   display: flex;
-  align-items: start;
+  align-items: center;
   text-align: left;
   font-size: 0.95rem;
   font-weight: 600;
   color: var(--text-main);
   width: 100%;
   gap: 12px;
-  white-space: nowrap;
 }
 .task-item.completed .task-text {
   text-decoration: line-through;
@@ -297,6 +316,7 @@ body {
   margin-right: 5px;
   text-align: left;
   word-break: break-word;
+  white-space: normal;
 }
 .task-item:hover {
   background: transparent;
@@ -304,14 +324,13 @@ body {
 
 .task-item::before {
   content: "";
-  display: inline-block;
+  display: block;
   width: 8px;
   height: 8px;
   background-color: #666;
   border-radius: 50%;
-  margin-right: 12px;
   flex-shrink: 0;
-  margin-top: 6px;
+  margin-top: 0;
 }
 .category-home::before {
   background-color: #3cc47c !important;
@@ -565,13 +584,13 @@ body {
   color: #000;
 }
 .ant-radio-button-wrapper.category-home {
-   background-color: rgba(60, 196, 124, 0.1);
+  background-color: rgba(60, 196, 124, 0.1);
   border: 2px solid #3cc47c;
   color: #3cc47c;
   box-shadow: 0 0 4px rgba(60, 196, 124, 1);
 }
 .ant-radio-button-wrapper.category-home:hover {
-    color: #3cc47c;
+  color: #3cc47c;
 }
 .ant-radio-button-wrapper-checked.category-home {
   transition: all 0.3s;
@@ -586,9 +605,10 @@ body {
   background-color: rgba(54, 115, 255, 0.1);
   border: 2px solid #3673ff;
   color: #3673ff;
-  box-shadow: 0 0 4px rgba(54, 115, 255, 1);}
+  box-shadow: 0 0 4px rgba(54, 115, 255, 1);
+}
 .ant-radio-button-wrapper.category-work:hover {
-    color: #3673ff;
+  color: #3673ff;
 }
 .ant-radio-button-wrapper-checked.category-work {
   transition: all 0.3s;
@@ -606,7 +626,7 @@ body {
   box-shadow: 0 0 4px rgba(255, 175, 4, 1);
 }
 .ant-radio-button-wrapper.category-self:hover {
-    color: #ffaf04;
+  color: #ffaf04;
 }
 .ant-radio-button-wrapper-checked.category-self {
   transition: all 0.3s;
@@ -616,4 +636,44 @@ body {
 .ant-radio-button-wrapper-checked.category-self:hover {
   transition: all 0.3s;
   color: #000;
+}
+.action-btn {
+  background-color: transparent;
+  color: var(--prompt-content);
+  padding: 4px;
+  flex-shrink: 0;
+}
+.action-btn svg {
+  font-size: 1.2em;
+}
+.ant-dropdown-menu-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 8px 12px !important;
+  border-radius: var(--radius-sm);
+}
+.ant-dropdown-menu {
+  width: 100%;
+  min-width: 0;
+}
+.custom-dropdown .ant-dropdown-menu {
+  background-color: var(--popover-bg);
+  min-width: 0;
+}
+.custom-dropdown .ant-checkbox-wrapper {
+  width: 100%;
+}
+.custom-dropdown .ant-dropdown-menu-item:has(.complete-btn.active) {
+  background-color: rgba(60, 196, 124, 1);
+  border-radius: var(--radius-sm);
+}
+.custom-dropdown .ant-dropdown-menu-item {
+  width: 100%;
+  display: flex;
+  box-sizing: border-box;
+  border-radius: var(--radius-sm);
+}
+.custom-dropdown .ant-dropdown-menu-item:has(:not(.complete-btn.active)) {
+  border-radius: var(--radius-sm);
 }
