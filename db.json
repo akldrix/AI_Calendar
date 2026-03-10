@@ -43,7 +43,8 @@
       "duration_minutes": 60,
       "priority": "high",
       "category": "work",
-      "id": 9
+      "id": 9,
+      "completed": false
     },
     {
       "title": "Урок по английскому",
@@ -68,7 +69,7 @@
       "end_time": "11:22",
       "date": "2026-03-07",
       "category": "home",
-      "completed": true,
+      "completed": false,
       "id": 17
     },
     {
@@ -104,7 +105,7 @@
       "end_time": "",
       "date": "2026-03-28",
       "category": "self",
-      "completed": false,
+      "completed": true,
       "id": 23
     },
     {
@@ -115,6 +116,51 @@
       "category": "work",
       "completed": false,
       "id": 24
+    },
+    {
+      "title": "цукц",
+      "start_time": "",
+      "end_time": "",
+      "date": "2026-03-08",
+      "category": "work",
+      "completed": false,
+      "id": 25
+    },
+    {
+      "title": "rewefref",
+      "start_time": "",
+      "end_time": "",
+      "date": "2026-03-07",
+      "category": "work",
+      "completed": false,
+      "id": 26
+    },
+    {
+      "title": "ewdwe",
+      "start_time": "",
+      "end_time": "",
+      "date": "2026-03-07",
+      "category": "work",
+      "completed": false,
+      "id": 27
+    },
+    {
+      "title": "2r23",
+      "start_time": "",
+      "end_time": "",
+      "date": "2026-03-07",
+      "category": "self",
+      "completed": false,
+      "id": 28
+    },
+    {
+      "title": "32e",
+      "start_time": "12:23",
+      "end_time": "22:01",
+      "date": "2026-03-10",
+      "category": "home",
+      "completed": false,
+      "id": 30
     }
   ]
 }

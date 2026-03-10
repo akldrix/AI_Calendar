@@ -24,6 +24,8 @@
   --today-shadow: 0 0 15px rgba(14, 165, 233, 0.15);
   --selected-border: 1px solid rgba(14, 165, 233, 1);
   --selected-shadow: 0 0 15px rgba(46, 116, 255, 0.2);
+  --inactive-text: rgba(0, 0, 0, 0.5);
+  --divider: #000;
 }
 
 [data-theme="dark"] {
@@ -48,6 +50,8 @@
   --selected-bg: rgba(79, 136, 252, 0.1);
   --selected-border: 1px solid #4882f5;
   --selected-shadow: 0 0 15px rgba(46, 116, 255, 0.2);
+  --inactive-text: rgba(255, 255, 255, 0.5);
+  --divider: #ccc;
 }
 ::view-transition-group(root) {
   animation-duration: 0.8s;
@@ -228,7 +232,7 @@ body {
   margin-bottom: 6px;
 }
 .day-number.grey{
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--inactive-text);
 }
 .selected-number {
   font-weight: 700;
@@ -249,7 +253,7 @@ body {
   animation: slide-in-left 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
 .dot.grey {
-  background-color: #595757;
+  background-color: var(--inactive-text);
 }
 .category-home {
   background-color: #3cc47c;
@@ -308,8 +312,7 @@ body {
   gap: 12px;
 }
 .task-item.completed .task-text {
-  text-decoration: line-through;
-  opacity: 0, 5;
+  opacity: 0.4;
 }
 .task-text {
   flex: 1;
@@ -322,7 +325,7 @@ body {
   background: transparent;
 }
 
-.task-item::before {
+/*.task-item::before {
   content: "";
   display: block;
   width: 8px;
@@ -331,6 +334,21 @@ body {
   border-radius: 50%;
   flex-shrink: 0;
   margin-top: 0;
+}*/
+.task-span {
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 0;
+}
+.task-item.completed::before{
+   opacity: 0.4;
+}
+.task-item.crossed.faded {
+opacity: 0.4;
+cursor: pointer;
 }
 .category-home::before {
   background-color: #3cc47c !important;
@@ -346,7 +364,11 @@ body {
 .task-item.faded::before {
   opacity: 0.5;
 }
-
+.task-item.faded {
+  cursor: pointer;
+  user-select: none;
+  opacity: 0.4;
+}
 .divider {
   height: 1px;
   background: #ccc;
@@ -676,4 +698,20 @@ body {
 }
 .custom-dropdown .ant-dropdown-menu-item:has(:not(.complete-btn.active)) {
   border-radius: var(--radius-sm);
+}
+.time-block {
+  font-weight: 600 !important;
+  font-size: small;
+  gap: 0;
+  padding: 0 !important;
+}
+.task-row {
+  display: flex;
+  align-items: center; 
+  gap: 10px;          
+}
+.task-row hr {
+  border: none;
+  height: 1px; 
+  background-color: var(--divider);
 }

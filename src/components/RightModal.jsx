@@ -48,7 +48,17 @@ const RightModal = ({
               const items = [
                 {
                   key: "toggle",
-                  label: <div className={task.completed ? "complete-btn active" : "complete-btn inactive"}>{task.completed ? "Выполнено" :  "Выполнить"}</div>,
+                  label: (
+                    <div
+                      className={
+                        task.completed
+                          ? "complete-btn active"
+                          : "complete-btn inactive"
+                      }
+                    >
+                      {task.completed ? "Выполнено" : "Выполнить"}
+                    </div>
+                  ),
                   onClick: () => onToggleTask(task),
                 },
                 {
@@ -67,14 +77,37 @@ const RightModal = ({
                 },
               ];
               return (
-                <li onDoubleClick={() => onToggleTask(task)} style={{cursor: "default", userSelect: 'none'}}
+                <li
+                  onDoubleClick={() => onToggleTask(task)}
+                  style={{ cursor: "pointer", userSelect: "none" }}
                   key={task.id}
                   className={`task-item category-${task.category} ${task.completed ? "completed" : ""}`}
                 >
                   <span className="task-text">
-                    {!task.start_time
-                      ? task.title
-                      : `${task.start_time}${task.end_time ? `-${task.end_time}` : ""} — ${task.title}`}
+                    {!task.start_time ? (
+                      
+                      <div className="task-row">
+                      <div className="time-block">
+                        <hr style={{width: "32px"}}/>
+                      </div>
+                     <div className={`task-span category-${task.category}`}></div>
+                     <div>{task.title}</div>
+                      </div>
+                    ) : (
+                      <div className="task-row">
+                        <div className="time-block">
+                          <span className="time-start">{task.start_time}</span>
+                          {task.end_time && (
+                            <>
+                            <hr/>
+                              <span className="time-end">{task.end_time}</span>
+                            </>
+                          )}
+                        </div>
+                        <div className={`task-span category-${task.category}`}></div>
+                        <div className="task-title">{task.title}</div>
+                      </div>
+                    )}
                   </span>
 
                   <Dropdown
@@ -109,11 +142,18 @@ const RightModal = ({
             {sortTasks(tomorrowTasks).map((task) => (
               <li
                 key={task.id}
-                className={`task-item faded category-${task.category}`}
+                className={
+                  !task.completed
+                    ? `task-item faded category-${task.category}`
+                    : `task-item crossed faded category-${task.category}`
+                }
               >
-                {!task.start_time
-                  ? task.title
-                  : `${task.start_time}${task.end_time ? ` - ${task.end_time}` : ""} — ${task.title}`}
+                <span className="task-text">
+                <div className="task-row">
+                    <div className={`task-span category-${task.category}`}></div>
+                     <div>{task.title}</div>
+                     </div>
+                  </span>
               </li>
             ))}
           </ul>
