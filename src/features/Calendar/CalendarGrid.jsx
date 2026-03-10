@@ -111,7 +111,7 @@ const CalendarGrid = ({
         );
         const maxDots = 4;
         return (
-          <div key={`prev-${i}`} className="day-cell prev">
+          <div key={`prev-${i}`} className="day-cell prev" style={{cursor: "default"}}>
             <span className="day-number grey">{day}</span>
             <div>
               <div className="tasks-dots">
@@ -188,7 +188,7 @@ const CalendarGrid = ({
         );
         const maxDots = 4;
         return (
-          <div key={`prev-${i}`} className="day-cell prev">
+          <div key={`prev-${i}`} className="day-cell prev" style={{cursor: "default"}}>
             <span className="day-number grey">{day}</span>
             <div>
               <div className="tasks-dots">
