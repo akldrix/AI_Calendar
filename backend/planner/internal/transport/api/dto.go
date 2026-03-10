@@ -2,6 +2,7 @@ package api
 
 type CreateTaskFromTextRequest struct {
 	Text string `json:"text"`
+	Mode string `json:"mode,omitempty"` // "task" | "plan"
 }
 type CreateTaskRequest struct {
 	Title     string `json:"title"`
