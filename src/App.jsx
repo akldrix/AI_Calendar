@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CalendarGrid from "./features/Calendar/CalendarGrid";
 import Modal from "./components/Modal";
 import ManualTaskForm from "./features/Tasks/ManualTaskForm";
@@ -7,7 +7,9 @@ import { useCalendar } from "./hooks/useCalendar";
 import { useTasks } from "./hooks/useTasks";
 import { FilterCategory } from "./features/Tasks/FilterCategory";
 
-import "./styles/main.css";
+import { MoonIcon } from "./components/Icons/Moon";
+import { SunIcon } from "./components/Icons/Sun";
+import { useHotkeys } from "react-hotkeys-hook";
 
 function App() {
   const {
@@ -16,11 +18,22 @@ function App() {
     year,
     daysInMonth,
     startDay,
+    endDay,
     nextMonth,
     prevMonth,
+    prevDaysInMonth,
+    nextDaysInMonth,
   } = useCalendar();
 
-  const { tasks, isLoading, generateFromPrompt, addManualTask } = useTasks();
+  const {
+    tasks,
+    isLoading,
+    generateFromPrompt,
+    addManualTask,
+    handleToggle,
+    handleDeleteTask,
+    handleTaskChange,
+  } = useTasks();
 
   const toDateString = (date) => {
     if (!date) return "";
@@ -33,10 +46,27 @@ function App() {
   const [isModalOpen, setModalOpen] = useState(false);
   const [prompt, setPrompt] = useState("");
   const [hiddenCategories, setHiddenCategories] = useState([]);
-
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+  const [editingTask, setEditingTask] = useState(null);
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
   const filteredTasks = tasks.filter(
     (task) => !hiddenCategories.includes(task.category),
   );
+  const toggleTheme = () => {
+    if (!document.startViewTransition) {
+      setTheme((prev) => (prev === "light" ? "dark" : "light"));
+      return;
+    }
+    document.startViewTransition(() => {
+      setTheme((prev) => (prev === "light" ? "dark" : "light"));
+    });
+  };
+  useHotkeys("ctrl+t", () => {
+    toggleTheme();
+  });
 
   const toggleCategory = (categoryId) => {
     setHiddenCategories((prev) =>
@@ -45,13 +75,31 @@ function App() {
         : [...prev, categoryId],
     );
   };
-
+  useHotkeys("shift+h", () => {
+    toggleCategory("home");
+  });
+  useHotkeys("shift+w", () => {
+    toggleCategory("work");
+  });
+  useHotkeys("shift+s", () => {
+    toggleCategory("self");
+  });
   const handleAiSend = () => {
     if (!prompt.trim()) return;
     generateFromPrompt(prompt, currentDate);
     setPrompt("");
   };
-
+  useHotkeys("ctrl+a", () => {
+    setModalOpen(true);
+  });
+  const handleEditClick = (task) => {
+    setEditingTask(task);
+    setModalOpen(true);
+  };
+  const closeModal = () => {
+    setModalOpen(false);
+    setEditingTask(null);
+  };
   return (
     <div className="app-container">
       <header className="header">
@@ -68,9 +116,18 @@ function App() {
           />
         </div>
         <div className="header-controls">
+          <button onClick={toggleTheme} className="theme-toggle">
+            {theme === "light" ? <MoonIcon /> : <SunIcon />}
+          </button>
           <button onClick={prevMonth}>&lt;</button>
           <button onClick={nextMonth}>&gt;</button>
-          <button className="add-btn" onClick={() => setModalOpen(true)}>
+          <button
+            className="add-btn"
+            onClick={() => {
+              setEditingTask(null);
+              setModalOpen(true);
+            }}
+          >
             + Задача
           </button>
         </div>
@@ -80,15 +137,28 @@ function App() {
           tasks={filteredTasks}
           daysInMonth={daysInMonth}
           startDayOffset={startDay}
+          endDay={endDay}
           currentDate={currentDate}
           onSelect={setSelectedDate}
+          selectedDate={selectedDate}
+          prevDaysInMonth={prevDaysInMonth}
+          nextDaysInMonth={nextDaysInMonth}
+          prevMonth={prevMonth}
+          nextMonth={nextMonth}
         />
-        <RightModal selectedDate={selectedDate} tasks={filteredTasks} />
+        <RightModal
+          selectedDate={selectedDate}
+          tasks={filteredTasks}
+          onToggleTask={handleToggle}
+          onDelete={handleDeleteTask}
+          taskChange={handleEditClick}
+        />
       </div>
+
       <div className="prompt-area">
         <input
           type="text"
-          placeholder="AI промпт: Спланируй мой день..."
+          placeholder={isLoading ? "Подождите..." : "Спланируй мой день..."}
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleAiSend()}
@@ -102,15 +172,22 @@ function App() {
       <Modal
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}
-        title="Добавить задачу вручную"
+        title={editingTask ? "Редактировать задачу" : "Добавить задачу"}
       >
         <ManualTaskForm
+          key={editingTask?.id || "new-task"}
+          initialData={editingTask}
           onSubmit={(data) => {
-            addManualTask(data);
-            setModalOpen(false);
+            if (editingTask) {
+              handleTaskChange(data);
+            } else {
+              addManualTask(data);
+            }
+            closeModal();
           }}
           onCancel={() => setModalOpen(false)}
           currentDate={currentDate}
+          daysInMonth={daysInMonth}
         />
       </Modal>
     </div>

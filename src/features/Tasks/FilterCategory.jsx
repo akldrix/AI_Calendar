@@ -7,18 +7,16 @@ const categories = [
 ];
 export function FilterCategory({ hiddenCategories, onToggle }) {
   return (
-    <div style={{ display: 'flex', gap: '8px' }}>
-      {categories.map(cat => {
+    <div style={{ display: "flex", gap: "8px" }}>
+      {categories.map((cat) => {
         const isHidden = hiddenCategories.includes(cat.id);
         return (
           <button
             key={cat.id}
             onClick={() => onToggle(cat.id)}
-            className={`filter-btn category-${cat.id} ${isHidden ? 'inactive' : ''}`}
+            className={`filter-btn category-${cat.id} ${isHidden ? "inactive" : ""}`}
             style={{
-              opacity: isHidden ? 0.5 : 1,
-              filter: isHidden ? 'grayscale(1)' : 'none',
-              cursor: 'pointer',
+              cursor: "pointer",
             }}
           >
             {cat.label}
@@ -27,5 +25,4 @@ export function FilterCategory({ hiddenCategories, onToggle }) {
       })}
     </div>
   );
-};
-
+}

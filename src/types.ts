@@ -1,15 +1,15 @@
-enum Priority {
-  Low = "low",
-  Medium = "medium",
-  High = "high",
-}
+  enum Category {
+    Home = "home",
+    Work = "work",
+    Self = "self",
+  }
 
-export interface Task {
-  id: string;
-  title: string;
-  description?: string;
-  start_time: string;
-  duration_minutes: number;
-  priority: Priority;
-  date: string;
-}
+  export interface Task {
+    id: string;
+    title: string;
+    description?: string;
+    start_time: string;
+    end_time: string;
+    category: Category;
+    date: string;
+  }
