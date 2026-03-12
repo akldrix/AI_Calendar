@@ -99,7 +99,6 @@ const RightModal = ({
                           <span className="time-start">{task.start_time}</span>
                           {task.end_time && (
                             <>
-                            <hr/>
                               <span className="time-end">{task.end_time}</span>
                             </>
                           )}
