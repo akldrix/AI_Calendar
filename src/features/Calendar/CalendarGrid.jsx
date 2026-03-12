@@ -9,9 +9,6 @@ const CalendarGrid = ({
   onSelect,
   selectedDate,
   prevDaysInMonth,
-  prevMonth,
-  nextMonth,
-  endDay,
 }) => {
   const [arrow, setArrow] = useState("Show");
   const mergedArrow = useMemo(() => {

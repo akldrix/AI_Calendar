@@ -6,7 +6,6 @@ import RightModal from "./components/RightModal";
 import { useCalendar } from "./hooks/useCalendar";
 import { useTasks } from "./hooks/useTasks";
 import { FilterCategory } from "./features/Tasks/FilterCategory";
-
 import { MoonIcon } from "./components/Icons/Moon";
 import { SunIcon } from "./components/Icons/Sun";
 import { useHotkeys } from "react-hotkeys-hook";
@@ -192,6 +191,5 @@ function App() {
       </Modal>
     </div>
   );
-}
-
+};
 export default App;

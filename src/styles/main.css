@@ -703,6 +703,8 @@ cursor: pointer;
   font-size: small;
   gap: 0;
   padding: 0 !important;
+  display: flex;
+  flex-direction: column;
 }
 .task-row {
   display: flex;
