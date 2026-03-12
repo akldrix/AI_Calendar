@@ -1,10 +1,11 @@
 # main.py
 from fastapi import FastAPI, HTTPException, status
+from fastapi.responses import JSONResponses
 from pydantic import BaseModel, Field
 import logging
 import os
 from datetime import datetime, timedelta
-from typing import Optional
+from typing import Optional, List, Dict
 from parser import OllamaTaskParser
 
 logging.basicConfig(
@@ -30,19 +31,27 @@ except Exception as e:
 class ParseRequest(BaseModel):
     mode: str = Field(
         default="task",
-        description="Режим работы: 'task' для одиночной задачи, 'plan' для составления расписания"
+        description="Режим работы: 'task', 'plan' или 'assign'"
     )
-    user_input: str = Field(
+    user_input: Optional[str] = Field(
         ...,
         min_length=1,
         max_length=500,
-        description="Текст запроса пользователя"
+        description="Текст запроса пользователя (не нужен для mode='assign')"
     )
     horizon_days: Optional[int] = Field(
         default=7,
         ge=1,
         le=30,
         description="Горизонт планирования в днях (только для mode='plan')"
+    )
+    occurrences: Optional[List[Dict]] = Field(
+        None,
+        description="Список задач для распределения (только для mode='assign')"
+    )
+    slots: Optional[List[Dict]] = Field(
+        None,
+        description="Список свободных слотов (только для mode='assign')"
     )
 
 
@@ -60,9 +69,10 @@ class PlanResponse(BaseModel):
     "/parse",
     summary="Распарсить запрос (задача или план)",
     description="""
-    Поддерживает два режима:
-    - `mode="task"`: парсинг одиночной задачи (возвращает структуру задачи)
-    - `mode="plan"`: извлечение списка регулярных действий для расписания (возвращает список items)
+    Поддерживает три режима:
+    - `mode="task"`: парсинг одиночной задачи
+    - `mode="plan"`: извлечение списка регулярных действий для расписания
+    - `mode="assign"`: распределение задач (occurrences) по предоставленным слотам (slots)
     """
 )
 async def parse_endpoint(request: ParseRequest):
@@ -76,11 +86,24 @@ async def parse_endpoint(request: ParseRequest):
         logger.info(f"Парсинг в режиме '{request.mode}': {request.user_input[:50]}...")
 
         # Вызываем парсер с параметрами
-        result = parser.parse(
-            user_input=request.user_input,
-            mode=request.mode,
-            horizon_days=request.horizon_days
-        )
+        if request.mode == "assign":
+            if not request.occurrences or not request.slots:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Для mode='assign' требуются поля 'occurrences' и 'slots'"
+                )
+            result = parser.parse(
+                user_input="",  # Не нужен для assign
+                mode=request.mode,
+                occurrences=request.occurrences,
+                slots=request.slots
+            )
+        else:
+            result = parser.parse(
+                user_input=request.user_input or "",
+                mode=request.mode,
+                horizon_days=request.horizon_days or 7
+            )
 
         return result
 
@@ -109,7 +132,7 @@ async def health():
         "service": "ready" if parser else "uninitialized",
         "ollama": ollama_status,
         "model": parser.model if parser else None,
-        "supported_modes": ["task", "plan"]
+        "supported_modes": ["task", "plan", "assign"]
     }
 
 
@@ -121,7 +144,8 @@ async def root():
         "docs": "/docs",
         "modes": {
             "task": "Парсинг одиночной задачи",
-            "plan": "Извлечение списка действий для расписания"
+            "plan": "Извлечение списка действий для расписания",
+            "assign": "Распределение задач по предоставленным слотам"
         }
     }
 
