@@ -10,7 +10,6 @@ import { MoonIcon } from "./components/Icons/Moon";
 import { SunIcon } from "./components/Icons/Sun";
 import { useHotkeys } from "react-hotkeys-hook";
 
-
 function App() {
   const {
     currentDate,
@@ -35,8 +34,6 @@ function App() {
     handleDeleteTask,
     handleTaskChange,
   } = useTasks();
-
-
 
   const toDateString = (date) => {
     if (!date) return "";
@@ -70,12 +67,11 @@ function App() {
   useHotkeys("alt+space, ctrl+t", () => {
     toggleTheme();
   });
-const handleJumpToDate = (dateString) => {
-
+  const handleJumpToDate = (dateString) => {
     const targetDate = new Date(dateString);
-    
-    setCurrentDate(targetDate); 
-    
+
+    setCurrentDate(targetDate);
+
     setSelectedDate(dateString);
   };
 
@@ -94,6 +90,13 @@ const handleJumpToDate = (dateString) => {
   });
   useHotkeys("shift+s", () => {
     toggleCategory("self");
+  });
+
+  useHotkeys("shift+right", () => {
+    nextMonth();
+  });
+  useHotkeys("shift+left", () => {
+    prevMonth();
   });
   const handleAiSend = () => {
     if (!prompt.trim()) return;
@@ -168,7 +171,7 @@ const handleJumpToDate = (dateString) => {
 
       <div className="prompt-area">
         <input
-        id="prompt"
+          id="prompt"
           type="text"
           placeholder={isLoading ? "Подождите..." : "Спланируй мой день..."}
           value={prompt}
@@ -203,8 +206,7 @@ const handleJumpToDate = (dateString) => {
           onSelect={handleJumpToDate}
         />
       </Modal>
-     
     </div>
   );
-};
+}
 export default App;
