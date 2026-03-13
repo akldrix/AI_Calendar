@@ -1,9 +1,12 @@
 import React from "react";
+import { useState } from "react";
 import "../styles/main.css";
 import { Checkbox } from "antd";
 import { Dropdown, Space } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
 import { useLongPress } from "use-long-press";
+import { Confirm } from "./Confirm";
+import { ConfirmForm } from "../features/Tasks/ConfirmForm";
 
 const RightModal = ({
   selectedDate,
@@ -12,14 +15,13 @@ const RightModal = ({
   onDelete,
   taskChange,
 }) => {
+   const [taskToDelete, setTaskToDelete] = useState(null);
   const bind = useLongPress(
     (event, { context }) => {
-      if (context && window.confirm(`Удалить задачу "${context.title}"?`)) {
-      onDelete(context);
-    }
+        setTaskToDelete(context);
     },
     {
-      threshold: 1000,
+      threshold: 400,
       captureEvent: true,
       cancelOnMovement: true,
     },
@@ -89,7 +91,7 @@ const RightModal = ({
                   key: "delete",
                   label: "Удалить",
                   danger: true,
-                  onClick: () => onDelete(task),
+                  onClick: () => setTaskToDelete(task),
                 },
               ];
               return (
@@ -133,7 +135,12 @@ const RightModal = ({
                     overlayClassName="custom-dropdown"
                     menu={{ items: items }}
                     trigger={["click"]}
-                    
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}
+                    onMouseDown={(e) => e.stopPropagation()}
+                    onTouchStart={(e) => e.stopPropagation()}
                   >
                     <button
                       className="ant-dropdown-link action-btn"
@@ -147,6 +154,7 @@ const RightModal = ({
                       <MoreOutlined />
                     </button>
                   </Dropdown>
+                  
                 </li>
               );
             })}
@@ -188,6 +196,20 @@ const RightModal = ({
           <p className="no-tasks">Нет планов на завтра</p>
         )}
       </div>
+       <Confirm 
+        isOpen={!!taskToDelete} 
+        onClose={() => setTaskToDelete(null)} 
+        title="Подтверждение"
+      >
+        <ConfirmForm 
+          taskTitle={taskToDelete?.title}
+          onCancel={() => setTaskToDelete(null)}
+          onConfirm={() => {
+            onDelete(taskToDelete);
+            setTaskToDelete(null);
+          }}
+        />
+      </Confirm>
     </div>
   );
 };

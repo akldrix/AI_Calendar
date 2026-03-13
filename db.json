@@ -10,6 +10,15 @@
       "id": 7
     },
     {
+      "title": "Тренировка в зале",
+      "start_time": "",
+      "date": "2026-02-03",
+      "duration_minutes": 60,
+      "priority": "high",
+      "category": "self",
+      "id": 8
+    },
+    {
       "title": "Сделать end_time",
       "start_time": "",
       "date": "2026-02-23",
