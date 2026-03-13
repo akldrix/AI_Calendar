@@ -27,7 +27,8 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-hotkeys-hook": "^5.2.4",
-    "tailwind-merge": "^3.5.0"
+    "tailwind-merge": "^3.5.0",
+    "use-long-press": "^3.3.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",

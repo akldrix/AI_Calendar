@@ -1,0 +1,75 @@
+/* Фон затемнения */
+.confirm-modal-root.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6); /* Полупрозрачный черный */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(2px); /* Легкое размытие заднего фона */
+}
+
+/* Контейнер окна */
+.confirm-modal-box.modal-content {
+  background: #1a1a1a; /* Темный фон как на скрине */
+  color: #ffffff;
+  padding: 24px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Шапка с заголовком и крестиком */
+.confirm-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.confirm-header h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 24px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+/* Текст вопроса */
+.confirm-body p {
+  font-size: 16px;
+  line-height: 1.4;
+  margin-bottom: 24px;
+  color: #e0e0e0;
+}
+
+/* Блок кнопок */
+.confirm-modal-box .actions  {
+  display: flex;
+  gap: 8px; /* Расстояние между кнопками */
+}
+
+.confirm-modal-box .actions button {
+  flex: 1; /* Кнопки одинаковой ширины */
+  padding: 12px;
+  border-radius: 10px; /* Сильное скругление как на фото */
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+

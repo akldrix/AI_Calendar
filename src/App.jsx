@@ -10,9 +10,11 @@ import { MoonIcon } from "./components/Icons/Moon";
 import { SunIcon } from "./components/Icons/Sun";
 import { useHotkeys } from "react-hotkeys-hook";
 
+
 function App() {
   const {
     currentDate,
+    setCurrentDate,
     monthName,
     year,
     daysInMonth,
@@ -33,6 +35,8 @@ function App() {
     handleDeleteTask,
     handleTaskChange,
   } = useTasks();
+
+
 
   const toDateString = (date) => {
     if (!date) return "";
@@ -63,9 +67,17 @@ function App() {
       setTheme((prev) => (prev === "light" ? "dark" : "light"));
     });
   };
-  useHotkeys("ctrl+t", () => {
+  useHotkeys("alt+space, ctrl+t", () => {
     toggleTheme();
   });
+const handleJumpToDate = (dateString) => {
+
+    const targetDate = new Date(dateString);
+    
+    setCurrentDate(targetDate); 
+    
+    setSelectedDate(dateString);
+  };
 
   const toggleCategory = (categoryId) => {
     setHiddenCategories((prev) =>
@@ -156,6 +168,7 @@ function App() {
 
       <div className="prompt-area">
         <input
+        id="prompt"
           type="text"
           placeholder={isLoading ? "Подождите..." : "Спланируй мой день..."}
           value={prompt}
@@ -186,9 +199,11 @@ function App() {
           }}
           onCancel={() => setModalOpen(false)}
           currentDate={currentDate}
-          daysInMonth={daysInMonth}
+          selectedDate={selectedDate}
+          onSelect={handleJumpToDate}
         />
       </Modal>
+     
     </div>
   );
 };

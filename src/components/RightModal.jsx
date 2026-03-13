@@ -1,8 +1,12 @@
 import React from "react";
+import { useState } from "react";
 import "../styles/main.css";
 import { Checkbox } from "antd";
 import { Dropdown, Space } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
+import { useLongPress } from "use-long-press";
+import { Confirm } from "./Confirm";
+import { ConfirmForm } from "../features/Tasks/ConfirmForm";
 
 const RightModal = ({
   selectedDate,
@@ -11,6 +15,18 @@ const RightModal = ({
   onDelete,
   taskChange,
 }) => {
+   const [taskToDelete, setTaskToDelete] = useState(null);
+  const bind = useLongPress(
+    (event, { context }) => {
+        setTaskToDelete(context);
+    },
+    {
+      threshold: 400,
+      captureEvent: true,
+      cancelOnMovement: true,
+    },
+  );
+
   if (!selectedDate)
     return <div className="right-modal-empty">Выберите день</div>;
 
@@ -30,9 +46,11 @@ const RightModal = ({
   const tomorrowTasks = tasks.filter((task) => task.date === nextDayString);
   const sortTasks = (list) => {
     return [...list].sort((a, b) => {
-      const timeA = a.start_time || "00:00";
-      const timeB = b.start_time || "00:00";
-      return timeA.localeCompare(timeB);
+      if (!a.start_time && b.start_time) return 1;
+      if (a.start_time && !b.start_time) return -1;
+      if (!a.start_time && !b.start_time) return 0;
+
+      return a.start_time.localeCompare(b.start_time);
     });
   };
 
@@ -73,25 +91,27 @@ const RightModal = ({
                   key: "delete",
                   label: "Удалить",
                   danger: true,
-                  onClick: () => onDelete(task),
+                  onClick: () => setTaskToDelete(task),
                 },
               ];
               return (
                 <li
                   onDoubleClick={() => onToggleTask(task)}
+                  {...bind(task)}
                   style={{ cursor: "pointer", userSelect: "none" }}
                   key={task.id}
                   className={`task-item category-${task.category} ${task.completed ? "completed" : ""}`}
                 >
                   <span className="task-text">
                     {!task.start_time ? (
-                      
                       <div className="task-row">
-                      <div className="time-block">
-                        <hr style={{width: "32px"}}/>
-                      </div>
-                     <div className={`task-span category-${task.category}`}></div>
-                     <div>{task.title}</div>
+                        <div className="time-block">
+                          <hr style={{ width: "32px" }} />
+                        </div>
+                        <div
+                          className={`task-span category-${task.category}`}
+                        ></div>
+                        <div>{task.title}</div>
                       </div>
                     ) : (
                       <div className="task-row">
@@ -103,7 +123,9 @@ const RightModal = ({
                             </>
                           )}
                         </div>
-                        <div className={`task-span category-${task.category}`}></div>
+                        <div
+                          className={`task-span category-${task.category}`}
+                        ></div>
                         <div className="task-title">{task.title}</div>
                       </div>
                     )}
@@ -113,14 +135,26 @@ const RightModal = ({
                     overlayClassName="custom-dropdown"
                     menu={{ items: items }}
                     trigger={["click"]}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}
+                    onMouseDown={(e) => e.stopPropagation()}
+                    onTouchStart={(e) => e.stopPropagation()}
                   >
                     <button
                       className="ant-dropdown-link action-btn"
-                      onClick={(e) => e.preventDefault()}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }}
+                      onMouseDown={(e) => e.stopPropagation()}
+                      onTouchStart={(e) => e.stopPropagation()}
                     >
                       <MoreOutlined />
                     </button>
                   </Dropdown>
+                  
                 </li>
               );
             })}
@@ -148,11 +182,13 @@ const RightModal = ({
                 }
               >
                 <span className="task-text">
-                <div className="task-row">
-                    <div className={`task-span category-${task.category}`}></div>
-                     <div>{task.title}</div>
-                     </div>
-                  </span>
+                  <div className="task-row">
+                    <div
+                      className={`task-span category-${task.category}`}
+                    ></div>
+                    <div>{task.title}</div>
+                  </div>
+                </span>
               </li>
             ))}
           </ul>
@@ -160,6 +196,20 @@ const RightModal = ({
           <p className="no-tasks">Нет планов на завтра</p>
         )}
       </div>
+       <Confirm 
+        isOpen={!!taskToDelete} 
+        onClose={() => setTaskToDelete(null)} 
+        title="Подтверждение"
+      >
+        <ConfirmForm 
+          taskTitle={taskToDelete?.title}
+          onCancel={() => setTaskToDelete(null)}
+          onConfirm={() => {
+            onDelete(taskToDelete);
+            setTaskToDelete(null);
+          }}
+        />
+      </Confirm>
     </div>
   );
 };

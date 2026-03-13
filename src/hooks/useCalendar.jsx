@@ -24,6 +24,7 @@ export const useCalendar = () => {
   const prevDaysInMonth = new Date(year, currentDate.getMonth(), 0).getDate()
   return {
     currentDate,
+    setCurrentDate,
     monthName,
     year,
     daysInMonth,
