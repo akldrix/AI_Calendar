@@ -1,25 +1,6 @@
 {
   "tasks": [
     {
-      "title": "Прочитать документацию",
-      "start_time": "",
-      "date": "2026-02-02",
-      "duration_minutes": 60,
-      "priority": "high",
-      "category": "work",
-      "id": 7
-    },
-    {
-      "title": "Сделать end_time",
-      "start_time": "",
-      "date": "2026-02-23",
-      "duration_minutes": 60,
-      "priority": "high",
-      "category": "work",
-      "id": 9,
-      "completed": false
-    },
-    {
       "title": "qwe",
       "start_time": "",
       "end_time": "",
@@ -72,15 +53,6 @@
       "category": "self",
       "completed": false,
       "id": 42
-    },
-    {
-      "title": "ewd",
-      "start_time": "",
-      "end_time": "",
-      "date": "2026-03-21",
-      "category": "self",
-      "completed": true,
-      "id": 43
     },
     {
       "title": "we",
