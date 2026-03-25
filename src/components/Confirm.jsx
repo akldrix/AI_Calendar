@@ -6,7 +6,10 @@ export const Confirm = ({ isOpen, onClose, title, children }) => {
 
   return (
     <div className="modal-overlay confirm-modal-root" onClick={onClose}>
-      <div className="modal-content confirm-modal-box" onClick={(e) => e.stopPropagation()}>
+      <div
+        className="modal-content confirm-modal-box"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="confirm-header">
           <h3>{title}</h3>
           <button className="close-btn" onClick={onClose}>
@@ -18,4 +21,3 @@ export const Confirm = ({ isOpen, onClose, title, children }) => {
     </div>
   );
 };
-

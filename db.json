@@ -19,15 +19,6 @@
       "id": 21
     },
     {
-      "title": "ыуа",
-      "start_time": "",
-      "end_time": "",
-      "date": "2026-03-28",
-      "category": "self",
-      "completed": true,
-      "id": 23
-    },
-    {
       "title": "sdf",
       "start_time": "",
       "end_time": "",
@@ -46,42 +37,6 @@
       "id": 37
     },
     {
-      "title": "wed",
-      "start_time": "",
-      "end_time": "",
-      "date": "2026-05-30",
-      "category": "self",
-      "completed": false,
-      "id": 42
-    },
-    {
-      "title": "we",
-      "start_time": "",
-      "end_time": "",
-      "date": "2026-05-01",
-      "category": "work",
-      "completed": false,
-      "id": 44
-    },
-    {
-      "title": "wef",
-      "start_time": "",
-      "end_time": "",
-      "date": "2027-06-01",
-      "category": "work",
-      "completed": false,
-      "id": 45
-    },
-    {
-      "title": "wef",
-      "start_time": "",
-      "end_time": "",
-      "date": "2026-04-13",
-      "category": "self",
-      "completed": false,
-      "id": 48
-    },
-    {
       "title": "sdc",
       "start_time": "",
       "end_time": "",
@@ -91,31 +46,13 @@
       "id": 50
     },
     {
-      "title": "2dw",
-      "start_time": "",
-      "end_time": "",
-      "date": "2026-05-02",
+      "title": "Учить инвестиции",
+      "start_time": "15:35",
+      "end_time": "17:05",
+      "date": "2026-03-24",
       "category": "self",
       "completed": false,
-      "id": 53
-    },
-    {
-      "title": "с мк",
-      "start_time": "",
-      "end_time": "",
-      "date": "2026-05-03",
-      "category": "work",
-      "completed": false,
-      "id": 58
-    },
-    {
-      "title": "к маа",
-      "start_time": "",
-      "end_time": "",
-      "date": "2026-05-03",
-      "category": "self",
-      "completed": false,
-      "id": 59
+      "id": 52
     }
   ]
 }

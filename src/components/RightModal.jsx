@@ -15,10 +15,10 @@ const RightModal = ({
   onDelete,
   taskChange,
 }) => {
-   const [taskToDelete, setTaskToDelete] = useState(null);
+  const [taskToDelete, setTaskToDelete] = useState(null);
   const bind = useLongPress(
     (event, { context }) => {
-        setTaskToDelete(context);
+      setTaskToDelete(context);
     },
     {
       threshold: 400,
@@ -154,7 +154,6 @@ const RightModal = ({
                       <MoreOutlined />
                     </button>
                   </Dropdown>
-                  
                 </li>
               );
             })}
@@ -196,12 +195,12 @@ const RightModal = ({
           <p className="no-tasks">Нет планов на завтра</p>
         )}
       </div>
-       <Confirm 
-        isOpen={!!taskToDelete} 
-        onClose={() => setTaskToDelete(null)} 
+      <Confirm
+        isOpen={!!taskToDelete}
+        onClose={() => setTaskToDelete(null)}
         title="Подтверждение"
       >
-        <ConfirmForm 
+        <ConfirmForm
           taskTitle={taskToDelete?.title}
           onCancel={() => setTaskToDelete(null)}
           onConfirm={() => {

@@ -18,7 +18,6 @@ export const ConfirmForm = ({ onConfirm, onCancel, taskTitle }) => {
     };
   }, [onCancel, onConfirm]);
 
-
   return (
     <div className="confirm-form">
       <p>
