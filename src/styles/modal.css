@@ -1,24 +1,24 @@
 :root {
---modal-body: white;
---add-btn: #333;
---add-text: white;
---button-bg: #000;
---button-text: white;
---close-bg: transparent;
---close-content: #000;
---input-bg: white;
---border: #ddd;
+  --modal-body: white;
+  --add-btn: #333;
+  --add-text: white;
+  --button-bg: #000;
+  --button-text: white;
+  --close-bg: transparent;
+  --close-content: #000;
+  --input-bg: white;
+  --border: #ddd;
 }
 [data-theme="dark"] {
---modal-body: #1c1c1c;
---add-btn: #CCCC;
---add-text: black;
---button-bg: #CCCC;
---button-text: black;
---close-bg: transparent;
---close-content: #fff;
---input-bg: #CCC;
---border: #212121;
+  --modal-body: #1c1c1c;
+  --add-btn: #cccc;
+  --add-text: black;
+  --button-bg: #cccc;
+  --button-text: black;
+  --close-bg: transparent;
+  --close-content: #fff;
+  --input-bg: #ccc;
+  --border: #212121;
 }
 .modal-overlay {
   position: fixed;
@@ -31,8 +31,8 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
-    -webkit-backdrop-filter: blur(10px); 
-backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
 .modal-content {
   background: var(--modal-body);

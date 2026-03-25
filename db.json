@@ -1,87 +1,6 @@
 {
   "tasks": [
     {
-      "title": "Сдать отчет",
-      "start_time": "",
-      "date": "2026-02-19",
-      "duration_minutes": 60,
-      "priority": "high",
-      "category": "work",
-      "id": 1
-    },
-    {
-      "title": "Вынести мусор",
-      "start_time": "",
-      "date": "2026-02-19",
-      "duration_minutes": 60,
-      "priority": "high",
-      "category": "home",
-      "id": 5
-    },
-    {
-      "title": "Прочитать документацию",
-      "start_time": "",
-      "date": "2026-02-02",
-      "duration_minutes": 60,
-      "priority": "high",
-      "category": "work",
-      "id": 7
-    },
-    {
-      "title": "Тренировка в зале",
-      "start_time": "",
-      "date": "2026-02-03",
-      "duration_minutes": 60,
-      "priority": "high",
-      "category": "self",
-      "id": 8
-    },
-    {
-      "title": "Сделать end_time",
-      "start_time": "",
-      "date": "2026-02-23",
-      "duration_minutes": 60,
-      "priority": "high",
-      "category": "work",
-      "id": 9,
-      "completed": false
-    },
-    {
-      "title": "Урок по английскому",
-      "start_time": "",
-      "date": "2026-02-09",
-      "duration_minutes": 60,
-      "category": "self",
-      "id": 11
-    },
-    {
-      "title": "ee",
-      "start_time": "",
-      "end_time": "",
-      "date": "2026-03-07",
-      "category": "work",
-      "completed": false,
-      "id": 15
-    },
-    {
-      "title": "erf",
-      "start_time": "11:11",
-      "end_time": "11:22",
-      "date": "2026-03-07",
-      "category": "home",
-      "completed": false,
-      "id": 17
-    },
-    {
-      "title": "qwd",
-      "start_time": "",
-      "end_time": "",
-      "date": "2026-03-10",
-      "category": "self",
-      "completed": false,
-      "id": 19
-    },
-    {
       "title": "qwe",
       "start_time": "",
       "end_time": "",
@@ -98,105 +17,6 @@
       "category": "self",
       "completed": false,
       "id": 21
-    },
-    {
-      "title": "ыуа",
-      "start_time": "",
-      "end_time": "",
-      "date": "2026-03-28",
-      "category": "self",
-      "completed": true,
-      "id": 23
-    },
-    {
-      "title": "wed",
-      "start_time": "",
-      "end_time": "",
-      "date": "2026-03-01",
-      "category": "work",
-      "completed": false,
-      "id": 24
-    },
-    {
-      "title": "цукц",
-      "start_time": "",
-      "end_time": "",
-      "date": "2026-03-08",
-      "category": "work",
-      "completed": false,
-      "id": 25
-    },
-    {
-      "title": "rewefref",
-      "start_time": "",
-      "end_time": "",
-      "date": "2026-03-07",
-      "category": "work",
-      "completed": false,
-      "id": 26
-    },
-    {
-      "title": "ewdwe",
-      "start_time": "",
-      "end_time": "",
-      "date": "2026-03-07",
-      "category": "work",
-      "completed": false,
-      "id": 27
-    },
-    {
-      "title": "2r23",
-      "start_time": "",
-      "end_time": "",
-      "date": "2026-03-07",
-      "category": "self",
-      "completed": false,
-      "id": 28
-    },
-    {
-      "title": "32e",
-      "start_time": "12:23",
-      "end_time": "22:01",
-      "date": "2026-03-10",
-      "category": "home",
-      "completed": false,
-      "id": 30
-    },
-    {
-      "title": "ewd",
-      "start_time": "",
-      "end_time": "",
-      "date": "2026-03-12",
-      "category": "work",
-      "completed": false,
-      "id": 31
-    },
-    {
-      "title": "er",
-      "start_time": "",
-      "end_time": "",
-      "date": "2026-03-12",
-      "category": "home",
-      "completed": false,
-      "id": 32
-    },
-    {
-      "title": "r",
-      "start_time": "",
-      "end_time": "",
-      "date": "2026-03-12",
-      "category": "self",
-      "completed": false,
-      "id": 33
-    },
-    {
-      "title": "zdcsdvc",
-      "start_time": "",
-      "end_time": "",
-      "date": "2026-03-20",
-      "category": "home",
-      "completed": false,
-      "id": 35
     },
     {
       "title": "sdf",
@@ -217,31 +37,22 @@
       "id": 37
     },
     {
-      "title": "dfggerge",
+      "title": "sdc",
       "start_time": "",
       "end_time": "",
-      "date": "2026-03-10",
-      "category": "work",
-      "completed": false,
-      "id": 38
+      "date": "2027-04-28",
+      "category": "self",
+      "completed": true,
+      "id": 50
     },
     {
-      "title": "sdfvsfvdvfecd",
-      "start_time": "11:22",
-      "end_time": "22:11",
-      "date": "2026-03-10",
-      "category": "work",
+      "title": "Учить инвестиции",
+      "start_time": "15:35",
+      "end_time": "17:05",
+      "date": "2026-03-24",
+      "category": "self",
       "completed": false,
-      "id": 39
-    },
-    {
-      "title": "sdga",
-      "start_time": "",
-      "end_time": "",
-      "date": "2026-03-09",
-      "category": "work",
-      "completed": false,
-      "id": 40
+      "id": 52
     }
   ]
 }

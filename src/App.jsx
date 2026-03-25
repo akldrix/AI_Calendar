@@ -13,6 +13,7 @@ import { useHotkeys } from "react-hotkeys-hook";
 function App() {
   const {
     currentDate,
+    setCurrentDate,
     monthName,
     year,
     daysInMonth,
@@ -63,9 +64,16 @@ function App() {
       setTheme((prev) => (prev === "light" ? "dark" : "light"));
     });
   };
-  useHotkeys("ctrl+t", () => {
+  useHotkeys("alt+space, ctrl+t", () => {
     toggleTheme();
   });
+  const handleJumpToDate = (dateString) => {
+    const targetDate = new Date(dateString);
+
+    setCurrentDate(targetDate);
+
+    setSelectedDate(dateString);
+  };
 
   const toggleCategory = (categoryId) => {
     setHiddenCategories((prev) =>
@@ -82,6 +90,13 @@ function App() {
   });
   useHotkeys("shift+s", () => {
     toggleCategory("self");
+  });
+
+  useHotkeys("shift+right", () => {
+    nextMonth();
+  });
+  useHotkeys("shift+left", () => {
+    prevMonth();
   });
   const handleAiSend = () => {
     if (!prompt.trim()) return;
@@ -156,6 +171,7 @@ function App() {
 
       <div className="prompt-area">
         <input
+          id="prompt"
           type="text"
           placeholder={isLoading ? "Подождите..." : "Спланируй мой день..."}
           value={prompt}
@@ -186,10 +202,11 @@ function App() {
           }}
           onCancel={() => setModalOpen(false)}
           currentDate={currentDate}
-          daysInMonth={daysInMonth}
+          selectedDate={selectedDate}
+          onSelect={handleJumpToDate}
         />
       </Modal>
     </div>
   );
-};
+}
 export default App;

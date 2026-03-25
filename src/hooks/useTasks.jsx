@@ -48,7 +48,7 @@ export const useTasks = () => {
       const previousTasks = queryClient.getQueryData(["tasks"]);
 
       queryClient.setQueryData(["tasks"], (old) =>
-        old.map((task) => (task.id === updatedTask.id ? updatedTask : task)),
+        old?.map((task) => (task.id === updatedTask.id ? updatedTask : task)),
       );
 
       return { previousTasks };
@@ -102,7 +102,7 @@ export const useTasks = () => {
       const previousTasks = queryClient.getQueryData(["tasks"]);
 
       queryClient.setQueryData(["tasks"], (old) =>
-        old.map((task) => (task.id === changedTask.id ? changedTask : task)),
+        old?.map((task) => (task.id === changedTask.id ? changedTask : task)),
       );
 
       return { previousTasks };

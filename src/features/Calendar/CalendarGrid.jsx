@@ -19,7 +19,6 @@ const CalendarGrid = ({
       return true;
     }
     return {
-      pointAtCenter: true,
     };
   }, [arrow]);
   const renderPopoverContent = (dayTasks) => (

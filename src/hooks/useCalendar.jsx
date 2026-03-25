@@ -21,9 +21,10 @@ export const useCalendar = () => {
   const prevMonth = () => {
     setCurrentDate((cur) => new Date(cur.getFullYear(), cur.getMonth() - 1, 1));
   };
-  const prevDaysInMonth = new Date(year, currentDate.getMonth(), 0).getDate()
+  const prevDaysInMonth = new Date(year, currentDate.getMonth(), 0).getDate();
   return {
     currentDate,
+    setCurrentDate,
     monthName,
     year,
     daysInMonth,

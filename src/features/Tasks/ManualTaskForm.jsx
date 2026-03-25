@@ -7,8 +7,9 @@ const ManualTaskForm = ({
   onSubmit,
   onCancel,
   currentDate,
-  daysInMonth,
   initialData,
+  selectedDate,
+  onSelect,
 }) => {
   const [title, setTitle] = useState(initialData?.title || "");
   const [time, setTime] = useState(initialData?.start_time || "");
@@ -19,9 +20,12 @@ const ManualTaskForm = ({
   const [month, setMonth] = useState(currentDate.getMonth());
   const [day, setDay] = useState(() => {
     if (initialData?.date) return new Date(initialData.date).getDate();
-    return new Date().getDate();
+    return new Date(selectedDate).getDate();
   });
 
+  const monthForUrl = month + 1;
+  const formattedDate = `${year}-${monthForUrl.toString().padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
+  const maxDays = new Date(year, monthForUrl, 0).getDate();
   const options = [
     { value: "home", label: "Дом" },
     { value: "work", label: "Работа" },
@@ -36,8 +40,6 @@ const ManualTaskForm = ({
     }
 
     setIsCategoryInvalid(false);
-    const monthForUrl = (month + 1).toString().padStart(2, "0");
-    const formattedDate = `${year}-${monthForUrl.toString().padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
 
     onSubmit({
       ...initialData,
@@ -91,15 +93,15 @@ const ManualTaskForm = ({
           value={day}
           onChange={(e) => setDay(e.target.value)}
           min="1"
-          max={daysInMonth}
+          max={maxDays}
         />
         <select
           value={month}
           onChange={(e) => setMonth(Number(e.target.value))}
         >
-          {months.map((month, index) => (
-            <option key={index} value={index}>
-              {month}
+          {months.map((m, i) => (
+            <option key={i} value={i}>
+              {m}
             </option>
           ))}
         </select>
@@ -185,7 +187,11 @@ const ManualTaskForm = ({
           Отмена
         </button>
 
-        <button type="submit" className="primary">
+        <button
+          type="submit"
+          className="primary"
+          onClick={() => onSelect(formattedDate)}
+        >
           {initialData ? "Сохранить" : "Создать"}
         </button>
       </div>
