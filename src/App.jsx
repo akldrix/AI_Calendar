@@ -42,6 +42,7 @@ function App() {
     const day = date.getDate();
     return `${year}-${month.toString().padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
   };
+
   const [selectedDate, setSelectedDate] = useState(toDateString(currentDate));
   const [isModalOpen, setModalOpen] = useState(false);
   const [prompt, setPrompt] = useState("");
@@ -67,7 +68,45 @@ function App() {
   useHotkeys("alt+space, ctrl+t", () => {
     toggleTheme();
   });
-  const handleJumpToDate = (dateString) => {
+    const toNextString = (date, direction) => {
+        if (!date || isNaN(date)) return "";
+        const nextDate = new Date(date);
+
+        switch (direction) {
+            case "right": nextDate.setDate(nextDate.getDate() + 1); break;
+            case "left":  nextDate.setDate(nextDate.getDate() - 1); break;
+            case "up":    nextDate.setDate(nextDate.getDate() - 7); break;
+            case "down":  nextDate.setDate(nextDate.getDate() + 7); break;
+            default:      nextDate.setDate(nextDate.getDate() + 1);
+        }
+
+        const year = nextDate.getFullYear();
+        const month = String(nextDate.getMonth() + 1).padStart(2, "0");
+        const day = String(nextDate.getDate()).padStart(2, "0");
+
+        return `${year}-${month}-${day}`;
+    };
+
+    useHotkeys("left, right, up, down", (event) => {
+    event.preventDefault();
+
+    const direction = event.key.replace("Arrow", "").toLowerCase();
+
+    setSelectedDate((prevSelected) => {
+        const currentSelectedObj = new Date(prevSelected.replace(/-/g, "/"));
+        const nextDateStr = toNextString(currentSelectedObj, direction);
+
+        setCurrentDate(new Date(nextDateStr.replace(/-/g, "/")));
+
+        return nextDateStr;
+    });
+}, {
+    enableOnFormTags: true
+}, [selectedDate]);
+
+
+
+const handleJumpToDate = (dateString) => {
     const targetDate = new Date(dateString);
 
     setCurrentDate(targetDate);
