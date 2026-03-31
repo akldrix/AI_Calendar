@@ -67,7 +67,12 @@
       "identity": null
     },
     "win": {
-      "target": "nsis"
-    }
+    "target": "nsis",
+    "requestedExecutionLevel": "asInvoker"
+  },
+  "nsis": {
+    "oneClick": false,
+    "allowToChangeInstallationDirectory": true
+  }
   }
 }

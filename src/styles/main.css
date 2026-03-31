@@ -75,6 +75,9 @@ body {
     max-height: 110vh;
     overflow-x: hidden;
 }
+body::-webkit-scrollbar {
+  display: none;
+}
 
 .app-container {
     max-width: 1200px;
