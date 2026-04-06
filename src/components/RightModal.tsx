@@ -7,18 +7,27 @@ import {MoreOutlined} from "@ant-design/icons";
 import {useLongPress} from "use-long-press";
 import {Confirm} from "./Confirm";
 import {ConfirmForm} from "../features/Tasks/ConfirmForm";
+import type {Task} from "../types.ts";
+import type { MenuProps } from "antd";
 
-const RightModal = ({
+interface RightModalProps {
+    selectedDate: string | null;
+    tasks: Task[];
+    onToggleTask: (task: Task) => void;
+    onDelete: (task: Task) => void;
+    taskChange: (task: Task) => void;
+}
+const RightModal: React.FC<RightModalProps> = ({
                         selectedDate,
                         tasks,
                         onToggleTask,
                         onDelete,
                         taskChange,
                     }) => {
-    const [taskToDelete, setTaskToDelete] = useState(null);
-    const bind = useLongPress(
+    const [taskToDelete, setTaskToDelete] = useState<Task | null>(null);
+    const bind = useLongPress<HTMLLIElement, Task>(
         (event, {context}) => {
-            setTaskToDelete(context);
+           if (context) setTaskToDelete(context);
         },
         {
             threshold: 400,
@@ -32,7 +41,7 @@ const RightModal = ({
 
     const todayTasks = tasks.filter((task) => task.date === selectedDate);
 
-    const getNextDayString = (dateStr) => {
+    const getNextDayString = (dateStr: string): string => {
         const date = new Date(dateStr);
         date.setDate(date.getDate() + 1);
 
@@ -44,7 +53,7 @@ const RightModal = ({
 
     const nextDayString = getNextDayString(selectedDate);
     const tomorrowTasks = tasks.filter((task) => task.date === nextDayString);
-    const sortTasks = (list) => {
+    const sortTasks = (list: Task[]): Task[] => {
         return [...list].sort((a, b) => {
             if (!a.start_time && b.start_time) return 1;
             if (a.start_time && !b.start_time) return -1;
@@ -63,7 +72,7 @@ const RightModal = ({
                 {todayTasks.length > 0 ? (
                     <ul className="task-list">
                         {sortTasks(todayTasks).map((task) => {
-                            const items = [
+                            const items: MenuProps['items'] = [
                                 {
                                     key: "toggle",
                                     label: (
@@ -85,7 +94,7 @@ const RightModal = ({
                                     onClick: () => taskChange(task),
                                 },
                                 {
-                                    type: "divider",
+                                    type: "divider" as const,
                                 },
                                 {
                                     key: "delete",
@@ -135,14 +144,8 @@ const RightModal = ({
                                         overlayClassName="custom-dropdown"
                                         menu={{items: items}}
                                         trigger={["click"]}
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            e.stopPropagation();
-                                        }}
-                                        onMouseDown={(e) => e.stopPropagation()}
-                                        onTouchStart={(e) => e.stopPropagation()}
                                     >
-                                        <button
+                                        <button type={"button"}
                                             className="ant-dropdown-link action-btn"
                                             onClick={(e) => {
                                                 e.preventDefault();
@@ -201,10 +204,10 @@ const RightModal = ({
                 title="Подтверждение"
             >
                 <ConfirmForm
-                    taskTitle={taskToDelete?.title}
+                    taskTitle={taskToDelete?.title || ""}
                     onCancel={() => setTaskToDelete(null)}
                     onConfirm={() => {
-                        onDelete(taskToDelete);
+                      if (taskToDelete) onDelete(taskToDelete);
                         setTaskToDelete(null);
                     }}
                 />

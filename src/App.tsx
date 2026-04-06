@@ -1,14 +1,15 @@
 import {useState, useEffect} from "react";
-import CalendarGrid from "./features/Calendar/CalendarGrid";
-import Modal from "./components/Modal";
-import ManualTaskForm from "./features/Tasks/ManualTaskForm";
-import RightModal from "./components/RightModal";
-import {useCalendar} from "./hooks/useCalendar";
-import {useTasks} from "./hooks/useTasks";
-import {FilterCategory} from "./features/Tasks/FilterCategory";
-import {MoonIcon} from "./components/Icons/Moon";
-import {SunIcon} from "./components/Icons/Sun";
+import CalendarGrid from "./features/Calendar/CalendarGrid.tsx";
+import Modal from "./components/Modal.tsx";
+import ManualTaskForm from "./features/Tasks/ManualTaskForm.tsx";
+import RightModal from "./components/RightModal.tsx";
+import {useCalendar} from "./hooks/useCalendar.tsx";
+import {useTasks} from "./hooks/useTasks.tsx";
+import {FilterCategory} from "./features/Tasks/FilterCategory.tsx";
+import {MoonIcon} from "./components/Icons/Moon.tsx";
+import {SunIcon} from "./components/Icons/Sun.tsx";
 import {useHotkeys} from "react-hotkeys-hook";
+import type {Task, TaskFormData} from "./types.ts";
 
 function App() {
     const {
@@ -22,7 +23,6 @@ function App() {
         nextMonth,
         prevMonth,
         prevDaysInMonth,
-        nextDaysInMonth,
     } = useCalendar();
 
     const {
@@ -35,7 +35,7 @@ function App() {
         handleTaskChange,
     } = useTasks();
 
-    const toDateString = (date) => {
+    const toDateString = (date: Date): string => {
         if (!date) return "";
         const year = date.getFullYear();
         const month = date.getMonth() + 1;
@@ -46,9 +46,9 @@ function App() {
     const [selectedDate, setSelectedDate] = useState(toDateString(currentDate));
     const [isModalOpen, setModalOpen] = useState(false);
     const [prompt, setPrompt] = useState("");
-    const [hiddenCategories, setHiddenCategories] = useState([]);
+    const [hiddenCategories, setHiddenCategories] = useState<string[]>([]);
     const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
-    const [editingTask, setEditingTask] = useState(null);
+    const [editingTask, setEditingTask] = useState<Task | null>(null);
     useEffect(() => {
         document.documentElement.setAttribute("data-theme", theme);
         localStorage.setItem("theme", theme);
@@ -65,11 +65,12 @@ function App() {
             setTheme((prev) => (prev === "light" ? "dark" : "light"));
         });
     };
-    useHotkeys("alt+space, ctrl+t", () => {
+    useHotkeys<HTMLBaseElement>("alt+space, ctrl+t", () => {
         toggleTheme();
     });
-    const toNextString = (date, direction) => {
-        if (!date || isNaN(date)) return "";
+    type Direction = 'right' | 'left' | 'up' | 'down';
+    const toNextString = (date: Date, direction: Direction) => {
+        if (!date || isNaN(date.getTime())) return "";
         const nextDate = new Date(date);
 
         switch (direction) {
@@ -96,12 +97,12 @@ function App() {
         return `${year}-${month}-${day}`;
     };
 
-    useHotkeys("left, right, up, down", (event) => {
+    useHotkeys<HTMLBaseElement>("left, right, up, down", (event) => {
         event.preventDefault();
 
-        const direction = event.key.replace("Arrow", "").toLowerCase();
+        const direction = event.key.replace('Arrow', '').toLowerCase() as Direction;
 
-        setSelectedDate((prevSelected) => {
+        setSelectedDate((prevSelected: string) => {
             const currentSelectedObj = new Date(prevSelected.replace(/-/g, "/"));
             const nextDateStr = toNextString(currentSelectedObj, direction);
 
@@ -114,7 +115,7 @@ function App() {
     }, [selectedDate]);
 
 
-    const handleJumpToDate = (dateString) => {
+    const handleJumpToDate = (dateString: string) => {
         const targetDate = new Date(dateString);
 
         setCurrentDate(targetDate);
@@ -122,38 +123,38 @@ function App() {
         setSelectedDate(dateString);
     };
 
-    const toggleCategory = (categoryId) => {
+    const toggleCategory = (categoryId: string) => {
         setHiddenCategories((prev) =>
             prev.includes(categoryId)
                 ? prev.filter((id) => id !== categoryId)
                 : [...prev, categoryId],
         );
     };
-    useHotkeys("shift+h", () => {
+    useHotkeys<HTMLBaseElement>("shift+h", () => {
         toggleCategory("home");
     });
-    useHotkeys("shift+w", () => {
+    useHotkeys<HTMLBaseElement>("shift+w", () => {
         toggleCategory("work");
     });
-    useHotkeys("shift+s", () => {
+    useHotkeys<HTMLBaseElement>("shift+s", () => {
         toggleCategory("self");
     });
 
-    useHotkeys("shift+right", () => {
+    useHotkeys<HTMLBaseElement>("shift+right", () => {
         nextMonth();
     });
-    useHotkeys("shift+left", () => {
+    useHotkeys<HTMLBaseElement>("shift+left", () => {
         prevMonth();
     });
-    const handleAiSend = () => {
+    const handleAiSend = (): void => {
         if (!prompt.trim()) return;
-        generateFromPrompt(prompt, currentDate);
+       void generateFromPrompt(prompt);
         setPrompt("");
     };
-    useHotkeys("ctrl+a", () => {
+    useHotkeys<HTMLBaseElement>("ctrl+a", () => {
         setModalOpen(true);
     });
-    const handleEditClick = (task) => {
+    const handleEditClick = (task: Task) => {
         setEditingTask(task);
         setModalOpen(true);
     };
@@ -198,14 +199,10 @@ function App() {
                     tasks={filteredTasks}
                     daysInMonth={daysInMonth}
                     startDayOffset={startDay}
-                    endDay={endDay}
                     currentDate={currentDate}
                     onSelect={setSelectedDate}
                     selectedDate={selectedDate}
                     prevDaysInMonth={prevDaysInMonth}
-                    nextDaysInMonth={nextDaysInMonth}
-                    prevMonth={prevMonth}
-                    nextMonth={nextMonth}
                 />
                 <RightModal
                     selectedDate={selectedDate}
@@ -239,11 +236,11 @@ function App() {
                 <ManualTaskForm
                     key={editingTask?.id || "new-task"}
                     initialData={editingTask}
-                    onSubmit={(data) => {
+                    onSubmit={(data: TaskFormData) => {
                         if (editingTask) {
-                            handleTaskChange(data);
+                            handleTaskChange({ ...data, id: editingTask.id } as Task);
                         } else {
-                            addManualTask(data);
+                           void addManualTask(data);
                         }
                         closeModal();
                     }}

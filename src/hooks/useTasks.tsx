@@ -1,4 +1,5 @@
 import {useQuery, useMutation, useQueryClient} from "@tanstack/react-query";
+import React from "react";
 import {
     fetchTasks,
     createTask,
@@ -6,30 +7,32 @@ import {
     toggleTaskCompleteness,
     deleteTask,
     changeTask,
-} from "../services/api";
-import React from "react";
+} from "../services/api.ts";
 
-export const useTasks = () => {
+import type {Task, CreateTaskInput, UseTasksReturn} from "../types.ts";
+
+export const useTasks = (): UseTasksReturn => {
+
     const queryClient = useQueryClient();
     const {
         data: tasks = [],
         isLoading,
         error,
-    } = useQuery({
+    } = useQuery<Task[], Error>({
         queryKey: ["tasks"],
         queryFn: fetchTasks,
         staleTime: 1000 * 60 * 5,
     });
-    const addMutation = useMutation({
-        mutationFn: (taskData) => createTask({...taskData, completed: false}),
-        onSuccess: (response) => {
-            queryClient.setQueryData(["tasks"], (old) => [response, ...old]);
+    const addMutation = useMutation<Task, Error, CreateTaskInput>({
+        mutationFn: (taskData: CreateTaskInput) => createTask({...taskData, completed: false}),
+        onSuccess: (newTask) => {
+            queryClient.setQueryData<Task[]>(["tasks"], (old) => old ? [newTask, ...old] : [newTask]);
         },
     });
-    const aiMutation = useMutation({
+    const aiMutation = useMutation<Task, Error, string>({
         mutationFn: generateTasksAI,
-        onSuccess: (response) => {
-            queryClient.setQueryData(["tasks"], (old) => [response, ...old]);
+        onSuccess: (newTask) => {
+            queryClient.setQueryData<Task[]>(["tasks"], (old) => old ? [newTask, ...old] : [newTask]);
         },
     });
 
@@ -40,49 +43,52 @@ export const useTasks = () => {
         ),
       );
     };*/
-    const taskCompletenessMutation = useMutation({
+    const taskCompletenessMutation = useMutation<Task, Error, Task, { previousTasks: Task[] | undefined}>({
         mutationFn: toggleTaskCompleteness,
 
         onMutate: async (updatedTask) => {
             await queryClient.cancelQueries({queryKey: ["tasks"]});
-            const previousTasks = queryClient.getQueryData(["tasks"]);
+            const previousTasks = queryClient.getQueryData<Task[]>(["tasks"]);
 
-            queryClient.setQueryData(["tasks"], (old) =>
+            queryClient.setQueryData<Task[]>(["tasks"], (old) =>
                 old?.map((task) => (task.id === updatedTask.id ? updatedTask : task)),
             );
 
             return {previousTasks};
         },
 
-        onError: (err, updatedTask, context) => {
-            queryClient.setQueryData(["tasks"], context.previousTasks);
+        onError: (_err, _variables, context) => {
+            if (context?.previousTasks) {
+                queryClient.setQueryData(["tasks"], context.previousTasks);
+            }
         },
-
         onSettled: () => {
             queryClient.invalidateQueries({queryKey: ["tasks"]});
         },
     });
 
-    const handleToggle = (task) => {
+    const handleToggle = (task: Task) => {
         taskCompletenessMutation.mutate({...task, completed: !task.completed});
     };
 
-    const deleteTaskMutation = useMutation({
+    const deleteTaskMutation = useMutation<void, Error, Task, {previousTasks: Task[] | undefined}>({
         mutationFn: deleteTask,
 
         onMutate: async (deletedTask) => {
             await queryClient.cancelQueries({queryKey: ["tasks"]});
-            const previousTasks = queryClient.getQueryData(["tasks"]);
+            const previousTasks = queryClient.getQueryData<Task[]>(["tasks"]);
 
-            queryClient.setQueryData(["tasks"], (old) =>
+            queryClient.setQueryData<Task[]>(["tasks"], (old) =>
                 old?.filter((task) => task.id !== deletedTask.id),
             );
 
             return {previousTasks};
         },
 
-        onError: (err, updatedTask, context) => {
-            queryClient.setQueryData(["tasks"], context.previousTasks);
+        onError: (_err, _variables, context) => {
+            if (context?.previousTasks) {
+                queryClient.setQueryData(["tasks"], context.previousTasks);
+            }
         },
 
         onSettled: () => {
@@ -90,26 +96,28 @@ export const useTasks = () => {
         },
     });
 
-    const handleDeleteTask = (task) => {
+    const handleDeleteTask = (task: Task) => {
         deleteTaskMutation.mutate(task);
     };
 
-    const changeTaskMutation = useMutation({
+    const changeTaskMutation = useMutation<Task, Error, Task, { previousTasks: Task[] | undefined}>({
         mutationFn: changeTask,
 
         onMutate: async (changedTask) => {
             await queryClient.cancelQueries({queryKey: ["tasks"]});
-            const previousTasks = queryClient.getQueryData(["tasks"]);
+            const previousTasks = queryClient.getQueryData<Task[]>(["tasks"]);
 
-            queryClient.setQueryData(["tasks"], (old) =>
+            queryClient.setQueryData<Task[]>(["tasks"], (old) =>
                 old?.map((task) => (task.id === changedTask.id ? changedTask : task)),
             );
 
             return {previousTasks};
         },
 
-        onError: (err, updatedTask, context) => {
-            queryClient.setQueryData(["tasks"], context.previousTasks);
+        onError: (_err, _updatedTask, context) => {
+            if (context?.previousTasks) {
+                queryClient.setQueryData(["tasks"], context.previousTasks);
+            }
         },
 
         onSettled: () => {
@@ -117,13 +125,13 @@ export const useTasks = () => {
         },
     });
 
-    const handleTaskChange = (task) => {
+    const handleTaskChange = (task: Task) => {
         changeTaskMutation.mutate(task);
     };
     return {
         tasks,
         isLoading: isLoading || aiMutation.isPending || addMutation.isPending,
-        error: error || aiMutation.error?.message || addMutation.error?.message,
+        error: error?.message || aiMutation.error?.message || addMutation.error?.message,
         generateFromPrompt: aiMutation.mutateAsync,
         addManualTask: addMutation.mutateAsync,
         handleToggle,

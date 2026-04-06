@@ -5,7 +5,7 @@ import { motion, useAnimation } from "framer-motion";
 import type { HTMLAttributes } from "react";
 import { forwardRef, useCallback, useImperativeHandle, useRef } from "react";
 
-import { cn } from "../../utils/utils";
+import { cn } from "../../utils/utils.ts";
 
 export interface MoonIconHandle {
   startAnimation: () => void;

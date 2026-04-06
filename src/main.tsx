@@ -17,11 +17,16 @@ export const queryClient = new QueryClient({
 const persister = createAsyncStoragePersister({
     storage: window.localStorage,
 });
-persistQueryClient({queryClient, persister});
-createRoot(document.getElementById("root")).render(
-    <StrictMode>
-        <QueryClientProvider client={queryClient}>
-            <App/>
-        </QueryClientProvider>
-    </StrictMode>,
-);
+persistQueryClient({queryClient, persister, maxAge: 1000 * 60 * 30,});
+
+const rootElement = document.getElementById("root");
+if (rootElement) {
+    createRoot(rootElement).render(
+        <StrictMode>
+            <QueryClientProvider client={queryClient}>
+                <App/>
+            </QueryClientProvider>
+        </StrictMode>,
+    );
+}
+
