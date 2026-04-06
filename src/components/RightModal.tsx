@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useMemo} from "react";
 import {useState} from "react";
 import "../styles/main.css";
 import {Checkbox} from "antd";
@@ -62,6 +62,8 @@ const RightModal: React.FC<RightModalProps> = ({
             return a.start_time.localeCompare(b.start_time);
         });
     };
+    const sortedTodayTasks = useMemo(() => sortTasks(todayTasks), [todayTasks]);
+    const sortedTomorrowTasks = useMemo(() => sortTasks(tomorrowTasks), [tomorrowTasks]);
 
     return (
         <div className="right-modal-content">
@@ -69,9 +71,9 @@ const RightModal: React.FC<RightModalProps> = ({
                 <h3 className="sidebar-title">
                     Дата: <span>{selectedDate}</span>
                 </h3>
-                {todayTasks.length > 0 ? (
+                {sortedTodayTasks.length > 0 ? (
                     <ul className="task-list">
-                        {sortTasks(todayTasks).map((task) => {
+                        {sortedTodayTasks.map((task) => {
                             const items: MenuProps['items'] = [
                                 {
                                     key: "toggle",
@@ -172,9 +174,9 @@ const RightModal: React.FC<RightModalProps> = ({
                 <h3 className="sidebar-title">
                     Следующий день: <span>{nextDayString}</span>
                 </h3>
-                {tomorrowTasks.length > 0 ? (
+                {sortedTomorrowTasks.length > 0 ? (
                     <ul className="task-list">
-                        {sortTasks(tomorrowTasks).map((task) => (
+                        {sortedTomorrowTasks.map((task) => (
                             <li
                                 key={task.id}
                                 className={

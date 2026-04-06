@@ -1,11 +1,20 @@
 import React from "react";
 import "../../styles/main.css";
+interface Category {
+  id: string;
+  label: string;
+}
+
 const categories = [
   { id: "home", label: "Дом" },
   { id: "work", label: "Работа" },
   { id: "self", label: "Саморазвитие" },
 ];
-export function FilterCategory({ hiddenCategories, onToggle }) {
+interface FilterCategoryProps {
+  hiddenCategories: string[];
+  onToggle: (id: string) => void;
+}
+export function FilterCategory({ hiddenCategories, onToggle }: FilterCategoryProps) {
   return (
     <div style={{ display: "flex", gap: "8px" }}>
       {categories.map((cat) => {
@@ -19,7 +28,7 @@ export function FilterCategory({ hiddenCategories, onToggle }) {
               cursor: "pointer",
             }}
           >
-            {cat.label}
+            {cat.label} {isHidden ? "" : "✕"}
           </button>
         );
       })}

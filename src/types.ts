@@ -37,6 +37,8 @@ export interface ConfirmProps {
     className?: string;
 }
 
-export interface TaskFormData extends Omit<Task, "id"> {
-date: string;
+export interface TaskFormData extends Partial<Omit<Task, "id">> {
+    title: string;
+    date: string;
+    category: Category;
 }
