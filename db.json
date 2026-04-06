@@ -28,13 +28,33 @@
       "id": 50
     },
     {
-      "title": "Учить инвестиции",
-      "start_time": "15:35",
-      "end_time": "17:05",
-      "date": "2026-03-24",
+      "title": "1 april",
+      "start_time": "",
+      "end_time": "",
+      "date": "2033-04-01",
       "category": "self",
       "completed": false,
-      "id": 52
+      "id": 54
+    },
+    {
+      "title": "qwd",
+      "start_time": "",
+      "end_time": "",
+      "date": "2026-03-21",
+      "category": "self",
+      "completed": true,
+      "description": "",
+      "id": 55
+    },
+    {
+      "title": "wd",
+      "start_time": "",
+      "end_time": "",
+      "date": "2026-03-21",
+      "category": "home",
+      "completed": true,
+      "description": "",
+      "id": 56
     }
   ]
 }

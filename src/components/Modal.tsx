@@ -1,9 +1,18 @@
-import React from "react";
+import React, {type ReactNode, type MouseEvent} from "react";
 import "../styles/modal.css";
 
-const Modal = ({ isOpen, onClose, title, children }) => {
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  title: string;
+  children: ReactNode;
+}
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
   if (!isOpen) return null;
 
+  const handleContentClick = (e: MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+  };
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>

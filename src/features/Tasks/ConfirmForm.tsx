@@ -1,10 +1,14 @@
 import React from "react";
 import { useEffect, useRef } from "react";
-
-export const ConfirmForm = ({ onConfirm, onCancel, taskTitle }) => {
-  const confirmBtnRef = useRef(null);
+interface ConfirmFormProps {
+  onConfirm: () => void;
+  onCancel: () => void;
+  taskTitle?: string;
+}
+export const ConfirmForm: React.FC<ConfirmFormProps> = ({ onConfirm, onCancel, taskTitle }) => {
+  const confirmBtnRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
-    const handleKeyDown = (event) => {
+    const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") onCancel();
       if (event.key === "Enter") onConfirm();
     };

@@ -1,7 +1,15 @@
-import { useState, useEffect } from "react";
-import { Select } from "antd";
-import { Popover } from "antd";
-import { Radio } from "antd";
+import React, {useEffect, useRef, useState} from "react";
+import {Popover, Radio} from "antd";
+import {Category, type Task, type TaskFormData} from "../../types.ts";
+
+interface ManualTaskFormProps {
+  onSubmit: (data: TaskFormData) => void;
+  onCancel: () => void;
+  currentDate: Date;
+  initialData?: Task;
+  selectedDate: string;
+  onSelect: (date: string) => void;
+}
 
 const ManualTaskForm = ({
   onSubmit,
@@ -10,48 +18,49 @@ const ManualTaskForm = ({
   initialData,
   selectedDate,
   onSelect,
-}) => {
+}: ManualTaskFormProps) => {
   const [title, setTitle] = useState(initialData?.title || "");
   const [time, setTime] = useState(initialData?.start_time || "");
   const [endTime, setEndTime] = useState(initialData?.end_time || "");
-  const [category, setCategory] = useState(initialData?.category || "");
+  const [category, setCategory] = useState<Category | "">(initialData?.category || "");
   const [isCategoryInvalid, setIsCategoryInvalid] = useState(false);
-  const [year, setYear] = useState(currentDate.getFullYear());
-  const [month, setMonth] = useState(currentDate.getMonth());
-  const [day, setDay] = useState(() => {
-    if (initialData?.date) return new Date(initialData.date).getDate();
-    return new Date(selectedDate).getDate();
-  });
+  const initialDateObj = initialData?.date ? new Date(initialData.date) : new Date(selectedDate);
+
+  const [year, setYear] = useState(initialDateObj.getFullYear());
+  const [month, setMonth] = useState(initialDateObj.getMonth());
+  const [day, setDay] = useState(initialDateObj.getDate());
 
   const monthForUrl = month + 1;
   const formattedDate = `${year}-${monthForUrl.toString().padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
   const maxDays = new Date(year, monthForUrl, 0).getDate();
   const options = [
-    { value: "home", label: "Дом" },
-    { value: "work", label: "Работа" },
-    { value: "self", label: "Саморазвитие" },
+    { value: Category.Home, label: "Дом" },
+    { value: Category.Work, label: "Работа" },
+    { value: Category.Self, label: "Личное" },
   ];
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!title) return;
+  const handleSubmit = (event: React.SyntheticEvent) => {
+    event.preventDefault();
+    if (!title.trim() ) return;
     if (!category) {
       setIsCategoryInvalid(true);
       return;
     }
 
-    setIsCategoryInvalid(false);
-
-    onSubmit({
-      ...initialData,
-      title,
-      start_time: time,
-      end_time: endTime,
-      date: formattedDate,
-      category: category,
-    });
+    onSelect(formattedDate);
+const taskData: TaskFormData = {
+    ...initialData,
+          title,
+          start_time: time,
+          end_time: endTime,
+          date: formattedDate,
+          category: category as Category,
+          completed: initialData?.completed ?? false,
+          description: initialData?.description ?? "",
+    };
+    onSubmit(taskData);
   };
   useEffect(() => {
-    const handleKeyDown = (event) => {
+    const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         onCancel();
       }
@@ -76,7 +85,7 @@ const ManualTaskForm = ({
     "ноября",
     "декабря",
   ];
-
+  const submitBtnRef = useRef<HTMLButtonElement>(null);
   return (
     <form onSubmit={handleSubmit} className="task-form">
       <input
@@ -91,7 +100,7 @@ const ManualTaskForm = ({
           type="number"
           placeholder="День"
           value={day}
-          onChange={(e) => setDay(e.target.value)}
+          onChange={(e) => setDay(Number(e.target.value))}
           min="1"
           max={maxDays}
         />
@@ -109,7 +118,7 @@ const ManualTaskForm = ({
           type="number"
           placeholder="Год"
           value={year}
-          onChange={(e) => setYear(e.target.value)}
+          onChange={(e) => setYear(Number(e.target.value))}
           min={2000}
         />
       </div>
@@ -142,10 +151,7 @@ const ManualTaskForm = ({
             if (value) setIsCategoryInvalid(false);
 
             setTimeout(() => {
-              const submitBtn = document.querySelector(
-                ".task-form button.primary",
-              );
-              submitBtn?.focus();
+              submitBtnRef.current?.focus();
             }, 0);
           }}
           style={{
@@ -191,6 +197,7 @@ const ManualTaskForm = ({
           type="submit"
           className="primary"
           onClick={() => onSelect(formattedDate)}
+          ref={submitBtnRef}
         >
           {initialData ? "Сохранить" : "Создать"}
         </button>
