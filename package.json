@@ -2,7 +2,6 @@
   "name": "ai-calendar",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
   "main": "electron.cjs",
   "homepage": "./",
   "scripts": {
@@ -67,7 +66,11 @@
         "dmg"
       ],
       "identity": null,
-      "icon": "build/icon.icns"
+      "icon": "build/icon.icns",
+      "mergeASARs": false
+    },
+    "dmg": {
+      "writeUpdateInfo": false
     },
     "win": {
       "target": "nsis",
