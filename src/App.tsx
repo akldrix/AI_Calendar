@@ -28,6 +28,7 @@ function App() {
     const {
         tasks,
         isLoading,
+        isPending,
         generateFromPrompt,
         addManualTask,
         handleToggle,
@@ -49,6 +50,24 @@ function App() {
     const [hiddenCategories, setHiddenCategories] = useState<string[]>([]);
     const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
     const [editingTask, setEditingTask] = useState<Task | null>(null);
+    const [showSkeleton, setShowSkeleton] = useState(false);
+
+    useEffect(() => {
+        let timer: ReturnType<typeof setTimeout>;
+
+        if(isPending) {
+            timer = setTimeout(() => {
+                setShowSkeleton(true);
+            }, 50);
+        } else {
+            setShowSkeleton(false);
+        }
+        return () => {
+            clearTimeout(timer);
+        }
+    }, [isPending]);
+
+
     useEffect(() => {
         document.documentElement.setAttribute("data-theme", theme);
         localStorage.setItem("theme", theme);
@@ -210,6 +229,7 @@ function App() {
                     onToggleTask={handleToggle}
                     onDelete={handleDeleteTask}
                     taskChange={handleEditClick}
+                    isLoading={showSkeleton}
                 />
             </div>
 
@@ -238,7 +258,7 @@ function App() {
                     initialData={editingTask}
                     onSubmit={(data: TaskFormData) => {
                         if (editingTask) {
-                            handleTaskChange({ ...data, id: editingTask.id } as Task);
+                            handleTaskChange({ ...data, id: editingTask.id, completed: editingTask.completed } as Task);
                         } else {
                            void addManualTask(data);
                         }

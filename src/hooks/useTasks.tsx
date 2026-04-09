@@ -18,6 +18,7 @@ export const useTasks = (): UseTasksReturn => {
         data: tasks = [],
         isLoading,
         error,
+        isPending,
     } = useQuery<Task[], Error>({
         queryKey: ["tasks"],
         queryFn: fetchTasks,
@@ -137,6 +138,7 @@ export const useTasks = (): UseTasksReturn => {
         handleToggle,
         handleDeleteTask,
         handleTaskChange,
+        isPending: isPending || addMutation.isPending,
     };
 };
 

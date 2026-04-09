@@ -6,7 +6,7 @@ interface ManualTaskFormProps {
   onSubmit: (data: TaskFormData) => void;
   onCancel: () => void;
   currentDate: Date;
-  initialData?: Task;
+  initialData?: Task | null;
   selectedDate: string;
   onSelect: (date: string) => void;
 }

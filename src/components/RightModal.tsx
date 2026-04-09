@@ -8,7 +8,10 @@ import {useLongPress} from "use-long-press";
 import {Confirm} from "./Confirm";
 import {ConfirmForm} from "../features/Tasks/ConfirmForm";
 import type {Task} from "../types.ts";
-import type { MenuProps } from "antd";
+import type {MenuProps} from "antd";
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
+
 
 interface RightModalProps {
     selectedDate: string | null;
@@ -16,18 +19,22 @@ interface RightModalProps {
     onToggleTask: (task: Task) => void;
     onDelete: (task: Task) => void;
     taskChange: (task: Task) => void;
+    isLoading?: boolean;
+    isPending?: boolean;
 }
+
 const RightModal: React.FC<RightModalProps> = ({
-                        selectedDate,
-                        tasks,
-                        onToggleTask,
-                        onDelete,
-                        taskChange,
-                    }) => {
+                                                   selectedDate,
+                                                   tasks,
+                                                   onToggleTask,
+                                                   onDelete,
+                                                   taskChange,
+                                                   isLoading,
+                                               }) => {
     const [taskToDelete, setTaskToDelete] = useState<Task | null>(null);
     const bind = useLongPress<HTMLLIElement, Task>(
         (event, {context}) => {
-           if (context) setTaskToDelete(context);
+            if (context) setTaskToDelete(context);
         },
         {
             threshold: 400,
@@ -59,19 +66,34 @@ const RightModal: React.FC<RightModalProps> = ({
             if (a.start_time && !b.start_time) return -1;
             if (!a.start_time && !b.start_time) return 0;
 
-            return a.start_time.localeCompare(b.start_time);
+            return (a.start_time || "").localeCompare(b.start_time || "");
         });
     };
     const sortedTodayTasks = useMemo(() => sortTasks(todayTasks), [todayTasks]);
     const sortedTomorrowTasks = useMemo(() => sortTasks(tomorrowTasks), [tomorrowTasks]);
 
+    const TaskSkeleton = () => (
+        <li className="task-item" style={{ marginBottom: '10px', display: 'flex', alignItems: 'center' }}>
+            <div style={{ width: '40px', marginRight: '15px' }}>
+                <Skeleton width={35} height={12} count={2} />
+            </div>
+            <div style={{ flex: 1 }}>
+                <Skeleton height={20} width="80%" />
+            </div>
+        </li>
+    );
     return (
         <div className="right-modal-content">
             <div className="task-group">
                 <h3 className="sidebar-title">
                     Дата: <span>{selectedDate}</span>
                 </h3>
-                {sortedTodayTasks.length > 0 ? (
+                {isLoading ? (<ul className="task-list">
+                        <TaskSkeleton />
+                        <TaskSkeleton />
+                        <TaskSkeleton />
+                    </ul>) :
+                    sortedTodayTasks.length > 0 ? (
                     <ul className="task-list">
                         {sortedTodayTasks.map((task) => {
                             const items: MenuProps['items'] = [
@@ -148,13 +170,13 @@ const RightModal: React.FC<RightModalProps> = ({
                                         trigger={["click"]}
                                     >
                                         <button type={"button"}
-                                            className="ant-dropdown-link action-btn"
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                e.stopPropagation();
-                                            }}
-                                            onMouseDown={(e) => e.stopPropagation()}
-                                            onTouchStart={(e) => e.stopPropagation()}
+                                                className="ant-dropdown-link action-btn"
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    e.stopPropagation();
+                                                }}
+                                                onMouseDown={(e) => e.stopPropagation()}
+                                                onTouchStart={(e) => e.stopPropagation()}
                                         >
                                             <MoreOutlined/>
                                         </button>
@@ -174,7 +196,12 @@ const RightModal: React.FC<RightModalProps> = ({
                 <h3 className="sidebar-title">
                     Следующий день: <span>{nextDayString}</span>
                 </h3>
-                {sortedTomorrowTasks.length > 0 ? (
+                {isLoading ? (<ul className="task-list">
+                        <TaskSkeleton />
+                        <TaskSkeleton />
+                        <TaskSkeleton />
+                    </ul>):
+                    sortedTomorrowTasks.length > 0 ? (
                     <ul className="task-list">
                         {sortedTomorrowTasks.map((task) => (
                             <li
@@ -209,7 +236,7 @@ const RightModal: React.FC<RightModalProps> = ({
                     taskTitle={taskToDelete?.title || ""}
                     onCancel={() => setTaskToDelete(null)}
                     onConfirm={() => {
-                      if (taskToDelete) onDelete(taskToDelete);
+                        if (taskToDelete) onDelete(taskToDelete);
                         setTaskToDelete(null);
                     }}
                 />

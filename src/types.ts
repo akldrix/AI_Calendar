@@ -10,8 +10,8 @@ export interface Task {
     id: string;
     title: string;
     description?: string;
-    start_time: string;
-    end_time: string;
+    start_time?: string;
+    end_time?: string;
     category: Category;
     date: string;
     completed: boolean;
@@ -22,6 +22,7 @@ export type CreateTaskInput = Omit<Task, "id" | "completed">;
 export interface UseTasksReturn {
     tasks: Task[];
     isLoading: boolean;
+    isPending: boolean;
     error: string | null | undefined;
     generateFromPrompt: (prompt: string) => Promise<Task>;
     addManualTask: (task: CreateTaskInput) => Promise<Task>;
@@ -37,8 +38,10 @@ export interface ConfirmProps {
     className?: string;
 }
 
-export interface TaskFormData extends Partial<Omit<Task, "id">> {
+export interface TaskFormData extends CreateTaskInput {
     title: string;
     date: string;
     category: Category;
+    completed: boolean;
 }
+
