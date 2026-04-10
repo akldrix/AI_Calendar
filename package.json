@@ -2,7 +2,6 @@
   "name": "ai-calendar",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
   "main": "electron.cjs",
   "homepage": "./",
   "scripts": {
@@ -10,7 +9,9 @@
     "build": "vite build",
     "server": "json-server --watch db.json --port 3000",
     "preview": "vite preview",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -30,6 +31,7 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-hotkeys-hook": "^5.2.4",
+    "react-loading-skeleton": "^3.5.0",
     "tailwind-merge": "^3.5.0",
     "use-long-press": "^3.3.0"
   },
@@ -66,11 +68,17 @@
       "target": [
         "dmg"
       ],
-      "identity": null
+      "identity": null,
+      "icon": "build/icon.icns",
+      "mergeASARs": false
+    },
+    "dmg": {
+      "writeUpdateInfo": false
     },
     "win": {
       "target": "nsis",
-      "requestedExecutionLevel": "asInvoker"
+      "requestedExecutionLevel": "asInvoker",
+      "icon": "build/icon.ico"
     },
     "nsis": {
       "oneClick": false,

@@ -54,7 +54,7 @@ function createWindow() {
         mainWindow.webContents.openDevTools();
     } else {
 
-        const indexPath = path.join(app.getAppPath(), 'dist', 'index.html');
+        const indexPath = path.join(__dirname, 'dist', 'index.html');
         mainWindow.loadFile(indexPath).catch(err => console.error("Ошибка loadFile:", err));
     }
 
