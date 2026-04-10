@@ -105,6 +105,26 @@
       "completed": false,
       "description": "",
       "id": 61
+    },
+    {
+      "title": "qws",
+      "start_time": "",
+      "end_time": "",
+      "date": "2026-04-11",
+      "category": "self",
+      "completed": false,
+      "description": "",
+      "id": 62
+    },
+    {
+      "title": "qwd",
+      "start_time": "",
+      "end_time": "",
+      "date": "2026-04-11",
+      "category": "work",
+      "completed": false,
+      "description": "",
+      "id": 63
     }
   ]
 }
