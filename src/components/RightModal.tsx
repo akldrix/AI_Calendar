@@ -1,17 +1,17 @@
 import React, {useEffect, useMemo} from "react";
 import {useState} from "react";
+import {lazy, Suspense} from "react";
 import "../styles/main.css";
 import {Checkbox} from "antd";
 import {Dropdown, Space} from "antd";
 import {MoreOutlined} from "@ant-design/icons";
 import {useLongPress} from "use-long-press";
 import {Confirm} from "./Confirm";
-import {ConfirmForm} from "../features/Tasks/ConfirmForm";
 import type {Task} from "../types.ts";
 import type {MenuProps} from "antd";
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-
+const ConfirmForm = lazy(()  => import("../features/Tasks/ConfirmForm"));
 
 interface RightModalProps {
     selectedDate: string | null;
@@ -232,6 +232,7 @@ const RightModal: React.FC<RightModalProps> = ({
                 onClose={() => setTaskToDelete(null)}
                 title="Подтверждение"
             >
+                <Suspense fallback={<div>Загрузка формы...</div>}>
                 <ConfirmForm
                     taskTitle={taskToDelete?.title || ""}
                     onCancel={() => setTaskToDelete(null)}
@@ -240,6 +241,7 @@ const RightModal: React.FC<RightModalProps> = ({
                         setTaskToDelete(null);
                     }}
                 />
+                </Suspense>
             </Confirm>
         </div>
     );

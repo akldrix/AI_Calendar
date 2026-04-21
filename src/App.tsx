@@ -1,7 +1,6 @@
-import {useState, useEffect} from "react";
+import React, {useState, useEffect} from "react";
 import CalendarGrid from "./features/Calendar/CalendarGrid.tsx";
 import Modal from "./components/Modal.tsx";
-import ManualTaskForm from "./features/Tasks/ManualTaskForm.tsx";
 import RightModal from "./components/RightModal.tsx";
 import {useCalendar} from "./hooks/useCalendar.tsx";
 import {useTasks} from "./hooks/useTasks.tsx";
@@ -10,6 +9,10 @@ import {MoonIcon} from "./components/Icons/Moon.tsx";
 import {SunIcon} from "./components/Icons/Sun.tsx";
 import {useHotkeys} from "react-hotkeys-hook";
 import type {Task, TaskFormData} from "./types.ts";
+import {lazy, Suspense} from "react";
+
+const ManualTaskForm = lazy(() => import("./features/Tasks/ManualTaskForm"));
+
 
 function App() {
     const {
@@ -55,7 +58,7 @@ function App() {
     useEffect(() => {
         let timer: ReturnType<typeof setTimeout>;
 
-        if(isPending) {
+        if (isPending) {
             timer = setTimeout(() => {
                 setShowSkeleton(true);
             }, 50);
@@ -167,7 +170,7 @@ function App() {
     });
     const handleAiSend = (): void => {
         if (!prompt.trim()) return;
-       void generateFromPrompt(prompt);
+        void generateFromPrompt(prompt);
         setPrompt("");
     };
     useHotkeys<HTMLBaseElement>("ctrl+a", () => {
@@ -253,14 +256,15 @@ function App() {
                 onClose={() => setModalOpen(false)}
                 title={editingTask ? "Редактировать задачу" : "Добавить задачу"}
             >
+                <Suspense fallback={<div>Загрузка формы...</div>}>
                 <ManualTaskForm
                     key={editingTask?.id || "new-task"}
                     initialData={editingTask}
                     onSubmit={(data: TaskFormData) => {
                         if (editingTask) {
-                            handleTaskChange({ ...data, id: editingTask.id, completed: editingTask.completed } as Task);
+                            handleTaskChange({...data, id: editingTask.id, completed: editingTask.completed} as Task);
                         } else {
-                           void addManualTask(data);
+                            void addManualTask(data);
                         }
                         closeModal();
                     }}
@@ -269,6 +273,7 @@ function App() {
                     selectedDate={selectedDate}
                     onSelect={handleJumpToDate}
                 />
+                </Suspense>
             </Modal>
         </div>
     );

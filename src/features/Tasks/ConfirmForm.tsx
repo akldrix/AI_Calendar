@@ -5,7 +5,7 @@ interface ConfirmFormProps {
   onCancel: () => void;
   taskTitle?: string;
 }
-export const ConfirmForm: React.FC<ConfirmFormProps> = ({ onConfirm, onCancel, taskTitle }) => {
+const ConfirmForm: React.FC<ConfirmFormProps> = ({ onConfirm, onCancel, taskTitle }) => {
   const confirmBtnRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -43,3 +43,4 @@ export const ConfirmForm: React.FC<ConfirmFormProps> = ({ onConfirm, onCancel, t
     </div>
   );
 };
+export default ConfirmForm;
