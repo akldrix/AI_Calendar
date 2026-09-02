@@ -1,16 +1,139 @@
-# React + Vite
+# 🗓️ AI Calendar — Интеллектуальный Планировщик Задач
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Современное веб-приложение для управления временем и задачами с интегрированным ИИ-помощником. Сервис позволяет вести календарь, категоризировать дела и автоматически распознавать задачи из обычного текстового описания благодаря возможностям искусственного интеллекта.
 
-Currently, two official plugins are available:
+Весь стек приложения полностью контейнеризирован с помощью Docker и настроен для локальной разработки.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 🚀 Ключевые Возможности
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **🤖 AI Task Generation:** Автоматическое определение сути задачи, даты, времени и категории из обычного текста.
+- **📅 Интерактивный Календарь:** Удобная сетка дней с фильтрацией задач по тегам и статусу выполнения.
+- **🏷️ Категоризация:** Разделение задач по сферам жизни (`Дом`, `Работа`, `Саморазвитие`).
+- **⚡ Асинхронный Бэкенд:** Высокая скорость обработки запросов без блокировки потоков.
+- **🐳 Полный Docker-пакет:** Развертывание всего проекта одной командой.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🛠️ Технологический Стек
+
+### Фронтенд (Frontend)
+- **Framework:** React (TypeScript)
+- **Сборщик:** Vite
+- **State & Server Management:** TanStack React Query
+- **Стилизация:** Tailwind CSS / CSS Modules
+- **Веб-сервер:** Nginx (Alpine) — раздача статики и реверс-прокси для API
+
+### Бэкенд (Backend)
+- **Framework:** FastAPI (Python 3.12)
+- **ASGI Сервер:** Uvicorn
+- **ORM:** SQLAlchemy 2.0 (полностью асинхронный режим)
+- **Драйвер БД:** `asyncpg`
+
+### База Данных (Database)
+- **СУБД:** PostgreSQL 18
+
+---
+
+## 📐 Архитектура Docker-сети и Проксирования
+
+Приложение использует трехслойную архитектуру, изолированную внутри сети Docker. Внешний доступ открыт только для Nginx на порту 80.
+
+```text
+  Пользователь (Браузер)
+          │
+          ▼ [Порт 80]
+   ┌──────────────┐
+   │    Nginx     │ ─── (Раздает собранный React-статик из /dist)
+   └──────────────┘
+          │
+          ▼ [Внутренний прокси /api/ -> backend:8000]
+   ┌──────────────┐
+   │   FastAPI    │
+   └──────────────┘
+          │
+          ▼ [Внутреннее подключение -> db:5432]
+   ┌──────────────┐
+   │  PostgreSQL  │
+   └──────────────┘
+```
+
+---
+
+## 💻 Локальный запуск
+
+Для запуска приложения на вашем компьютере должны быть установлены **Git** и **Docker Desktop**.
+
+### 1. Клонирование репозитория
+```bash
+git clone https://github.com
+cd AI_Calendar
+```
+
+### 2. Запуск контейнеров
+Запустите Docker Compose. Фронтенд автоматически соберется внутри Docker-контейнера, а база данных создаст все необходимые таблицы при первом старте:
+```bash
+docker compose up --build
+```
+
+### 3. Доступ к приложению
+После успешной сборки откройте браузер:
+- **Интерфейс приложения:** [http://localhost](http://localhost) (или по локальному IP-адресу с других устройств в Wi-Fi сети).
+
+---
+
+## 🔒 Переменные окружения и Конфигурация
+
+По умолчанию для удобства локальной разработки в `docker-compose.yml` зашиты стандартные безопасные параметры авторизации (`name` / `pw`). 
+
+Для развертывания на продакшн-сервере рекомендуется создать файл `.env` в корне проекта (он уже добавлен в `.gitignore`) со следующей структурой:
+
+```env
+POSTGRES_USER=production_admin
+POSTGRES_PASSWORD=secure_generated_password
+POSTGRES_DB=Calendar
+DATABASE_URL=postgresql+asyncpg://production_admin:secure_generated_password@db:5432/Calendar
+```
+
+---
+
+## 📁 Структура Проекта
+
+```text
+AI_Calendar/
+├── backend/
+│   ├── app/
+│   │   ├── models/          # SQLAlchemy модели базы данных
+│   │   ├── routes/          # Эндпоинты FastAPI (tasks.py)
+│   │   ├── schemas/         # Pydantic схемы валидации данных
+│   │   ├── database.py      # Инициализация асинхронной сессии БД
+│   │   └── main.py          # Точка входа FastAPI, CORS, Lifespan
+│   ├── Dockerfile           # Инструкция сборки Python-окружения
+│   ├── requirements.txt     # Зависимости бэкенда
+│   └── run.py               # Скрипт старта Uvicorn сервера
+├── dist/                    # Локальный билд фронтенда
+├── nginx.conf               # Конфигурация маршрутизации и проксирования Nginx
+├── docker-compose.yml       # Оркестрация всего стека приложения
+└── .gitignore               # Игнорируемые файлы (кэш, .venv, секреты)
+```
+
+---
+
+## 🛠️ Полезные команды для отладки
+
+Просмотр логов конкретного сервиса в реальном времени:
+```bash
+docker compose logs backend -f
+docker compose logs frontend -f
+```
+
+Прямое подключение к базе данных через CLI внутри контейнера:
+```bash
+docker exec -it ai_calendar_db psql -U name -d Calendar
+```
+
+Остановка проекта с полной очисткой контейнеров:
+```bash
+docker compose down
+```
