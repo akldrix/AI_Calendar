@@ -1,12 +1,11 @@
 import { QueryClient } from "@tanstack/react-query";
 import  type { Task, CreateTaskInput } from "../types.ts";
 
-const BASE_URL = "http://localhost:3000";
+const BASE_URL = "/api";
 // "https://posttracheal-beckie-lithographical.ngrok-free.dev";//
 
 const headers = {
   "Content-Type": "application/json",
-  "ngrok-skip-browser-warning": "true",
 };
 
 export const fetchTasks = async (): Promise<Task[]> => {
