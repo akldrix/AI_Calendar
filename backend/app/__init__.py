@@ -4,6 +4,8 @@ from app.database import engine
 from app.models import Base, Task
 from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
+from app.auth import fastapi_users, auth_backend
+from app.schemas.users import UserRead, UserCreate
 
 
 @asynccontextmanager
@@ -30,3 +32,13 @@ fastapi.add_middleware(
 )
 
 fastapi.include_router(tasks.router)
+fastapi.include_router(
+	fastapi_users.get_auth_router(auth_backend),
+	prefix="/auth/jwt",
+	tags=["auth"],
+)
+fastapi.include_router(
+	fastapi_users.get_register_router(UserRead, UserCreate),
+	prefix="/auth",
+	tags=["auth"],
+)
