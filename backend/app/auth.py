@@ -30,7 +30,7 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
 	async def on_after_request_verify(
 			self, user: User, token: str, request: Optional[Request] = None
 	):
-		verification_link = f"http://localhost:8000/auth/verify?token={token}"
+		verification_link = f"http://10.119.66.183/api/auth/confirm?token={token}"
 		subject = "Подтверждение верификации"
 
 		body = (

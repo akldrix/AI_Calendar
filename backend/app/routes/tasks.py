@@ -1,5 +1,4 @@
 from typing import Annotated, List
-
 from fastapi import APIRouter, HTTPException, Response, status
 from fastapi.params import Depends
 from sqlalchemy import select
@@ -51,7 +50,6 @@ async def get_task(task_id: str, session: Annotated[AsyncSession, Depends(get_as
 async def change_task(task_id: str, task_data: UpdateTask,
                       session: Annotated[AsyncSession, Depends(get_async_session)],
                       user: Annotated[User, Depends(current_active_user)]):
-
 	result = await session.execute(select(Task).where(Task.id == task_id, Task.user_id == user.id))
 
 	db_task = result.scalar_one_or_none()
@@ -84,3 +82,6 @@ async def delete_task(task_id: str, session: Annotated[AsyncSession, Depends(get
 	await session.delete(task)
 	await session.commit()
 	return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+
