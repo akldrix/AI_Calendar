@@ -41,6 +41,9 @@ async def get_task(task_id: str, session: Annotated[AsyncSession, Depends(get_as
 	query = select(Task).where(Task.id == task_id, Task.user_id == user.id)
 	result = await session.execute(query)
 	task = result.scalar_one_or_none()
+
+	if not task:
+		raise HTTPException(status_code=404, detail="Task not found")
 	return task
 
 
@@ -48,22 +51,23 @@ async def get_task(task_id: str, session: Annotated[AsyncSession, Depends(get_as
 async def change_task(task_id: str, task_data: UpdateTask,
                       session: Annotated[AsyncSession, Depends(get_async_session)],
                       user: Annotated[User, Depends(current_active_user)]):
-	query = select(Task).where(Task.id == task_id, Task.user_id == user.id)
-	result = await session.execute(query)
-	task = result.scalar_one_or_none()
 
-	if not task:
+	result = await session.execute(select(Task).where(Task.id == task_id, Task.user_id == user.id))
+
+	db_task = result.scalar_one_or_none()
+
+	if not db_task:
 		raise HTTPException(status_code=404, detail="Task not found")
 
 	updated_task = task_data.model_dump(exclude_unset=True)
 
-	for key, value in task_data.model_dump().items():
-		setattr(updated_task, key, value)
+	for key, value in updated_task.items():
+		setattr(db_task, key, value)
 
 	await session.commit()
-	await session.refresh(updated_task)
+	await session.refresh(db_task)
 
-	return task
+	return db_task
 
 
 @router.delete("/tasks/{task_id}")
@@ -75,6 +79,8 @@ async def delete_task(task_id: str, session: Annotated[AsyncSession, Depends(get
 
 	task = result.scalar_one_or_none()
 
+	if not task:
+		raise HTTPException(status_code=404, detail="Task not found")
 	await session.delete(task)
 	await session.commit()
 	return Response(status_code=status.HTTP_204_NO_CONTENT)

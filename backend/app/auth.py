@@ -1,7 +1,7 @@
 import uuid
 from typing import Optional
-from fastapi import Depends
-from fastapi_users import BaseUserManager, FastAPIUsers, UUIDIDMixin
+from fastapi import Depends, Request
+from fastapi_users import BaseUserManager, FastAPIUsers, UUIDIDMixin, models
 from fastapi_users.authentication import AuthenticationBackend, BearerTransport, JWTStrategy
 from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
 from app.models.users import User
@@ -9,6 +9,7 @@ from app.database import get_async_session
 from sqlalchemy.ext.asyncio import AsyncSession
 import os
 from dotenv import load_dotenv
+from app.utils.email import send_email
 
 load_dotenv()
 
@@ -22,6 +23,27 @@ async def get_user_db(session: AsyncSession = Depends(get_async_session)):
 class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
 	reset_password_token_secret = SECRET
 	verification_token_secret = SECRET
+
+	async def on_after_register(self, user: User, request: Optional[Request] = None) -> None:
+		await self.request_verify(user, request)
+
+	async def on_after_request_verify(
+			self, user: User, token: str, request: Optional[Request] = None
+	):
+		verification_link = f"http://localhost:8000/auth/verify?token={token}"
+		subject = "Подтверждение верификации"
+
+		body = (
+			f"Здравствуйте!\n\n"
+			f"Спасибо за регистрацию. Для подтверждения вашей почты перейдите по ссылке:\n"
+			f"{verification_link}\n\n"
+			f"Или введите этот токен в приложении: {token}"
+		)
+		try:
+			await send_email(user.email, subject, body)
+			print(f"Verification email successfully sent to {user.email}")
+		except Exception as e:
+			print(f"Failed to send email to {user.email}: {e}")
 
 
 async def get_user_manager(user_db: SQLAlchemyUserDatabase = Depends(get_user_db)):

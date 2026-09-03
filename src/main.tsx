@@ -14,7 +14,7 @@ export const queryClient = new QueryClient({
         },
     },
 });
-const persister = createAsyncStoragePersister({
+export const persister = createAsyncStoragePersister({
     storage: window.localStorage,
 });
 persistQueryClient({queryClient, persister, maxAge: 1000 * 60 * 30,});

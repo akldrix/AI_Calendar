@@ -14,6 +14,9 @@ import type {Task, CreateTaskInput, UseTasksReturn} from "../types.ts";
 export const useTasks = (): UseTasksReturn => {
 
     const queryClient = useQueryClient();
+
+    const hasToken = !!localStorage.getItem("access_token");
+
     const {
         data: tasks = [],
         isLoading,
@@ -23,6 +26,7 @@ export const useTasks = (): UseTasksReturn => {
         queryKey: ["tasks"],
         queryFn: fetchTasks,
         staleTime: 1000 * 60 * 5,
+        enabled: hasToken,
     });
     const addMutation = useMutation<Task, Error, CreateTaskInput>({
         mutationFn: (taskData: CreateTaskInput) => createTask({...taskData, completed: false}),
@@ -44,7 +48,7 @@ export const useTasks = (): UseTasksReturn => {
         ),
       );
     };*/
-    const taskCompletenessMutation = useMutation<Task, Error, Task, { previousTasks: Task[] | undefined}>({
+    const taskCompletenessMutation = useMutation<Task, Error, Task, { previousTasks: Task[] | undefined }>({
         mutationFn: toggleTaskCompleteness,
 
         onMutate: async (updatedTask) => {
@@ -72,7 +76,7 @@ export const useTasks = (): UseTasksReturn => {
         taskCompletenessMutation.mutate({...task, completed: !task.completed});
     };
 
-    const deleteTaskMutation = useMutation<void, Error, Task, {previousTasks: Task[] | undefined}>({
+    const deleteTaskMutation = useMutation<void, Error, Task, { previousTasks: Task[] | undefined }>({
         mutationFn: deleteTask,
 
         onMutate: async (deletedTask) => {
@@ -101,7 +105,7 @@ export const useTasks = (): UseTasksReturn => {
         deleteTaskMutation.mutate(task);
     };
 
-    const changeTaskMutation = useMutation<Task, Error, Task, { previousTasks: Task[] | undefined}>({
+    const changeTaskMutation = useMutation<Task, Error, Task, { previousTasks: Task[] | undefined }>({
         mutationFn: changeTask,
 
         onMutate: async (changedTask) => {

@@ -10,6 +10,9 @@ import {SunIcon} from "./components/Icons/Sun.tsx";
 import {useHotkeys} from "react-hotkeys-hook";
 import type {Task, TaskFormData} from "./types.ts";
 import {lazy, Suspense} from "react";
+import {RegisterForm} from "./features/Auth/RegisterForm";
+import {loginUser} from "./services/api";
+import {queryClient, persister} from "./main.tsx";
 
 const ManualTaskForm = lazy(() => import("./features/Tasks/ManualTaskForm"));
 
@@ -38,6 +41,12 @@ function App() {
         handleDeleteTask,
         handleTaskChange,
     } = useTasks();
+    const [token, setToken] = useState<string | null>(localStorage.getItem("access_token"));
+
+    const [isRegistering, setIsRegistering] = useState(false);
+    const [loginEmail, setLoginEmail] = useState("");
+    const [loginPassword, setLoginPassword] = useState("");
+    const [loginError, setLoginError] = useState("");
 
     const toDateString = (date: Date): string => {
         if (!date) return "";
@@ -184,6 +193,97 @@ function App() {
         setModalOpen(false);
         setEditingTask(null);
     };
+    const handleLogin = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setLoginError("");
+        try {
+            const data = await loginUser(loginEmail, loginPassword);
+            if (data?.access_token) {
+                setToken(data.access_token);
+            }
+        } catch (err) {
+            setLoginError("Неверный email или пароль, либо почта не подтверждена.");
+        }
+    };
+
+    const handleLogout = async () => {
+        localStorage.removeItem("access_token");
+        queryClient.clear();
+        await persister.removeClient();
+        setToken(null);
+    };
+
+    if (!token) {
+        return (
+            <div style={{maxWidth: '400px', margin: '80px auto', padding: '20px'}}>
+                {isRegistering ? (
+                    <div>
+                        <RegisterForm/>
+                        <p style={{textAlign: 'center', marginTop: '15px'}}>
+                            Уже есть аккаунт?{" "}
+                            <button
+                                onClick={() => setIsRegistering(false)}
+                                style={{background: 'none', border: 'none', color: '#007BFF', cursor: 'pointer'}}
+                            >
+                                Войти
+                            </button>
+                        </p>
+                    </div>
+                ) : (
+                    <div style={{border: '1px solid #ccc', borderRadius: '8px', padding: '20px'}}>
+                        <h2>Вход в AI Календарь</h2>
+                        <form onSubmit={handleLogin}>
+                            <div style={{marginBottom: '15px'}}>
+                                <label style={{display: 'block', marginBottom: '5px'}}>Email:</label>
+                                <input
+                                    type="email"
+                                    value={loginEmail}
+                                    onChange={(e) => setLoginEmail(e.target.value)}
+                                    required
+                                    style={{width: '100%', padding: '8px', boxSizing: 'border-box'}}
+                                />
+                            </div>
+                            <div style={{marginBottom: '15px'}}>
+                                <label style={{display: 'block', marginBottom: '5px'}}>Пароль:</label>
+                                <input
+                                    type="password"
+                                    value={loginPassword}
+                                    onChange={(e) => setLoginPassword(e.target.value)}
+                                    required
+                                    style={{width: '100%', padding: '8px', boxSizing: 'border-box'}}
+                                />
+                            </div>
+                            <button
+                                type="submit"
+                                style={{
+                                    width: '100%',
+                                    padding: '10px',
+                                    backgroundColor: '#007BFF',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '4px',
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                Войти
+                            </button>
+                        </form>
+                        {loginError && <p style={{color: 'red', marginTop: '15px'}}>{loginError}</p>}
+
+                        <p style={{textAlign: 'center', marginTop: '15px'}}>
+                            Нет аккаунта?{" "}
+                            <button
+                                onClick={() => setIsRegistering(true)}
+                                style={{background: 'none', border: 'none', color: '#007BFF', cursor: 'pointer'}}
+                            >
+                                Зарегистрироваться
+                            </button>
+                        </p>
+                    </div>
+                )}
+            </div>
+        );
+    }
     return (
         <div className="app-container">
             <header className="header">
@@ -213,6 +313,20 @@ function App() {
                         }}
                     >
                         + Задача
+                    </button>
+                    <button
+                        onClick={handleLogout}
+                        style={{
+                            backgroundColor: '#dc3545',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '4px',
+                            padding: '6px 12px',
+                            cursor: 'pointer',
+                            marginLeft: '8px'
+                        }}
+                    >
+                        Выйти
                     </button>
                 </div>
             </header>
@@ -257,22 +371,26 @@ function App() {
                 title={editingTask ? "Редактировать задачу" : "Добавить задачу"}
             >
                 <Suspense fallback={<div>Загрузка формы...</div>}>
-                <ManualTaskForm
-                    key={editingTask?.id || "new-task"}
-                    initialData={editingTask}
-                    onSubmit={(data: TaskFormData) => {
-                        if (editingTask) {
-                            handleTaskChange({...data, id: editingTask.id, completed: editingTask.completed} as Task);
-                        } else {
-                            void addManualTask(data);
-                        }
-                        closeModal();
-                    }}
-                    onCancel={() => setModalOpen(false)}
-                    currentDate={currentDate}
-                    selectedDate={selectedDate}
-                    onSelect={handleJumpToDate}
-                />
+                    <ManualTaskForm
+                        key={editingTask?.id || "new-task"}
+                        initialData={editingTask}
+                        onSubmit={(data: TaskFormData) => {
+                            if (editingTask) {
+                                handleTaskChange({
+                                    ...data,
+                                    id: editingTask.id,
+                                    completed: editingTask.completed
+                                } as Task);
+                            } else {
+                                void addManualTask(data);
+                            }
+                            closeModal();
+                        }}
+                        onCancel={() => setModalOpen(false)}
+                        currentDate={currentDate}
+                        selectedDate={selectedDate}
+                        onSelect={handleJumpToDate}
+                    />
                 </Suspense>
             </Modal>
         </div>
