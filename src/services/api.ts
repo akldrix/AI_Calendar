@@ -3,7 +3,6 @@ import type {Task, CreateTaskInput} from "../types.ts";
 import axios from 'axios';
 
 const BASE_URL = "/api";
-// "https://posttracheal-beckie-lithographical.ngrok-free.dev";//
 
 
 const getAuthHeaders = () => {
@@ -33,7 +32,7 @@ export const generateTasksAI = async (text: string): Promise<Task> => {
     const response = await fetch(`${BASE_URL}/tasks/from-text`, {
         method: "POST",
         headers: getAuthHeaders(),
-        body: JSON.stringify({text: text}),
+        body: JSON.stringify({prompt: text}),
     });
 
     if (!response.ok) {

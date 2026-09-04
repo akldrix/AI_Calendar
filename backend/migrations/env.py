@@ -1,12 +1,14 @@
-from logging.config import fileConfig
-from dotenv import load_dotenv
-from sqlalchemy.ext.asyncio import async_engine_from_config
-from sqlalchemy import pool
 import asyncio
-
 import os
-from app.models import Base
+from logging.config import fileConfig
+
 from alembic import context
+from app.models import Base
+from app.models.users import User
+from app.models.tasks import Task
+from dotenv import load_dotenv
+from sqlalchemy import pool
+from sqlalchemy.ext.asyncio import async_engine_from_config
 
 load_dotenv()
 # this is the Alembic Config object, which provides
@@ -55,10 +57,12 @@ def run_migrations_offline() -> None:
     with context.begin_transaction():
         context.run_migrations()
 
+
 def do_run_migrations(connection):
     context.configure(connection=connection, target_metadata=target_metadata)
     with context.begin_transaction():
         context.run_migrations()
+
 
 async def run_migrations_online() -> None:
     """Run migrations in 'online' mode.

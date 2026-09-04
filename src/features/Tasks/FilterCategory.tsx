@@ -8,7 +8,7 @@ interface Category {
 const categories = [
   { id: "home", label: "Дом" },
   { id: "work", label: "Работа" },
-  { id: "self", label: "Саморазвитие" },
+  { id: "self", label: "Личное" },
 ];
 interface FilterCategoryProps {
   hiddenCategories: string[];
